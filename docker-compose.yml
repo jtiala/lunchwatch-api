@@ -1,0 +1,30 @@
+version: '3'
+services:
+  web:
+    build: .
+    volumes:
+      - .env.docker:/app/.env
+      - .:/app/
+    ports:
+      - "8848:8848"
+    command: yarn start:dev
+    depends_on:
+      - db
+    links:
+      - db
+  db:
+    image: postgres:10.1-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=web
+  db-test:
+    image: postgres:10.1-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=web
