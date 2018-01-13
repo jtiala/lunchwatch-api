@@ -44,7 +44,7 @@ definitions:
     produces:
       - application/json
     tags:
-      - /v1/Restaurants
+      - /v1/restaurants
     responses:
       200:
         description: An array of restaurants
@@ -59,7 +59,7 @@ definitions:
     produces:
       - application/json
     tags:
-      - /v1/Restaurants
+      - /v1/restaurants
     parameters:
       - name: RestaurantParams
         description: POST params for a restaurant
@@ -90,7 +90,7 @@ definitions:
     produces:
       - application/json
     tags:
-      - /v1/Restaurants
+      - /v1/restaurants
     parameters:
       - name: id
         description: Unique identifier of the restaurant
@@ -119,7 +119,7 @@ definitions:
     produces:
       - application/json
     tags:
-      - /v1/Restaurants
+      - /v1/restaurants
     parameters:
       - name: id
         description: Unique identifier of the restaurant
@@ -158,7 +158,7 @@ definitions:
     produces:
       - application/json
     tags:
-      - /v1/Restaurants
+      - /v1/restaurants
     parameters:
       - name: id
         description: Unique identifier of the restaurant
