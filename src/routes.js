@@ -5,7 +5,7 @@ import restaurantsController from './controllers/restaurants';
 /**
  * Contains all API routes for the application.
  */
-let router = Router();
+const router = Router();
 
 /**
  * GET /api/swagger.json
@@ -48,7 +48,7 @@ router.get('/swagger.json', (req, res) => {
 router.get('/', (req, res) => {
   res.json({
     app: req.app.locals.title,
-    apiVersion: req.app.locals.version
+    apiVersion: req.app.locals.version,
   });
 });
 

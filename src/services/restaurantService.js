@@ -17,7 +17,7 @@ export function getAllRestaurants() {
  * @return {Promise}
  */
 export function getRestaurant(id) {
-  return new Restaurant({ id }).fetch().then(restaurant => {
+  return new Restaurant({ id }).fetch().then((restaurant) => {
     if (!restaurant) {
       throw new Boom.notFound('Restaurant not found');
     }
@@ -36,10 +36,10 @@ export function createRestaurant(restaurant) {
   return new Restaurant({
     name: restaurant.name,
     chain: restaurant.chain,
-    url: restaurant.url
+    url: restaurant.url,
   })
     .save()
-    .then(restaurant => restaurant.refresh());
+    .then(createdRestaurant => createdRestaurant.refresh());
 }
 
 /**
@@ -54,9 +54,9 @@ export function updateRestaurant(id, restaurant) {
     .save({
       name: restaurant.name,
       chain: restaurant.chain,
-      url: restaurant.url
+      url: restaurant.url,
     })
-    .then(restaurant => restaurant.refresh());
+    .then(updatedRestaurant => updatedRestaurant.refresh());
 }
 
 /**

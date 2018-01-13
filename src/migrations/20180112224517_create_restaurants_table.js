@@ -5,7 +5,7 @@
  * @return {Promise}
  */
 export function up(knex) {
-  return knex.schema.createTable('restaurants', table => {
+  return knex.schema.createTable('restaurants', (table) => {
     table.increments();
     table
       .timestamp('created_at')

@@ -7,14 +7,14 @@ import bookshelf from '../../src/db';
  * Tests for '/v1/restaurants'
  */
 describe('Restaurants Controller Test', () => {
-  before(done => {
+  before((done) => {
     bookshelf
       .knex('restaurants')
       .truncate()
       .then(() => done());
   });
 
-  it('should return list of restaurants', done => {
+  it('should return list of restaurants', (done) => {
     request(app)
       .get('/v1/restaurants')
       .end((err, res) => {
@@ -26,16 +26,16 @@ describe('Restaurants Controller Test', () => {
       });
   });
 
-  it('should not create a new restaurant if name is not provided', done => {
-    let restaurant = {
-      noname: 'Restaurant 1'
+  it('should not create a new restaurant if name is not provided', (done) => {
+    const restaurant = {
+      noname: 'Restaurant 1',
     };
 
     request(app)
       .post('/v1/restaurants')
       .send(restaurant)
       .end((err, res) => {
-        let { code, message, details } = res.body.error;
+        const { code, message, details } = res.body.error;
 
         expect(res.statusCode).to.be.equal(400);
         expect(code).to.be.equal(400);
@@ -48,16 +48,16 @@ describe('Restaurants Controller Test', () => {
       });
   });
 
-  it('should create a new restaurant with valid data', done => {
-    let restaurant = {
-      name: 'Restaurant 1'
+  it('should create a new restaurant with valid data', (done) => {
+    const restaurant = {
+      name: 'Restaurant 1',
     };
 
     request(app)
       .post('/v1/restaurants')
       .send(restaurant)
       .end((err, res) => {
-        let { data } = res.body;
+        const { data } = res.body;
 
         expect(res.statusCode).to.be.equal(201);
         expect(data).to.be.an('object');
@@ -71,11 +71,11 @@ describe('Restaurants Controller Test', () => {
       });
   });
 
-  it('should get information of restaurant', done => {
+  it('should get information of restaurant', (done) => {
     request(app)
       .get('/v1/restaurants/1')
       .end((err, res) => {
-        let { data } = res.body;
+        const { data } = res.body;
 
         expect(res.statusCode).to.be.equal(200);
         expect(data).to.be.an('object');
@@ -88,11 +88,11 @@ describe('Restaurants Controller Test', () => {
       });
   });
 
-  it('should respond with not found error if random restaurant id is provided', done => {
+  it('should respond with not found error if random restaurant id is provided', (done) => {
     request(app)
       .get('/v1/restaurants/1991')
       .end((err, res) => {
-        let { code, message } = res.body.error;
+        const { code, message } = res.body.error;
 
         expect(res.statusCode).to.be.equal(404);
         expect(code).to.be.equal(404);
@@ -102,16 +102,16 @@ describe('Restaurants Controller Test', () => {
       });
   });
 
-  it('should update a restaurant if name is provided', done => {
-    let restaurant = {
-      name: 'Restaurante 1'
+  it('should update a restaurant if name is provided', (done) => {
+    const restaurant = {
+      name: 'Restaurante 1',
     };
 
     request(app)
       .put('/v1/restaurants/1')
       .send(restaurant)
       .end((err, res) => {
-        let { data } = res.body;
+        const { data } = res.body;
 
         expect(res.statusCode).to.be.equal(200);
         expect(data).to.be.an('object');
@@ -125,16 +125,16 @@ describe('Restaurants Controller Test', () => {
       });
   });
 
-  it('should not update a restaurant if name is not provided', done => {
-    let restaurant = {
-      noname: 'Restaurante 1'
+  it('should not update a restaurant if name is not provided', (done) => {
+    const restaurant = {
+      noname: 'Restaurante 1',
     };
 
     request(app)
       .put('/v1/restaurants/1')
       .send(restaurant)
       .end((err, res) => {
-        let { code, message, details } = res.body.error;
+        const { code, message, details } = res.body.error;
 
         expect(res.statusCode).to.be.equal(400);
         expect(code).to.be.equal(400);
@@ -147,7 +147,7 @@ describe('Restaurants Controller Test', () => {
       });
   });
 
-  it('should delete a restaurant if valid id is provided', done => {
+  it('should delete a restaurant if valid id is provided', (done) => {
     request(app)
       .delete('/v1/restaurants/1')
       .end((err, res) => {
@@ -157,11 +157,11 @@ describe('Restaurants Controller Test', () => {
       });
   });
 
-  it('should respond with not found error if random restaurant id is provided for deletion', done => {
+  it('should respond with not found error if random restaurant id is provided for deletion', (done) => {
     request(app)
       .delete('/v1/restaurants/1991')
       .end((err, res) => {
-        let { code, message } = res.body.error;
+        const { code, message } = res.body.error;
 
         expect(res.statusCode).to.be.equal(404);
         expect(code).to.be.equal(404);
@@ -171,14 +171,14 @@ describe('Restaurants Controller Test', () => {
       });
   });
 
-  it('should respond with bad request for empty JSON in request body', done => {
-    let restaurant = {};
+  it('should respond with bad request for empty JSON in request body', (done) => {
+    const restaurant = {};
 
     request(app)
       .post('/v1/restaurants')
       .send(restaurant)
       .end((err, res) => {
-        let { code, message } = res.body.error;
+        const { code, message } = res.body.error;
 
         expect(res.statusCode).to.be.equal(400);
         expect(code).to.be.equal(400);

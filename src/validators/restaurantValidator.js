@@ -12,7 +12,7 @@ const SCHEMA = {
     .max(128),
   url: Joi.string()
     .label('URL')
-    .max(255)
+    .max(255),
 };
 
 /**

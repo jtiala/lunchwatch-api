@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+
 import bookshelf from '../db';
 
 const TABLE_NAME = 'restaurants';

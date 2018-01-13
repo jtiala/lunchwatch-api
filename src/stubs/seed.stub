@@ -5,7 +5,7 @@
  * @param  {object} Promise
  * @return {Promise}
  */
-export function seed(knex, Promise) {
+export default function seed(knex, Promise) {
   // Deletes all existing entries
   return knex('table_name')
     .del()

@@ -1,17 +1,16 @@
 import 'babel-polyfill';
-
-import './env';
-import './db';
 import cors from 'cors';
 import path from 'path';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import express from 'express';
-import routes from './routes';
 import favicon from 'serve-favicon';
-import logger from './utils/logger';
 import bodyParser from 'body-parser';
 import compression from 'compression';
+import './env';
+import './db';
+import routes from './routes';
+import logger from './utils/logger';
 import json from './middlewares/json';
 import * as errorHandler from './middlewares/errorHandler';
 

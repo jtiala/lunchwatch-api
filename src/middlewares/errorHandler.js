@@ -1,6 +1,6 @@
-import logger from '../utils/logger';
 import HttpStatus from 'http-status-codes';
 import buildError from '../utils/buildError';
+import logger from '../utils/logger';
 
 /**
  * Error response middleware for 404 not found.
@@ -12,8 +12,8 @@ export function notFound(req, res) {
   res.status(HttpStatus.NOT_FOUND).json({
     error: {
       code: HttpStatus.NOT_FOUND,
-      message: HttpStatus.getStatusText(HttpStatus.NOT_FOUND)
-    }
+      message: HttpStatus.getStatusText(HttpStatus.NOT_FOUND),
+    },
   });
 }
 
@@ -28,8 +28,8 @@ export function methodNotAllowed(req, res) {
   res.status(HttpStatus.METHOD_NOT_ALLOWED).json({
     error: {
       code: HttpStatus.METHOD_NOT_ALLOWED,
-      message: HttpStatus.getStatusText(HttpStatus.METHOD_NOT_ALLOWED)
-    }
+      message: HttpStatus.getStatusText(HttpStatus.METHOD_NOT_ALLOWED),
+    },
   });
 }
 
@@ -44,14 +44,14 @@ export function methodNotAllowed(req, res) {
  * @param  {Object}   res
  * @param  {Function} next
  */
-export function bodyParser(err, req, res, next) {
+export function bodyParser(err, req, res) {
   logger.error(err);
 
   res.status(err.status).json({
     error: {
       code: err.status,
-      message: HttpStatus.getStatusText(err.status)
-    }
+      message: HttpStatus.getStatusText(err.status),
+    },
   });
 }
 
@@ -63,9 +63,9 @@ export function bodyParser(err, req, res, next) {
  * @param  {Object}   res
  * @param  {Function} next
  */
-export function genericErrorHandler(err, req, res, next) {
+export function genericErrorHandler(err, req, res) {
   logger.error(err);
 
-  let error = buildError(err);
+  const error = buildError(err);
   res.status(error.code).json({ error });
 }
