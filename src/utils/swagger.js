@@ -11,7 +11,7 @@ const swaggerDefinition = {
     description: process.env.APP_DESCRIPTION,
   },
   host: `${process.env.APP_HOST}:${process.env.APP_PORT}`,
-  basePath: '/v1',
+  basePath: '/',
 };
 
 /**

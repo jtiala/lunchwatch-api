@@ -40,7 +40,7 @@ definitions:
       version:
         type: string
 
-/v1:
+/:
   get:
     summary: Get app version
     description: App version

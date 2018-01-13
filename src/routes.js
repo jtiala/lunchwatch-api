@@ -11,21 +11,21 @@ const router = Router();
  * GET /
  */
 router.get('/', (req, res) => {
-  res.redirect('/v1');
+  res.json({
+    app: req.app.locals.title,
+    version: req.app.locals.version,
+  });
 });
 
 /**
- * GET /v1/swagger.json
+ * GET /swagger.json
  */
 router.get('/swagger.json', (req, res) => {
   res.json(swaggerSpec);
 });
 
 router.get('/v1', (req, res) => {
-  res.json({
-    app: req.app.locals.title,
-    version: req.app.locals.version,
-  });
+  res.redirect('/');
 });
 
 router.use('/v1/restaurants', restaurantsController);
