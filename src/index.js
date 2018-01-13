@@ -11,6 +11,7 @@ import './env';
 import './db';
 import routes from './routes';
 import logger from './utils/logger';
+import scheduler from './utils/scheduler';
 import json from './middlewares/json';
 import * as errorHandler from './middlewares/errorHandler';
 
@@ -47,6 +48,7 @@ app.use(errorHandler.methodNotAllowed);
 
 app.listen(app.get('port'), app.get('host'), () => {
   logger.log('info', `Server started at http://${app.get('host')}:${app.get('port')}`);
+  scheduler.scheduleJob('job');
 });
 
 export default app;
