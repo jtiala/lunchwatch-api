@@ -1,10 +1,11 @@
+/* eslint-disable import/prefer-default-export */
 /**
  * Seed restaurants table.
  * @param  {object} knex
  * @param  {object} Promise
  * @return {Promise}
  */
-export default function seed(knex, Promise) {
+export function seed(knex, Promise) {
   // Deletes all existing entries
   return knex('restaurants')
     .del()

@@ -1,5 +1,5 @@
 /**
- * Create restaurants table
+ * Create restaurants table.
  *
  * @param  {object} knex
  * @return {Promise}
@@ -19,7 +19,7 @@ export function up(knex) {
 }
 
 /**
- * Drop restaurants table
+ * Drop restaurants table.
  *
  * @param  {object} knex
  * @return {Promise}

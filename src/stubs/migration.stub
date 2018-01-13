@@ -1,11 +1,11 @@
 /**
- * Description
+ * Description.
  *
  * @param  {object} knex
  * @return {Promise}
  */
 export function up(knex) {
-  return knex.schema.createTable('table_name', table => {
+  return knex.schema.createTable('table_name', (table) => {
     table.increments();
     table
       .timestamp('created_at')
@@ -16,7 +16,7 @@ export function up(knex) {
 }
 
 /**
- * Description
+ * Description.
  *
  * @param  {object} knex
  * @return {Promise}

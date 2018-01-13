@@ -5,11 +5,11 @@ import * as restaurantService from '../services/restaurantService';
 const SCHEMA = {
   name: Joi.string()
     .label('Name')
-    .max(128)
+    .max(255)
     .required(),
   chain: Joi.string()
     .label('Chain')
-    .max(128),
+    .max(255),
   url: Joi.string()
     .label('URL')
     .max(255),
