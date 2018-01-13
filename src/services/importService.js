@@ -19,7 +19,7 @@ export function getAllImports() {
 export function getImport(id) {
   return new Import({ id }).fetch().then((imp) => {
     if (!imp) {
-      throw new Boom.notFound('Import not found');
+      throw Boom.notFound('Import not found');
     }
 
     return imp;

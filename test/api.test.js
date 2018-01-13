@@ -5,11 +5,11 @@ import app from '../src/index';
 describe('Base API Test', () => {
   it('should return API version and title for the app', (done) => {
     request(app)
-      .get('/v1')
+      .get('/')
       .end((err, res) => {
         expect(res.statusCode).to.be.equal(200);
         expect(res.body.app).to.be.equal(app.locals.title);
-        expect(res.body.apiVersion).to.be.equal(app.locals.version);
+        expect(res.body.version).to.be.equal(app.locals.version);
 
         done();
       });

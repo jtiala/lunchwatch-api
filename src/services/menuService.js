@@ -19,7 +19,7 @@ export function getAllMenus() {
 export function getMenu(id) {
   return new Menu({ id }).fetch().then((menu) => {
     if (!menu) {
-      throw new Boom.notFound('Menu not found');
+      throw Boom.notFound('Menu not found');
     }
 
     return menu;

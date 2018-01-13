@@ -19,7 +19,7 @@ export function getAllRestaurants() {
 export function getRestaurant(id) {
   return new Restaurant({ id }).fetch().then((restaurant) => {
     if (!restaurant) {
-      throw new Boom.notFound('Restaurant not found');
+      throw Boom.notFound('Restaurant not found');
     }
 
     return restaurant;

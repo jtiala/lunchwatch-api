@@ -48,7 +48,10 @@ app.use(errorHandler.methodNotAllowed);
 
 app.listen(app.get('port'), app.get('host'), () => {
   logger.log('info', `Server started at http://${app.get('host')}:${app.get('port')}`);
-  scheduler.scheduleJob('job');
+
+  if (process.env.NODE_ENV !== 'test') {
+    scheduler.scheduleJob('job');
+  }
 });
 
 export default app;
