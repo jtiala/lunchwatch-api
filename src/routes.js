@@ -8,19 +8,26 @@ import restaurantsController from './controllers/restaurants';
 const router = Router();
 
 /**
- * GET /api/swagger.json
+ * GET /
+ */
+router.get('/', (req, res) => {
+  res.redirect('/v1');
+});
+
+/**
+ * GET /v1/swagger.json
  */
 router.get('/swagger.json', (req, res) => {
   res.json(swaggerSpec);
 });
 
-router.get('/', (req, res) => {
+router.get('/v1', (req, res) => {
   res.json({
     app: req.app.locals.title,
-    apiVersion: req.app.locals.version,
+    version: req.app.locals.version,
   });
 });
 
-router.use('/restaurants', restaurantsController);
+router.use('/v1/restaurants', restaurantsController);
 
 export default router;

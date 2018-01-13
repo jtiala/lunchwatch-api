@@ -38,8 +38,8 @@ app.use(json);
 // Everything in the public folder is served as static content
 app.use(express.static(path.join(__dirname, '/../public')));
 
-// API v1 Routes
-app.use('/v1', routes);
+// API Routes
+app.use('/', routes);
 
 // Error Middlewares
 app.use(errorHandler.genericErrorHandler);
