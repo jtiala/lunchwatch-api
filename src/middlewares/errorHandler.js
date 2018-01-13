@@ -44,7 +44,8 @@ export function methodNotAllowed(req, res) {
  * @param  {Object}   res
  * @param  {Function} next
  */
-export function bodyParser(err, req, res) {
+// eslint-disable-next-line no-unused-vars
+export function bodyParser(err, req, res, next) {
   logger.error(err);
 
   res.status(err.status).json({
@@ -63,7 +64,8 @@ export function bodyParser(err, req, res) {
  * @param  {Object}   res
  * @param  {Function} next
  */
-export function genericErrorHandler(err, req, res) {
+// eslint-disable-next-line no-unused-vars
+export function genericErrorHandler(err, req, res, next) {
   logger.error(err);
 
   const error = buildError(err);
