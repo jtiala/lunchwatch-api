@@ -1,12 +1,6 @@
 LunchWatch Menu Aggregator API
 ==============================
 
-## Prerequisites
-
-* [Node.js](https://yarnpkg.com/en/docs/install) - 6.9.0 or above
-* [Yarn](https://yarnpkg.com/en/docs/install) - 1.0.0 or above
-* [NPM](https://docs.npmjs.com/getting-started/installing-node) - 3.10.8 or above
-
 ## Setup
 
 Start containers with [docker-compose](https://docs.docker.com/compose/)
@@ -50,4 +44,4 @@ Run tests with coverage.
 
 ## License
 
-[MIT](LICENSE).
+[MIT](LICENSE)
