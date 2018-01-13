@@ -18,7 +18,7 @@ export function up(knex) {
       .inTable('menu_items')
       .onDelete('CASCADE')
       .notNull();
-    table.string('name').notNull();
+    table.string('value').notNull();
     table.integer('weight').notNull().defaultTo(1);
   });
 }

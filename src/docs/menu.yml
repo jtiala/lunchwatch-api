@@ -1,0 +1,25 @@
+definitions:
+  Menu:
+    title: Menu
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier representing a specific menu
+      createdAt:
+        type: string
+        format: date-time
+        description: Menu creation datetime
+      updatedAt:
+        type: string
+        format: date-time
+        description: Menu update datetime
+      restaurantId:
+        type: integer
+        description: Unique identifier representing a restaurant this menu belongs to
+      date:
+        type: string
+        description: ISO-8601 formatted date when the menu is served
+      language:
+        type: string
+        description: Language the menu is written in

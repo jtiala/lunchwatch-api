@@ -1,0 +1,25 @@
+definitions:
+  MenuItemComponent:
+    title: MenuItemComponent
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Unique identifier representing a specific menuItemComponent
+      createdAt:
+        type: string
+        format: date-time
+        description: MenuItemComponent creation datetime
+      updatedAt:
+        type: string
+        format: date-time
+        description: MenuItemComponent update datetime
+      menuItemId:
+        type: integer
+        description: Unique identifier representing a menuItem this menuItemComponent belongs to
+      value:
+        type: string
+        description: Value of the menuItemComponent
+      weight:
+        type: integer
+        description: Weight for ordering menuItemsComponents

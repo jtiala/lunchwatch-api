@@ -19,8 +19,6 @@ export function up(knex) {
       .onDelete('CASCADE')
       .notNull();
     table.enu('type', ['normal_meal', 'vegetarian_meal', 'light_meal', 'special_meal', 'dessert', 'breakfast', 'lunch_time', 'information', 'price_information']).notNull();
-    table.string('name');
-    table.string('price');
     table.integer('weight').notNull().defaultTo(1);
   });
 }
