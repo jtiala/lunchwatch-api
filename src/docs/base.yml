@@ -37,12 +37,12 @@ definitions:
     properties:
       app:
         type: string
-      appVersion:
+      version:
         type: string
 
-/:
+/v1:
   get:
-    summary: Get API version
+    summary: Get app version
     description: App version
     produces:
       - application/json
@@ -50,7 +50,7 @@ definitions:
       - Base
     responses:
       200:
-        description: Application and API version
+        description: Application name and version
         schema:
           title: App
           type: object
