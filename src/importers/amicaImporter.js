@@ -55,7 +55,7 @@ function importJson(json, restaurantId, language) {
                     .createMenuItem({
                       menuId: menu.id,
                       type: 'lunch_time',
-                      weight: -1,
+                      weight: -2,
                     })
                     .then((menuItem) => {
                       menuItemComponentService
@@ -71,7 +71,7 @@ function importJson(json, restaurantId, language) {
                 }
 
                 if ('SetMenus' in menuForDay && Array.isArray(menuForDay.SetMenus)) {
-                  let menuItemWeight = 1;
+                  let menuItemWeight = 0;
 
                   menuForDay.SetMenus.forEach((setMenu) => {
                     // create menuItem for a meal
@@ -79,11 +79,9 @@ function importJson(json, restaurantId, language) {
                       .createMenuItem({
                         menuId: menu.id,
                         type: 'normal_meal',
-                        weight: menuItemWeight,
+                        weight: menuItemWeight += 1,
                       })
                       .then((menuItem) => {
-                        menuItemWeight += 1;
-
                         // create menuItemComponent for name
                         if ('Name' in setMenu && (typeof setMenu.Name === 'string') && setMenu.Name.length) {
                           menuItemComponentService
@@ -109,7 +107,7 @@ function importJson(json, restaurantId, language) {
                         }
 
                         if ('Components' in setMenu && Array.isArray(setMenu.Components)) {
-                          let menuItemComponentWeight = 1;
+                          let menuItemComponentWeight = 0;
 
                           setMenu.Components.forEach((setMenuComponent) => {
                             // create menuItemComponent for component
@@ -119,10 +117,7 @@ function importJson(json, restaurantId, language) {
                                   menuItemId: menuItem.id,
                                   type: 'food_item',
                                   value: setMenuComponent,
-                                  weight: menuItemComponentWeight,
-                                })
-                                .then(() => {
-                                  menuItemComponentWeight += 1;
+                                  weight: menuItemComponentWeight += 1,
                                 })
                                 .catch(err => logger.log('error', err));
                             }
