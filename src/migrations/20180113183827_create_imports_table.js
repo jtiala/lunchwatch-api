@@ -21,6 +21,8 @@ export function up(knex) {
       .inTable('restaurants')
       .onDelete('CASCADE')
       .notNull();
+    table.string('language', 2).notNull();
+    table.boolean('enabled').defaultTo(true).notNull();
   });
 }
 

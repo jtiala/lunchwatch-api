@@ -18,6 +18,13 @@ const SCHEMA = {
     .integer()
     .positive()
     .required(),
+  language: Joi.string()
+    .label('Language')
+    .max(2)
+    .required(),
+  enabled: Joi.boolean()
+    .label('Enabled')
+    .required(),
 };
 
 /**
