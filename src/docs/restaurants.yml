@@ -23,19 +23,6 @@ definitions:
       url:
         type: string
         description: URL of the restaurants homepage
-  NewRestaurant:
-    title: NewRestaurant
-    type: object
-    properties:
-      name:
-        type: string
-        description: Name of the restaurant
-      chain:
-        type: string
-        description: Chain the restaurant is part of
-      url:
-        type: string
-        description: URL of the restaurants homepage
 
 /v1/restaurants:
   get:
@@ -53,35 +40,6 @@ definitions:
           type: array
           items:
             $ref: '#/definitions/Restaurant'
-  post:
-    summary: Create a new restaurant
-    description: Create a restaurant
-    produces:
-      - application/json
-    tags:
-      - /v1/restaurants
-    parameters:
-      - name: RestaurantParams
-        description: POST params for a restaurant
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/NewRestaurant'
-    responses:
-      201:
-        description: Newly created restaurant object
-        schema:
-          title: Restaurant
-          type: object
-          $ref: '#/definitions/Restaurant'
-      400:
-        description: Bad request
-        schema:
-          $ref: '#/definitions/ValidationError'
-      500:
-        description: Internal server error
-        schema:
-          $ref: '#/definitions/ServerError'
 
 /v1/restaurants/{id}:
   get:
@@ -104,74 +62,6 @@ definitions:
           title: Restaurant
           type: object
           $ref: '#/definitions/Restaurant'
-      404:
-        description: Restaurant not found
-        schema:
-          $ref: '#/definitions/NotFoundError'
-      500:
-        description: Internal server error
-        schema:
-          $ref: '#/definitions/ServerError'
-
-  put:
-    summary: Update a restaurant
-    description: Update a restaurant
-    produces:
-      - application/json
-    tags:
-      - /v1/restaurants
-    parameters:
-      - name: id
-        description: Unique identifier of the restaurant
-        in: path
-        required: true
-        type: integer
-      - name: RestaurantParams
-        description: PUT params for a restaurant
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/NewRestaurant'
-    responses:
-      200:
-        description: Updated restaurant object
-        schema:
-          title: Restaurant
-          type: object
-          $ref: '#/definitions/Restaurant'
-      400:
-        description: Bad request
-        schema:
-          $ref: '#/definitions/ValidationError'
-      404:
-        description: Restaurant not found
-        schema:
-          $ref: '#/definitions/NotFoundError'
-      500:
-        description: Internal server error
-        schema:
-          $ref: '#/definitions/ServerError'
-
-  delete:
-    summary: Delete a restaurant
-    description: Delete a restaurant
-    produces:
-      - application/json
-    tags:
-      - /v1/restaurants
-    parameters:
-      - name: id
-        description: Unique identifier of the restaurant
-        in: path
-        required: true
-        type: integer
-    responses:
-      204:
-        description: Restaurant deleted (no-content)
-      400:
-        description: Bad request
-        schema:
-          $ref: '#/definitions/ValidationError'
       404:
         description: Restaurant not found
         schema:
