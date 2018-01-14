@@ -68,3 +68,14 @@ export function updateMenu(id, menu) {
 export function deleteMenu(id) {
   return new Menu({ id }).fetch().then(menu => menu.destroy());
 }
+
+/**
+ * Delete all menus for specific restaurant for specific date.
+ *
+ * @param  {Number|String}  id
+ * @return {Promise}
+ */
+export function deleteMenusForRestaurantForDate(restaurantId, date, language) {
+  return Menu.where({ restaurant_id: restaurantId, date, language })
+    .fetchAll().then(menus => menus.map(menu => menu.destroy()));
+}

@@ -1,4 +1,3 @@
-// import fetch from 'node-fetch';
 import differenceInSeconds from 'date-fns/difference_in_seconds';
 import logger from '../utils/logger';
 import amicaImporter from '../importers/amicaImporter';
@@ -9,21 +8,12 @@ const importers = {
   unirestaImporter,
 };
 
-export function getImporter(importerName, opts) {
-  return importers[importerName](opts);
+export function getImporter(importerName, identifier, restaurantId, language) {
+  return importers[importerName](identifier, restaurantId, language);
 }
 
-export function fetchJSON(url) {
-  return new Promise((resolve) => {
-    logger.log('info', `Fetching ${url}`);
-    const e = Date.now() + 5000;
-    while (Date.now() < e);
-    resolve();
-  });
-}
-
-export function start(importerName, identifier) {
-  logger.log('info', `Starting ${importerName} for ${identifier}`);
+export function start(importerName, identifier, language) {
+  logger.log('info', `Starting ${importerName} for ${identifier} in ${language}`);
   return Date();
 }
 

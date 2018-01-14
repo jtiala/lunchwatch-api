@@ -9,7 +9,7 @@ const scheduler = {
       .getEnabledImports()
       .then((imports) => {
         imports.forEach((imp) => {
-          queue.add(() => getImporter(imp.get('importer'), imp.get('identifier')));
+          queue.add(() => getImporter(imp.get('importer'), imp.get('identifier'), imp.get('restaurantId'), imp.get('language')));
         });
       })
       .catch(err => logger.log('error', err));
