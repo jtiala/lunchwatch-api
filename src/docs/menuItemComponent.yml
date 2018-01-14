@@ -17,6 +17,9 @@ definitions:
       menuItemId:
         type: integer
         description: Unique identifier representing a menuItem this menuItemComponent belongs to
+      type:
+        type: string
+        description: Type of the menuItemComponent
       value:
         type: string
         description: Value of the menuItemComponent

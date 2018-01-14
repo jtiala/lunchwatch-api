@@ -6,7 +6,7 @@ import { getImporter } from './importer';
 const scheduler = {
   scheduleImporters: (queue, cron) => schedule.scheduleJob(cron, () => {
     importService
-      .getAllImports()
+      .getEnabledImports()
       .then((imports) => {
         imports.forEach((imp) => {
           queue.add(() => getImporter(imp.get('importer'), imp.get('identifier')));

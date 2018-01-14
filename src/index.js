@@ -55,7 +55,7 @@ app.listen(app.get('port'), app.get('host'), () => {
     const maxQueue = Infinity;
     const queue = new Queue(maxConcurrent, maxQueue);
 
-    scheduler.scheduleImporters(queue, '* * * * *');
+    scheduler.scheduleImporters(queue, process.env.IMPORT_CRON);
   }
 });
 

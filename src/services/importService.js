@@ -11,6 +11,15 @@ export function getAllImports() {
 }
 
 /**
+ * Get enabled imports.
+ *
+ * @return {Promise}
+ */
+export function getEnabledImports() {
+  return Import.where({ enabled: true }).fetchAll();
+}
+
+/**
  * Get a import.
  *
  * @param  {Number|String}  id
@@ -38,6 +47,8 @@ export function createImport(imp) {
     importer: imp.importer,
     identifier: imp.identifier,
     restaurantId: imp.restaurantId,
+    language: imp.language,
+    enabled: imp.enabled,
   })
     .save()
     .then(createdImport => createdImport.refresh());
@@ -57,6 +68,8 @@ export function updateImport(id, imp) {
       importer: imp.importer,
       identifier: imp.identifier,
       restaurantId: imp.restaurantId,
+      language: imp.language,
+      enabled: imp.enabled,
     })
     .then(updatedImport => updatedImport.refresh());
 }

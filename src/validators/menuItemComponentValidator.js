@@ -1,12 +1,17 @@
 import Joi from 'joi';
 import validate from '../utils/validate';
 import * as menuItemComponentService from '../services/menuItemComponentService';
+import MenuItemComponent from '../models/menuItemComponent';
 
 const SCHEMA = {
   menuItemId: Joi.number()
     .label('MenuItem ID')
     .integer()
     .positive()
+    .required(),
+  type: Joi.string()
+    .label('Type')
+    .valid(MenuItemComponent.validTypes)
     .required(),
   value: Joi.string()
     .label('Value')

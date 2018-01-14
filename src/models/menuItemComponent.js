@@ -3,6 +3,13 @@
 import bookshelf from '../db';
 
 const TABLE_NAME = 'menu_item_components';
+const VALID_TYPES = [
+  'name',
+  'food_item',
+  'lunch_time',
+  'information',
+  'price_information',
+];
 
 /**
  * MenuItemComponent model.
@@ -14,6 +21,10 @@ class MenuItemComponent extends bookshelf.Model {
 
   get hasTimestamps() {
     return true;
+  }
+
+  get validTypes() {
+    return VALID_TYPES;
   }
 }
 

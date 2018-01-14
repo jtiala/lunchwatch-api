@@ -35,6 +35,7 @@ export function getMenuItemComponent(id) {
 export function createMenuItemComponent(menuItemComponent) {
   return new MenuItemComponent({
     menuItemId: menuItemComponent.menuItemId,
+    type: menuItemComponent.type,
     value: menuItemComponent.value,
     weight: menuItemComponent.weight,
   })
@@ -53,6 +54,7 @@ export function updateMenuItemComponent(id, menuItemComponent) {
   return new MenuItemComponent({ id })
     .save({
       menuItemId: menuItemComponent.menuItemId,
+      type: menuItemComponent.type,
       value: menuItemComponent.value,
       weight: menuItemComponent.weight,
     })

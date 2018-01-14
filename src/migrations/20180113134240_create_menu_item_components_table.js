@@ -18,6 +18,7 @@ export function up(knex) {
       .inTable('menu_items')
       .onDelete('CASCADE')
       .notNull();
+    table.enu('type', ['name', 'food_item', 'lunch_time', 'information', 'price_information']).notNull();
     table.string('value').notNull();
     table.integer('weight').notNull().defaultTo(1);
   });
