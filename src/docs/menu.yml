@@ -18,8 +18,71 @@ definitions:
         type: integer
         description: Unique identifier representing a restaurant this menu belongs to
       date:
-        type: string
+        type: date
         description: ISO-8601 formatted date when the menu is served
       language:
         type: string
         description: Language the menu is written in
+
+/v1/menus:
+  get:
+    summary: Search menus
+    description: Returns menus that match search parameters. If parameters are not defined, all menus are returned
+    produces:
+      - application/json
+    tags:
+      - /v1/menus
+    parameters:
+      - name: restaurantId
+        description: Unique identifier of a restaurant
+        in: query
+        required: false
+        type: integer
+      - name: date
+        description: ISO-8601 formatted date when the menu is served
+        in: query
+        required: false
+        type: date
+      - name: language
+        description: Language the menu is written in
+        in: query
+        required: false
+        type: string
+    responses:
+      200:
+        description: An array of menus
+        schema:
+          title: Menus
+          type: array
+          items:
+            $ref: '#/definitions/Menu'
+
+/v1/menus/{id}:
+  get:
+    summary: Get a menu
+    description: Get menu information
+    produces:
+      - application/json
+    tags:
+      - /v1/menus
+    parameters:
+      - name: id
+        description: Unique identifier of the menu
+        in: path
+        required: true
+        type: integer
+    responses:
+      200:
+        description: Menu object
+        schema:
+          title: Menu
+          type: object
+          $ref: '#/definitions/Menu'
+      404:
+        description: Menu not found
+        schema:
+          $ref: '#/definitions/NotFoundError'
+      500:
+        description: Internal server error
+        schema:
+          $ref: '#/definitions/ServerError'

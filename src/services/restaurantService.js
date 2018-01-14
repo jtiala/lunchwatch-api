@@ -17,7 +17,7 @@ export function getAllRestaurants() {
  * @return {Promise}
  */
 export function getRestaurant(id) {
-  return new Restaurant({ id }).fetch().then((restaurant) => {
+  return new Restaurant({ id }).fetch({ withRelated: ['menus'] }).then((restaurant) => {
     if (!restaurant) {
       throw Boom.notFound('Restaurant not found');
     }

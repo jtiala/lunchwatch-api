@@ -11,13 +11,47 @@ export function getAllMenus() {
 }
 
 /**
+ * Search menus.
+ *
+ * @param  {Object}  searchParams
+ * @return {Promise}
+ */
+export function searchMenus(searchParams) {
+  const search = {};
+
+  if ('restaurantId' in searchParams && searchParams.restaurantId.length) {
+    search.restaurant_id = searchParams.restaurantId;
+  }
+
+  if ('date' in searchParams && searchParams.date.length) {
+    search.date = searchParams.date;
+  }
+
+  if ('language' in searchParams && searchParams.language.length) {
+    search.language = searchParams.language;
+  }
+
+  return Menu.where(search).fetchAll({
+    withRelated: [
+      { menuItems: query => query.orderBy('weight') },
+      { 'menuItems.menuItemComponents': query => query.orderBy('weight') },
+    ],
+  });
+}
+
+/**
  * Get a menu.
  *
  * @param  {Number|String}  id
  * @return {Promise}
  */
 export function getMenu(id) {
-  return new Menu({ id }).fetch().then((menu) => {
+  return new Menu({ id }).fetch({
+    withRelated: [
+      { menuItems: query => query.orderBy('weight') },
+      { 'menuItems.menuItemComponents': query => query.orderBy('weight') },
+    ],
+  }).then((menu) => {
     if (!menu) {
       throw Boom.notFound('Menu not found');
     }
