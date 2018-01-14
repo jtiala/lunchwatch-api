@@ -7,6 +7,7 @@ import express from 'express';
 import favicon from 'serve-favicon';
 import bodyParser from 'body-parser';
 import compression from 'compression';
+import Queue from 'promise-queue';
 import './env';
 import './db';
 import routes from './routes';
@@ -50,7 +51,11 @@ app.listen(app.get('port'), app.get('host'), () => {
   logger.log('info', `Server started at http://${app.get('host')}:${app.get('port')}`);
 
   if (process.env.NODE_ENV !== 'test') {
-    scheduler.scheduleImporters('* * * * *');
+    const maxConcurrent = 1;
+    const maxQueue = Infinity;
+    const queue = new Queue(maxConcurrent, maxQueue);
+
+    scheduler.scheduleImporters(queue, '* * * * *');
   }
 });
 

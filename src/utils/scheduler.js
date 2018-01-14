@@ -1,15 +1,10 @@
 import schedule from 'node-schedule';
-import Queue from 'promise-queue';
 import logger from './logger';
 import * as importService from '../services/importService';
 import { getImporter } from './importer';
 
 const scheduler = {
-  scheduleImporters: cron => schedule.scheduleJob(cron, () => {
-    const maxConcurrent = 1;
-    const maxQueue = Infinity;
-    const queue = new Queue(maxConcurrent, maxQueue);
-
+  scheduleImporters: (queue, cron) => schedule.scheduleJob(cron, () => {
     importService
       .getAllImports()
       .then((imports) => {
