@@ -1,20 +1,15 @@
-/* eslint-disable class-methods-use-this */
-
 import bookshelf from '../db';
+import Restaurant from './restaurant';
 
 const TABLE_NAME = 'imports';
 
 /**
  * Import model.
  */
-class Import extends bookshelf.Model {
-  get tableName() {
-    return TABLE_NAME;
-  }
-
-  get hasTimestamps() {
-    return true;
-  }
-}
+const Import = bookshelf.Model.extend({
+  tableName: TABLE_NAME,
+  hasTimestamps: true,
+  menuItem: () => this.belongsTo(Restaurant),
+});
 
 export default Import;

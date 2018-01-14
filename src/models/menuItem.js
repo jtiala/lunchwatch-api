@@ -1,6 +1,6 @@
-/* eslint-disable class-methods-use-this */
-
 import bookshelf from '../db';
+import Menu from './menu';
+import MenuItemComponent from './menuItemComponent';
 
 const TABLE_NAME = 'menu_items';
 const VALID_TYPES = [
@@ -18,18 +18,14 @@ const VALID_TYPES = [
 /**
  * MenuItem model.
  */
-class MenuItem extends bookshelf.Model {
-  get tableName() {
-    return TABLE_NAME;
-  }
-
-  get hasTimestamps() {
-    return true;
-  }
-
-  get validTypes() {
-    return VALID_TYPES;
-  }
-}
+const MenuItem = bookshelf.Model.extend({
+  tableName: TABLE_NAME,
+  hasTimestamps: true,
+  validTypes: VALID_TYPES,
+  menu: () => this.belongsTo(Menu),
+  menuItemComponents() {
+    return this.hasMany(MenuItemComponent);
+  },
+});
 
 export default MenuItem;
