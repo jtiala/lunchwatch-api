@@ -14,7 +14,6 @@ export function up(knex) {
     table.timestamp('updated_at').notNull();
     table.timestamp('last_import_at');
     table.string('importer').notNull();
-    table.string('schedule').notNull();
     table.string('identifier').notNull();
     table
       .integer('restaurant_id')

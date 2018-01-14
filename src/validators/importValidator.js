@@ -10,9 +10,6 @@ const SCHEMA = {
   importer: Joi.string()
     .label('Importer')
     .required(),
-  schedule: Joi.string()
-    .label('Schedule')
-    .required(),
   identifier: Joi.string()
     .label('Identifier')
     .required(),

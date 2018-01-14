@@ -14,8 +14,6 @@ import logger from './utils/logger';
 import scheduler from './utils/scheduler';
 import json from './middlewares/json';
 import * as errorHandler from './middlewares/errorHandler';
-import * as importService from './services/importService';
-import Importer from './importers/importer';
 
 const app = express();
 
@@ -52,14 +50,7 @@ app.listen(app.get('port'), app.get('host'), () => {
   logger.log('info', `Server started at http://${app.get('host')}:${app.get('port')}`);
 
   if (process.env.NODE_ENV !== 'test') {
-    importService
-      .getAllImports()
-      .then((imports) => {
-        imports.forEach((imp) => {
-          scheduler.scheduleJob(new Importer(imp.get('importer'), imp.get('identifier')), imp.get('schedule'));
-        });
-      })
-      .catch(err => logger.log('error', (err)));
+    scheduler.scheduleImporters('* * * * *');
   }
 });
 

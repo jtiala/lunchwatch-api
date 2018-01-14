@@ -21,9 +21,6 @@ definitions:
       importer:
         type: string
         description: Importer used to import this
-      schedule:
-        type: string
-        description: Cron formatted schedule
       identifier:
         type: string
         description: Identifier used in import

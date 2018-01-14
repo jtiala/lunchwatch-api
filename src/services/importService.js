@@ -36,7 +36,6 @@ export function createImport(imp) {
   return new Import({
     lastImportAt: imp.lastImportAt,
     importer: imp.importer,
-    schedule: imp.schedule,
     identifier: imp.identifier,
     restaurantId: imp.restaurantId,
   })
@@ -56,7 +55,6 @@ export function updateImport(id, imp) {
     .save({
       lastImportAt: imp.lastImportAt,
       importer: imp.importer,
-      schedule: imp.schedule,
       identifier: imp.identifier,
       restaurantId: imp.restaurantId,
     })

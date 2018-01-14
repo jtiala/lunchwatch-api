@@ -32,6 +32,13 @@ export function seed(knex, Promise) {
           url: 'https://www.amica.fi/ravintolat/ravintolat-kaupungeittain/oulu/vtt-oulu/',
           updated_at: new Date(),
         },
+        {
+          id: 4,
+          name: 'Kastari',
+          chain: 'Uniresta',
+          url: 'http://www.uniresta.fi/lounasravintolat/kaikki-ravintolat/kastari.html',
+          updated_at: new Date(),
+        },
       ]),
     ]));
 }

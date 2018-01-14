@@ -1,17 +1,20 @@
+import * as importer from '../utils/importer';
 import logger from '../utils/logger';
-import BaseImporter from './baseImporter';
 
-class AmicaImporter extends BaseImporter {
-  constructor(identifier) {
-    super();
-    this.identifier = identifier;
-  }
+const name = 'amicaImporter';
 
-  run() {
-    logger.log('info', `Running AmicaImporter for ${this.identifier}`);
-
-    AmicaImporter.fetchJson(this.identifier);
-  }
+function url(identifier, language, date) {
+  return `https://www.amica.fi/modules/json/json/Index?costNumber=${identifier}&language=${language}&firstDay=${date}`;
 }
 
-export default AmicaImporter;
+function amicaImporter(identifier) {
+  const start = importer.start(name, identifier);
+
+  importer.fetchJSON(url(identifier, 'fi', '2018-01-01'))
+    .then(() => {
+      importer.end(start);
+    })
+    .catch(err => logger.log('error', err));
+}
+
+export default amicaImporter;
