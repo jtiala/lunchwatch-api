@@ -1,7 +1,7 @@
 import schedule from 'node-schedule';
 import logger from './logger';
 import * as importService from '../services/importService';
-import { getImporter } from './importer';
+import { importer } from './importer';
 
 const scheduler = {
   scheduleImporters: (queue, cron) => schedule.scheduleJob(cron, () => {
@@ -9,7 +9,7 @@ const scheduler = {
       .getEnabledImports()
       .then((imports) => {
         imports.forEach((imp) => {
-          queue.add(() => getImporter(imp.get('importer'), imp.get('identifier'), imp.get('restaurantId'), imp.get('language')));
+          queue.add(() => importer(imp.get('importer'), imp.get('identifier'), imp.get('restaurantId'), imp.get('language')));
         });
       })
       .catch(err => logger.log('error', err));

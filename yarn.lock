@@ -773,7 +773,17 @@ block-stream@*:
   dependencies:
     inherits "~2.0.0"
 
-bluebird@^3.4.1, bluebird@^3.4.3, bluebird@^3.4.6:
+bluebird-queue@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/bluebird-queue/-/bluebird-queue-0.0.8.tgz#e5808b8ee55f135fe5654c3007b3dd5a292b4052"
+  dependencies:
+    bluebird "^2.9.24"
+
+bluebird@^2.9.24:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-2.11.0.tgz#534b9033c022c9579c56ba3b3e5a5caafbb650e1"
+
+bluebird@^3.4.1, bluebird@^3.4.3, bluebird@^3.4.6, bluebird@^3.5.1:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
 
@@ -1418,6 +1428,12 @@ del@^2.0.2:
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
     rimraf "^2.2.8"
+
+delay@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/delay/-/delay-2.0.0.tgz#9112eadc03e4ec7e00297337896f273bbd91fae5"
+  dependencies:
+    p-defer "^1.0.0"
 
 delayed-stream@~1.0.0:
   version "1.0.0"
@@ -3765,6 +3781,10 @@ output-file-sync@^1.1.2:
     mkdirp "^0.5.1"
     object-assign "^4.1.0"
 
+p-defer@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/p-defer/-/p-defer-1.0.0.tgz#9f6eb182f6c9aa8cd743004a7d4f96b196b0fb0c"
+
 p-finally@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/p-finally/-/p-finally-1.0.0.tgz#3fbcfb15b899a44123b34b6dcc18b724336a2cae"
@@ -3784,6 +3804,10 @@ p-locate@^2.0.0:
 p-map@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/p-map/-/p-map-1.2.0.tgz#e4e94f311eabbc8633a1e79908165fca26241b6b"
+
+p-queue@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/p-queue/-/p-queue-2.3.0.tgz#65d55e71bc1500fc413122da98ae457ff8a7c038"
 
 p-try@^1.0.0:
   version "1.0.0"
@@ -4046,10 +4070,6 @@ process-nextick-args@~1.0.6:
 progress@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.0.tgz#8a1be366bf8fc23db2bd23f10c6fe920b4389d1f"
-
-promise-queue@^2.2.3:
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/promise-queue/-/promise-queue-2.2.3.tgz#8534d76bf4673c3baa3a82bba01bd295cc30f14f"
 
 proxy-addr@~2.0.2:
   version "2.0.2"

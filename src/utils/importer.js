@@ -8,15 +8,17 @@ const importers = {
   unirestaImporter,
 };
 
-export function getImporter(importerName, identifier, restaurantId, language) {
-  return importers[importerName](identifier, restaurantId, language);
-}
+export const importer = (importerName, identifier, restaurantId, language) =>
+  importers[importerName](identifier, restaurantId, language);
 
-export function start(importerName, identifier, language) {
-  logger.log('info', `Starting ${importerName} for ${identifier} in ${language}`);
-  return Date();
-}
+export const start = (importerName, identifier, language) =>
+  new Promise((resolve) => {
+    logger.log('info', `Starting ${importerName}/${identifier}/${language}`);
+    resolve();
+  });
 
-export function end(startDate) {
-  logger.log('info', `Finished in ${differenceInSeconds(Date(), startDate)} seconds`);
-}
+export const end = (startDate, importerName, identifier, language) =>
+  new Promise((resolve) => {
+    logger.log('info', `Finished ${importerName}/${identifier}/${language} in ${differenceInSeconds(Date(), startDate)} seconds`);
+    resolve();
+  });

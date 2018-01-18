@@ -7,7 +7,7 @@ import express from 'express';
 import favicon from 'serve-favicon';
 import bodyParser from 'body-parser';
 import compression from 'compression';
-import Queue from 'promise-queue';
+import Queue from 'p-queue';
 import './env';
 import './db';
 import routes from './routes';
@@ -15,6 +15,11 @@ import logger from './utils/logger';
 import scheduler from './utils/scheduler';
 import json from './middlewares/json';
 import * as errorHandler from './middlewares/errorHandler';
+
+const queue = new Queue({
+  concurrency: 1,
+  autoStart: true,
+});
 
 const app = express();
 
@@ -51,10 +56,6 @@ app.listen(app.get('port'), app.get('host'), () => {
   logger.log('info', `Server started at http://${app.get('host')}:${app.get('port')}`);
 
   if (process.env.NODE_ENV !== 'test') {
-    const maxConcurrent = 1;
-    const maxQueue = Infinity;
-    const queue = new Queue(maxConcurrent, maxQueue);
-
     scheduler.scheduleImporters(queue, process.env.IMPORT_CRON);
   }
 });

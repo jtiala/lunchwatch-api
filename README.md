@@ -5,7 +5,7 @@ LunchWatch Menu Aggregator API
 
 Start containers with [docker-compose](https://docs.docker.com/compose/)
 
-    $ docker-compose up
+    docker-compose up
 
 Connect to the web container
 
@@ -13,8 +13,8 @@ Connect to the web container
 
 Run migrations and seed the database with some initial data
 
-    $ yarn run migrate
-    $ yarn run seed
+    yarn run migrate
+    yarn run seed
 
 Navigate to http://localhost:8848/api-docs/ to verify application is running from docker.
 
@@ -23,24 +23,24 @@ Navigate to http://localhost:8848/api-docs/ to verify application is running fro
 These are the commands to create a new migration and corresponding seed file. The commands should be
 ran inside the container.
 
-    $ yarn make:migration <name>
-    $ yarn make:seeder <name>
+    yarn make:migration <name>
+    yarn make:seeder <name>
 
 For example
 
-    $ yarn make:migration create_restaurants_table
-    $ yarn make:seeder 01_insert_restaurants
+    yarn make:migration create_restaurants_table
+    yarn make:seeder 01_insert_restaurants
 
 ## Tests
 
 To run tests, connect to the container and run these commands.
 
-    $ NODE_ENV=test yarn migrate
-    $ yarn test
+    NODE_ENV=test yarn migrate
+    yarn test
 
 Run tests with coverage.
 
-    $ yarn test:coverage
+    yarn test:coverage
 
 ## License
 
