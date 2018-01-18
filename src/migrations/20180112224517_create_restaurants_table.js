@@ -15,6 +15,8 @@ export function up(knex) {
     table.string('name').notNull();
     table.string('chain');
     table.string('url');
+    table.string('lat').notNull();
+    table.string('lng').notNull();
   });
 }
 
