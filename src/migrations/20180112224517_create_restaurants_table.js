@@ -17,6 +17,7 @@ export function up(knex) {
     table.string('url');
     table.string('lat').notNull();
     table.string('lng').notNull();
+    table.boolean('enabled').defaultTo(true).notNull();
   });
 }
 
