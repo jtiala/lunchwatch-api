@@ -234,7 +234,6 @@ const handleJson = (json, restaurantId, language) =>
  * Amica menus are fetched per week using the date of monday.
  * Menus for current and next week are usually available.
  *
- * @param {Queue}   queue
  * @param {String}  identifier
  * @param {Number}  restaurantId
  * @param {String}  language
