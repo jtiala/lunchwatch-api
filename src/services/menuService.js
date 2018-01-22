@@ -33,6 +33,7 @@ export function searchMenus(searchParams) {
 
   return Menu.where(search).fetchAll({
     withRelated: [
+      'restaurant',
       { menuItems: query => query.orderBy('weight') },
       { 'menuItems.menuItemComponents': query => query.orderBy('weight') },
     ],

@@ -24,14 +24,14 @@ const name = 'amicaImporter';
  */
 const getUrl = (identifier, language, date) => `https://www.amica.fi/modules/json/json/Index?costNumber=${identifier}&language=${language}&firstDay=${date}`;
 
-const handleMenuItemComponent = (menuItem, setMenuComponentJson, count) =>
+const handleMenuItemComponent = (menuItem, setMenuComponentJson, weight) =>
   new Promise((resolve) => {
     menuItemComponentService
       .createMenuItemComponent({
         menuItemId: menuItem.id,
         type: 'food_item',
-        value: setMenuComponentJson,
-        weight: count,
+        value: importer.normalizeString(setMenuComponentJson),
+        weight,
       })
       .then(() => resolve(menuItem))
       .catch((err) => {
@@ -54,8 +54,9 @@ const handleMenuItemComponents = (menuItem, setMenuJson) =>
       setMenuJson.Components.forEach((setMenuComponentJson) => {
         if ((typeof setMenuComponentJson === 'string') && setMenuComponentJson.length) {
           count += 1;
+          const weight = count;
           operations.push(() => delay(500)
-            .then(() => handleMenuItemComponent(menuItem, setMenuComponentJson, count))
+            .then(() => handleMenuItemComponent(menuItem, setMenuComponentJson, weight))
             .catch((err) => {
               logger.log('error', err);
             }));
@@ -76,7 +77,7 @@ const handleMenuItemPrice = (menuItem, setMenuJson) =>
         .createMenuItemComponent({
           menuItemId: menuItem.id,
           type: 'price_information',
-          value: setMenuJson.Price,
+          value: importer.normalizeString(setMenuJson.Price),
           weight: -2,
         })
         .then(() => resolve(menuItem))
@@ -96,7 +97,7 @@ const handleMenuItemName = (menuItem, setMenuJson) =>
         .createMenuItemComponent({
           menuItemId: menuItem.id,
           type: 'name',
-          value: setMenuJson.Name,
+          value: importer.normalizeString(setMenuJson.Name),
           weight: -2,
         })
         .then(() => resolve(menuItem))
@@ -109,13 +110,13 @@ const handleMenuItemName = (menuItem, setMenuJson) =>
     }
   });
 
-const handleSetMenu = (menu, setMenuJson, count) =>
+const handleSetMenu = (menu, setMenuJson, weight) =>
   new Promise((resolve) => {
     menuItemService
       .createMenuItem({
         menuId: menu.id,
-        type: 'normal_meal',
-        weight: count,
+        type: importer.getMenuItemTypeFromString(setMenuJson.Name),
+        weight,
       })
       .then(menuItem => handleMenuItemName(menuItem, setMenuJson))
       .then(menuItem => handleMenuItemPrice(menuItem, setMenuJson))
@@ -140,8 +141,10 @@ const handleSetMenus = (menu, menuJson) =>
 
       menuJson.SetMenus.forEach((setMenuJson) => {
         count += 1;
+        const weight = count;
+
         operations.push(() => delay(500)
-          .then(() => handleSetMenu(menu, setMenuJson, count))
+          .then(() => handleSetMenu(menu, setMenuJson, weight))
           .catch((err) => {
             logger.log('error', err);
           }));
@@ -168,7 +171,7 @@ const handleMenuLunchTime = (menu, menuJson) =>
             .createMenuItemComponent({
               menuItemId: menuItem.id,
               type: 'lunch_time',
-              value: menuJson.LunchTime,
+              value: importer.normalizeString(menuJson.LunchTime),
               weight: 0,
             });
         })

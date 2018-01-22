@@ -72,33 +72,45 @@ const handleMenuItems = (menu, items) =>
       Object.keys(items).forEach((key) => {
         if (Object.prototype.hasOwnProperty.call(items, key)) {
           if (key.match(/^(ma|ti|ke|to|pe|la|su)-ruokalaji-\d$/)) {
+            const value = importer.normalizeString(items[key]);
+            const type = importer.getMenuItemTypeFromString(value);
             count += 1;
+
             meals[count] = {
-              type: 'normal_meal',
+              type,
               components: [
                 {
-                  type: 'food_item',
-                  value: items[key],
+                  type: type === 'lunch_time' ? 'lunch_time' : 'food_item',
+                  value,
                   weight: 1,
                 },
               ],
             };
           } else if (key.match(/^(ma|ti|ke|to|pe|la|su)-erikoisuudet-otsikot$/)) {
             if (Array.isArray(items[key]) && items[key].length) {
-              items[key].forEach((title, index) => {
+              items[key].forEach((item, index) => {
+                const value = importer.normalizeString(item);
+                const type = importer.getMenuItemTypeFromString(value, 'special_meal', ['lunch_time']);
+
                 if (typeof specialMeals[index] !== 'object') {
                   specialMeals[index] = {
-                    type: 'special_meal',
+                    type,
                     components: [],
                   };
+                } else {
+                  specialMeals[index].type = type;
                 }
 
-                specialMeals[index].components.push({ type: 'name', value: title, weight: -2 });
+                if (value.length > 1) {
+                  specialMeals[index].components.push({ type: 'name', value, weight: -2 });
+                }
               });
             }
           } else if (key.match(/^(ma|ti|ke|to|pe|la|su)-erikoisuudet$/)) {
             if (Array.isArray(items[key]) && items[key].length) {
-              items[key].forEach((value, index) => {
+              items[key].forEach((item, index) => {
+                const value = importer.normalizeString(item);
+
                 if (typeof specialMeals[index] !== 'object') {
                   specialMeals[index] = {
                     type: 'special_meal',
@@ -106,18 +118,18 @@ const handleMenuItems = (menu, items) =>
                   };
                 }
 
-                specialMeals[index].components.push({ type: 'food_item', value, weight: 1 });
+                if (value.length > 1) {
+                  specialMeals[index].components.push({ type: 'food_item', value, weight: 1 });
+                }
               });
             }
           }
         }
       });
 
-      const normalMealCount = Object.keys(meals).length;
-
-      Object.keys(specialMeals).forEach((key) => {
+      Object.keys(specialMeals).forEach((key, index) => {
         if (Object.prototype.hasOwnProperty.call(specialMeals, key)) {
-          meals[normalMealCount + key] = specialMeals[key];
+          meals[count + index] = specialMeals[key];
         }
       });
 
