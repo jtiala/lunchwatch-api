@@ -6,7 +6,7 @@
  */
 export function up(knex) {
   return knex.schema.createTable('menu_item_components', (table) => {
-    table.increments();
+    table.bigIncrements();
     table
       .timestamp('created_at')
       .notNull()
@@ -19,7 +19,7 @@ export function up(knex) {
       .onDelete('CASCADE')
       .notNull();
     table.enu('type', ['name', 'food_item', 'lunch_time', 'information', 'price_information']).notNull();
-    table.string('value').notNull();
+    table.text('value').notNull();
     table.integer('weight').notNull().defaultTo(1);
   });
 }
