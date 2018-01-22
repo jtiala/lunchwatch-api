@@ -17,7 +17,9 @@ const MenuItemComponent = bookshelf.Model.extend({
   tableName: TABLE_NAME,
   hasTimestamps: true,
   validTypes: VALID_TYPES,
-  menuItem: () => this.belongsTo(MenuItem),
+  menuItem() {
+    return this.belongsTo(MenuItem);
+  },
 });
 
 export default MenuItemComponent;

@@ -9,7 +9,9 @@ const TABLE_NAME = 'imports';
 const Import = bookshelf.Model.extend({
   tableName: TABLE_NAME,
   hasTimestamps: true,
-  menuItem: () => this.belongsTo(Restaurant),
+  menuItem() {
+    return this.belongsTo(Restaurant);
+  },
 });
 
 export default Import;

@@ -10,7 +10,9 @@ const TABLE_NAME = 'menus';
 const Menu = bookshelf.Model.extend({
   tableName: TABLE_NAME,
   hasTimestamps: true,
-  restaurant: () => this.belongsTo(Restaurant),
+  restaurant() {
+    return this.belongsTo(Restaurant);
+  },
   menuItems() {
     return this.hasMany(MenuItem);
   },

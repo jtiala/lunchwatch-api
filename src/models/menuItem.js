@@ -22,7 +22,9 @@ const MenuItem = bookshelf.Model.extend({
   tableName: TABLE_NAME,
   hasTimestamps: true,
   validTypes: VALID_TYPES,
-  menu: () => this.belongsTo(Menu),
+  menu() {
+    return this.belongsTo(Menu);
+  },
   menuItemComponents() {
     return this.hasMany(MenuItemComponent);
   },
