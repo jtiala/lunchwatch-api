@@ -1,5 +1,5 @@
 .git
-.env*
+.env.production
 .editorconfig
 .gitignore
 LICENSE

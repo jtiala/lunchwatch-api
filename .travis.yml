@@ -6,11 +6,7 @@ node_js:
   - "6"
 services:
   - postgresql
-before_script:
-  - cp .env.example .env
-  - psql -c 'create database lunchwatch_api_test;' -U postgres
-  - NODE_ENV=test npm run migrate
 script:
-  - npm run test:coverage
+  - yarn run test:coverage
 after_script:
-  - npm run codecov
+  - yarn run codecov

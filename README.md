@@ -3,15 +3,15 @@ LunchWatch Menu Aggregator API
 
 ## Setup
 
-Start containers with [docker-compose](https://docs.docker.com/compose/)
+Start containers with [docker-compose](https://docs.docker.com/compose/):
 
     docker-compose up
 
-Connect to the web container
+Connect to the web container:
 
     docker exec -it lunchwatchapi_web_1 /bin/bash
 
-Run migrations and seed the database with some initial data
+Run migrations and seed the database with some initial data:
 
     yarn run migrate
     yarn run seed
@@ -33,12 +33,12 @@ For example
 
 ## Tests
 
-To run tests, connect to the container and run these commands.
+To run tests, connect to the container and run tests with:
 
-    NODE_ENV=test yarn migrate
+    docker exec -it lunchwatchapi_web_1 /bin/bash
     yarn test
 
-Run tests with coverage.
+Run tests with coverage with:
 
     yarn test:coverage
 

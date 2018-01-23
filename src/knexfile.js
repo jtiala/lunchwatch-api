@@ -1,18 +1,21 @@
+/* eslint-disable no-nested-ternary */
 // eslint-disable-next-line import/no-extraneous-dependencies
 require('babel-register');
-require('dotenv').config({ path: `${__dirname}/../.env` });
+require('dotenv').config({
+  path: process.env.NODE_ENV === 'test'
+    ? `${__dirname}/../.env.test`
+    : process.env.NODE_ENV === 'production'
+      ? `${__dirname}/../.env.production`
+      : `${__dirname}/../.env`,
+});
 
 /**
  * Database configuration.
  */
 module.exports = {
-  client: process.env.NODE_ENV === 'test' ? process.env.TEST_DB_CLIENT : process.env.DB_CLIENT,
+  client: process.env.DB_CLIENT,
   connection: process.env.NODE_ENV === 'test' ? {
-    port: process.env.TEST_DB_PORT,
-    host: process.env.TEST_DB_HOST,
-    user: process.env.TEST_DB_USER,
-    password: process.env.TEST_DB_PASSWORD,
-    database: process.env.TEST_DB_NAME,
+    filename: process.env.DB_FILE,
     charset: 'utf8',
     timezone: 'UTC',
   } : {
@@ -33,4 +36,5 @@ module.exports = {
     directory: './seeds',
     stub: './stubs/seed.stub',
   },
+  useNullAsDefault: process.env.DB_CLIENT === 'sqlite',
 };

@@ -21,8 +21,8 @@ node_modules
 # Build directory
 dist
 
-# Dotenv configuration
-.env
+# Dotenv production configuration
+.env.production
 
 # Visual Studio Code
 .vscode
@@ -33,3 +33,6 @@ coverage
 
 # Vim swp files
 *.swp
+
+# Sqlite databases
+*.sqlite3
