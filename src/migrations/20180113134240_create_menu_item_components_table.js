@@ -6,7 +6,7 @@
  */
 export function up(knex) {
   return knex.schema.createTable('menu_item_components', (table) => {
-    table.bigIncrements();
+    table.increments();
     table
       .timestamp('created_at')
       .notNull()

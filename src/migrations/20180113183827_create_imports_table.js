@@ -6,7 +6,7 @@
  */
 export function up(knex) {
   return knex.schema.createTable('imports', (table) => {
-    table.bigIncrements();
+    table.increments();
     table
       .timestamp('created_at')
       .notNull()

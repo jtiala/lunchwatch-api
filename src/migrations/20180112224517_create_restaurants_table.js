@@ -6,7 +6,7 @@
  */
 export function up(knex) {
   return knex.schema.createTable('restaurants', (table) => {
-    table.bigIncrements();
+    table.increments();
     table
       .timestamp('created_at')
       .notNull()
@@ -15,8 +15,8 @@ export function up(knex) {
     table.string('name').notNull();
     table.string('chain');
     table.string('url');
-    table.decimal('lat', 10, 6).notNull();
-    table.decimal('lng', 10, 6).notNull();
+    table.double('lat', 10, 6).notNull();
+    table.double('lng', 10, 6).notNull();
     table.boolean('enabled').defaultTo(true).notNull();
   });
 }
