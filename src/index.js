@@ -54,7 +54,8 @@ app.listen(app.get('port'), app.get('host'), () => {
   logger.log('info', `Server started at http://${app.get('host')}:${app.get('port')}`);
 
   if (process.env.NODE_ENV !== 'test') {
-    scheduler.scheduleImporters(queue, process.env.IMPORT_CRON);
+    scheduler.scheduleDatabaseCleaner(queue, process.env.DB_CLEANER_CRON);
+    scheduler.scheduleImporters(queue, process.env.IMPORT_MENUS_CRON);
   }
 });
 

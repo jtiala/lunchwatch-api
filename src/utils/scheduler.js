@@ -2,6 +2,7 @@ import schedule from 'node-schedule';
 import format from 'date-fns/format';
 import logger from './logger';
 import * as importService from '../services/importService';
+import * as menuService from '../services/menuService';
 import { importer } from './importer';
 
 const scheduler = {
@@ -15,6 +16,12 @@ const scheduler = {
               .updateImport(imp.id, Object.assign(imp, { lastImportAt: format(Date()) }))));
         });
       })
+      .catch(err => logger.log('error', err));
+  }),
+  scheduleDatabaseCleaner: (queue, cron) => schedule.scheduleJob(cron, () => {
+    menuService
+      .deleteOldMenus()
+      .then(() => logger.log('info', 'Deleted old menus.'))
       .catch(err => logger.log('error', err));
   }),
 };

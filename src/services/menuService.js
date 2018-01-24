@@ -1,4 +1,5 @@
 import Boom from 'boom';
+import subWeeks from 'date-fns/sub_weeks';
 import Menu from '../models/menu';
 
 /**
@@ -107,10 +108,22 @@ export function deleteMenu(id) {
 /**
  * Delete all menus for specific restaurant for specific date.
  *
- * @param  {Number|String}  id
+ * @param  {Number|String}  restaurantId
+ * @param  {String}         date
+ * @param  {String}         language
  * @return {Promise}
  */
 export function deleteMenusForRestaurantForDate(restaurantId, date, language) {
   return Menu.where({ restaurant_id: restaurantId, date, language })
+    .fetchAll().then(menus => menus.map(menu => menu.destroy()));
+}
+
+/**
+ * Delete all menus that are older than four weeks.
+ *
+ * @return {Promise}
+ */
+export function deleteOldMenus() {
+  return Menu.where('date', '<', subWeeks(Date(), 4))
     .fetchAll().then(menus => menus.map(menu => menu.destroy()));
 }
