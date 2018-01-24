@@ -1,4 +1,5 @@
 import Boom from 'boom';
+import bookshelf from '../db';
 import Restaurant from '../models/restaurant';
 
 /**
@@ -8,10 +9,10 @@ import Restaurant from '../models/restaurant';
  * @return {Promise}
  */
 export function searchRestaurants(searchParams) {
-  const search = {
-    enabled: true,
-  };
+  const columns = ['*'];
+  const conditions = { enabled: true };
 
+  let order = 'id';
   let page = 1;
   let pageSize = 10;
 
@@ -24,14 +25,22 @@ export function searchRestaurants(searchParams) {
   }
 
   if ('chain' in searchParams && searchParams.chain.length) {
-    search.chain = searchParams.chain;
+    conditions.chain = searchParams.chain;
   }
 
   if ('enabled' in searchParams && searchParams.enabled.length) {
-    search.enabled = searchParams.enabled;
+    conditions.enabled = searchParams.enabled;
   }
 
-  return Restaurant.where(search).orderBy('id').fetchPage({
+  if ('lat' in searchParams && searchParams.lat.length
+    && 'lng' in searchParams && searchParams.lng.length) {
+    columns.push(bookshelf.knex.raw(`((2 * 3961 * asin(sqrt((sin(radians((lat - ${parseFloat(searchParams.lat)}) / 2))) ^ 2 + cos(radians(${parseFloat(searchParams.lat)})) * cos(radians(lat)) * (sin(radians((lng - ${parseFloat(searchParams.lng)}) / 2))) ^ 2))) * 1.60934) AS distance`));
+    order = 'distance';
+  }
+
+  return Restaurant.query((qb) => {
+    qb.select(columns).where(conditions).orderBy(order);
+  }).fetchPage({
     page,
     pageSize,
   });

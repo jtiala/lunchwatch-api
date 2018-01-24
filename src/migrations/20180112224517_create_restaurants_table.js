@@ -15,8 +15,8 @@ export function up(knex) {
     table.string('name').notNull();
     table.string('chain');
     table.string('url');
-    table.string('lat').notNull();
-    table.string('lng').notNull();
+    table.decimal('lat', 10, 6).notNull();
+    table.decimal('lng', 10, 6).notNull();
     table.boolean('enabled').defaultTo(true).notNull();
   });
 }

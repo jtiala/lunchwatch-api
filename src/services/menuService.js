@@ -1,5 +1,6 @@
 import Boom from 'boom';
 import subWeeks from 'date-fns/sub_weeks';
+import bookshelf from '../db';
 import Menu from '../models/menu';
 
 /**
@@ -9,7 +10,11 @@ import Menu from '../models/menu';
  * @return {Promise}
  */
 export function searchMenus(searchParams) {
-  const search = {};
+  const columns = ['menus.*'];
+  const restaurantColumns = ['*'];
+  const conditions = { 'restaurants.enabled': true };
+
+  let order = 'restaurants.id';
   let page = 1;
   let pageSize = 10;
 
@@ -22,26 +27,36 @@ export function searchMenus(searchParams) {
   }
 
   if ('restaurantId' in searchParams && searchParams.restaurantId.length) {
-    search.restaurant_id = searchParams.restaurantId;
+    conditions['restaurants.id'] = searchParams.restaurantId;
   }
 
   if ('date' in searchParams && searchParams.date.length) {
-    search.date = searchParams.date;
+    conditions['menus.date'] = searchParams.date;
   }
 
   if ('language' in searchParams && searchParams.language.length) {
-    search.language = searchParams.language;
+    conditions['menus.language'] = searchParams.language;
   }
 
-  return Menu.where(search).fetchPage({
-    page,
-    pageSize,
-    withRelated: [
-      'restaurant',
-      { menuItems: query => query.orderBy('weight') },
-      { 'menuItems.menuItemComponents': query => query.orderBy('weight') },
-    ],
-  });
+  if ('lat' in searchParams && searchParams.lat.length
+    && 'lng' in searchParams && searchParams.lng.length) {
+    const sql = `((2 * 3961 * asin(sqrt((sin(radians((restaurants.lat - ${parseFloat(searchParams.lat)}) / 2))) ^ 2 + cos(radians(${parseFloat(searchParams.lat)})) * cos(radians(restaurants.lat)) * (sin(radians((restaurants.lng - ${parseFloat(searchParams.lng)}) / 2))) ^ 2))) * 1.60934)`;
+    order = bookshelf.knex.raw(sql);
+    restaurantColumns.push(bookshelf.knex.raw(`${sql} AS distance`));
+  }
+
+  return Menu.query((qb) => {
+    qb.select(columns).leftJoin('restaurants', 'menus.restaurant_id', 'restaurants.id').where(conditions).orderBy(order);
+  })
+    .fetchPage({
+      page,
+      pageSize,
+      withRelated: [
+        { restaurant: qb => qb.select(restaurantColumns) },
+        { menuItems: query => query.orderBy('weight') },
+        { 'menuItems.menuItemComponents': query => query.orderBy('weight') },
+      ],
+    });
 }
 
 /**

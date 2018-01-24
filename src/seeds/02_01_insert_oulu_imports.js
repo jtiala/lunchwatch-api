@@ -67,6 +67,17 @@ export function seed(knex, Promise) {
         { updated_at: new Date(), restaurant_id: 10304, importer: 'sodexoImporter', identifier: '8336', language: 'en' },
         { updated_at: new Date(), restaurant_id: 10305, importer: 'sodexoImporter', identifier: '94', language: 'fi' },
         { updated_at: new Date(), restaurant_id: 10305, importer: 'sodexoImporter', identifier: '94', language: 'en' },
+        // Oulu / Antell
+        { enabled: false, updated_at: new Date(), restaurant_id: 10400, importer: 'antellImporter', identifier: '300', language: 'fi' },
+        { enabled: false, updated_at: new Date(), restaurant_id: 10401, importer: 'antellImporter', identifier: '206', language: 'fi' },
+        { enabled: false, updated_at: new Date(), restaurant_id: 10402, importer: 'antellImporter', identifier: '65', language: 'fi' },
+        { enabled: false, updated_at: new Date(), restaurant_id: 10403, importer: 'antellImporter', identifier: '49', language: 'fi' },
+        { enabled: false, updated_at: new Date(), restaurant_id: 10404, importer: 'antellImporter', identifier: '336', language: 'fi' },
+        { enabled: false, updated_at: new Date(), restaurant_id: 10405, importer: 'antellImporter', identifier: '47', language: 'fi' },
+        { enabled: false, updated_at: new Date(), restaurant_id: 10406, importer: 'antellImporter', identifier: '356', language: 'fi' },
+        { enabled: false, updated_at: new Date(), restaurant_id: 10407, importer: 'antellImporter', identifier: '48', language: 'fi' },
+        { enabled: false, updated_at: new Date(), restaurant_id: 10408, importer: 'antellImporter', identifier: '66', language: 'fi' },
+        { enabled: false, updated_at: new Date(), restaurant_id: 10409, importer: 'antellImporter', identifier: '45', language: 'fi' },
       ]),
     ]));
 }
