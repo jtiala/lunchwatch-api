@@ -8,8 +8,8 @@ const router = Router();
  */
 router.get('/', (req, res, next) => {
   restaurantService
-    .getAllRestaurants()
-    .then(data => res.json({ data }))
+    .searchRestaurants(req.query)
+    .then(data => res.json({ data, pagination: data.pagination }))
     .catch(err => next(err));
 });
 

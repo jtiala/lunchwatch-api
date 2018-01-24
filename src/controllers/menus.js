@@ -9,7 +9,7 @@ const router = Router();
 router.get('/', (req, res, next) => {
   menuService
     .searchMenus(req.query)
-    .then(data => res.json({ data }))
+    .then(data => res.json({ data, pagination: data.pagination }))
     .catch(err => next(err));
 });
 

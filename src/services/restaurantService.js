@@ -2,6 +2,42 @@ import Boom from 'boom';
 import Restaurant from '../models/restaurant';
 
 /**
+ * Search restaurants.
+ *
+ * @param  {Object}  searchParams
+ * @return {Promise}
+ */
+export function searchRestaurants(searchParams) {
+  const search = {
+    enabled: true,
+  };
+
+  let page = 1;
+  let pageSize = 10;
+
+  if ('page' in searchParams && searchParams.page.length) {
+    page = parseInt(searchParams.page, 10);
+  }
+
+  if ('pageSize' in searchParams && searchParams.pageSize.length) {
+    pageSize = parseInt(searchParams.pageSize, 10);
+  }
+
+  if ('chain' in searchParams && searchParams.chain.length) {
+    search.chain = searchParams.chain;
+  }
+
+  if ('enabled' in searchParams && searchParams.enabled.length) {
+    search.enabled = searchParams.enabled;
+  }
+
+  return Restaurant.where(search).orderBy('id').fetchPage({
+    page,
+    pageSize,
+  });
+}
+
+/**
  * Get all restaurants.
  *
  * @return {Promise}

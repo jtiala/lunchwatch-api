@@ -3,15 +3,6 @@ import subWeeks from 'date-fns/sub_weeks';
 import Menu from '../models/menu';
 
 /**
- * Get all menus.
- *
- * @return {Promise}
- */
-export function getAllMenus() {
-  return Menu.fetchAll();
-}
-
-/**
  * Search menus.
  *
  * @param  {Object}  searchParams
@@ -19,6 +10,16 @@ export function getAllMenus() {
  */
 export function searchMenus(searchParams) {
   const search = {};
+  let page = 1;
+  let pageSize = 10;
+
+  if ('page' in searchParams && searchParams.page.length) {
+    page = parseInt(searchParams.page, 10);
+  }
+
+  if ('pageSize' in searchParams && searchParams.pageSize.length) {
+    pageSize = parseInt(searchParams.pageSize, 10);
+  }
 
   if ('restaurantId' in searchParams && searchParams.restaurantId.length) {
     search.restaurant_id = searchParams.restaurantId;
@@ -32,13 +33,24 @@ export function searchMenus(searchParams) {
     search.language = searchParams.language;
   }
 
-  return Menu.where(search).fetchAll({
+  return Menu.where(search).fetchPage({
+    page,
+    pageSize,
     withRelated: [
       'restaurant',
       { menuItems: query => query.orderBy('weight') },
       { 'menuItems.menuItemComponents': query => query.orderBy('weight') },
     ],
   });
+}
+
+/**
+ * Get all menus.
+ *
+ * @return {Promise}
+ */
+export function getAllMenus() {
+  return Menu.fetchAll();
 }
 
 /**
