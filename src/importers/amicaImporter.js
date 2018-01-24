@@ -2,10 +2,7 @@ import delay from 'delay';
 import fetch from 'node-fetch';
 import Queue from 'p-queue';
 import Promise from 'bluebird';
-import startOfWeek from 'date-fns/start_of_week';
-import addWeeks from 'date-fns/add_weeks';
-import format from 'date-fns/format';
-import parse from 'date-fns/parse';
+import { startOfWeek, addWeeks, format, parse } from 'date-fns';
 import * as menuService from '../services/menuService';
 import * as menuItemService from '../services/menuItemService';
 import * as menuItemComponentService from '../services/menuItemComponentService';
@@ -24,13 +21,13 @@ const name = 'amicaImporter';
  */
 const getUrl = (identifier, language, date) => `https://www.amica.fi/modules/json/json/Index?costNumber=${identifier}&language=${language}&firstDay=${date}`;
 
-const handleMenuItemComponent = (menuItem, setMenuComponentJson, weight) =>
+const handleMenuItemComponent = (menuItem, setMenuComponentData, weight) =>
   new Promise((resolve) => {
     menuItemComponentService
       .createMenuItemComponent({
         menuItemId: menuItem.id,
         type: 'food_item',
-        value: importer.normalizeString(setMenuComponentJson),
+        value: importer.normalizeString(setMenuComponentData),
         weight,
       })
       .then(() => resolve(menuItem))
@@ -40,9 +37,9 @@ const handleMenuItemComponent = (menuItem, setMenuComponentJson, weight) =>
       });
   });
 
-const handleMenuItemComponents = (menuItem, setMenuJson) =>
+const handleMenuItemComponents = (menuItem, setMenuData) =>
   new Promise((resolve) => {
-    if ('Components' in setMenuJson && Array.isArray(setMenuJson.Components) && setMenuJson.Components.length) {
+    if ('Components' in setMenuData && Array.isArray(setMenuData.Components) && setMenuData.Components.length) {
       const queue = new Queue({
         concurrency: 1,
         autoStart: true,
@@ -51,15 +48,13 @@ const handleMenuItemComponents = (menuItem, setMenuJson) =>
       const operations = [];
       let count = 0;
 
-      setMenuJson.Components.forEach((setMenuComponentJson) => {
-        if ((typeof setMenuComponentJson === 'string') && setMenuComponentJson.length) {
+      setMenuData.Components.forEach((setMenuComponentData) => {
+        if ((typeof setMenuComponentData === 'string') && setMenuComponentData.length) {
           count += 1;
           const weight = count;
           operations.push(() => delay(500)
-            .then(() => handleMenuItemComponent(menuItem, setMenuComponentJson, weight))
-            .catch((err) => {
-              logger.log('error', err);
-            }));
+            .then(() => handleMenuItemComponent(menuItem, setMenuComponentData, weight))
+            .catch(err => logger.log('error', err)));
         }
       });
 
@@ -70,15 +65,15 @@ const handleMenuItemComponents = (menuItem, setMenuJson) =>
     }
   });
 
-const handleMenuItemPrice = (menuItem, setMenuJson) =>
+const handleMenuItemPrice = (menuItem, setMenuData) =>
   new Promise((resolve) => {
-    if ('Price' in setMenuJson && (typeof setMenuJson.Price === 'string') && setMenuJson.Price.length) {
+    if ('Price' in setMenuData && (typeof setMenuData.Price === 'string') && setMenuData.Price.length) {
       menuItemComponentService
         .createMenuItemComponent({
           menuItemId: menuItem.id,
           type: 'price_information',
-          value: importer.normalizeString(setMenuJson.Price),
-          weight: -2,
+          value: importer.normalizeString(setMenuData.Price),
+          weight: -1,
         })
         .then(() => resolve(menuItem))
         .catch((err) => {
@@ -90,14 +85,14 @@ const handleMenuItemPrice = (menuItem, setMenuJson) =>
     }
   });
 
-const handleMenuItemName = (menuItem, setMenuJson) =>
+const handleMenuItemName = (menuItem, setMenuData) =>
   new Promise((resolve) => {
-    if ('Name' in setMenuJson && (typeof setMenuJson.Name === 'string') && setMenuJson.Name.length) {
+    if ('Name' in setMenuData && (typeof setMenuData.Name === 'string') && setMenuData.Name.length) {
       menuItemComponentService
         .createMenuItemComponent({
           menuItemId: menuItem.id,
           type: 'name',
-          value: importer.normalizeString(setMenuJson.Name),
+          value: importer.normalizeString(setMenuData.Name),
           weight: -2,
         })
         .then(() => resolve(menuItem))
@@ -110,17 +105,17 @@ const handleMenuItemName = (menuItem, setMenuJson) =>
     }
   });
 
-const handleSetMenu = (menu, setMenuJson, weight) =>
+const handleSetMenu = (menu, setMenuData, weight) =>
   new Promise((resolve) => {
     menuItemService
       .createMenuItem({
         menuId: menu.id,
-        type: importer.getMenuItemTypeFromString(setMenuJson.Name),
+        type: importer.getMenuItemTypeFromString(setMenuData.Name),
         weight,
       })
-      .then(menuItem => handleMenuItemName(menuItem, setMenuJson))
-      .then(menuItem => handleMenuItemPrice(menuItem, setMenuJson))
-      .then(menuItem => handleMenuItemComponents(menuItem, setMenuJson))
+      .then(menuItem => handleMenuItemName(menuItem, setMenuData))
+      .then(menuItem => handleMenuItemPrice(menuItem, setMenuData))
+      .then(menuItem => handleMenuItemComponents(menuItem, setMenuData))
       .then(() => resolve(menu))
       .catch((err) => {
         logger.log('error', err);
@@ -128,9 +123,9 @@ const handleSetMenu = (menu, setMenuJson, weight) =>
       });
   });
 
-const handleSetMenus = (menu, menuJson) =>
+const handleSetMenus = (menu, menuData) =>
   new Promise((resolve) => {
-    if ('SetMenus' in menuJson && Array.isArray(menuJson.SetMenus) && menuJson.SetMenus.length) {
+    if ('SetMenus' in menuData && Array.isArray(menuData.SetMenus) && menuData.SetMenus.length) {
       const queue = new Queue({
         concurrency: 1,
         autoStart: true,
@@ -139,15 +134,13 @@ const handleSetMenus = (menu, menuJson) =>
       const operations = [];
       let count = 0;
 
-      menuJson.SetMenus.forEach((setMenuJson) => {
+      menuData.SetMenus.forEach((setMenuData) => {
         count += 1;
         const weight = count;
 
         operations.push(() => delay(500)
-          .then(() => handleSetMenu(menu, setMenuJson, weight))
-          .catch((err) => {
-            logger.log('error', err);
-          }));
+          .then(() => handleSetMenu(menu, setMenuData, weight))
+          .catch(err => logger.log('error', err)));
       });
 
       queue.addAll(operations)
@@ -157,9 +150,9 @@ const handleSetMenus = (menu, menuJson) =>
     }
   });
 
-const handleMenuLunchTime = (menu, menuJson) =>
+const handleMenuLunchTime = (menu, menuData) =>
   new Promise((resolve) => {
-    if ('LunchTime' in menuJson && (typeof menuJson.LunchTime === 'string') && menuJson.LunchTime.length) {
+    if ('LunchTime' in menuData && (typeof menuData.LunchTime === 'string') && menuData.LunchTime.length) {
       menuItemService
         .createMenuItem({
           menuId: menu.id,
@@ -171,7 +164,7 @@ const handleMenuLunchTime = (menu, menuJson) =>
             .createMenuItemComponent({
               menuItemId: menuItem.id,
               type: 'lunch_time',
-              value: importer.normalizeString(menuJson.LunchTime),
+              value: importer.normalizeString(menuData.LunchTime),
               weight: 0,
             });
         })
@@ -185,7 +178,7 @@ const handleMenuLunchTime = (menu, menuJson) =>
     }
   });
 
-const handleMenu = (menuJson, restaurantId, date, language) =>
+const handleMenu = (menuData, restaurantId, date, language) =>
   new Promise((resolve) => {
     menuService
       .createMenu({
@@ -193,18 +186,18 @@ const handleMenu = (menuJson, restaurantId, date, language) =>
         date,
         language,
       })
-      .then(menu => handleMenuLunchTime(menu, menuJson))
-      .then(menu => handleSetMenus(menu, menuJson))
-      .then(() => resolve(menuJson))
+      .then(menu => handleMenuLunchTime(menu, menuData))
+      .then(menu => handleSetMenus(menu, menuData))
+      .then(() => resolve(menuData))
       .catch((err) => {
         logger.log('error', err);
-        resolve(menuJson);
+        resolve(menuData);
       });
   });
 
-const handleJson = (json, restaurantId, language) =>
+const handleJson = (data, restaurantId, language) =>
   new Promise((resolve) => {
-    if ('MenusForDays' in json && Array.isArray(json.MenusForDays) && json.MenusForDays.length) {
+    if ('MenusForDays' in data && Array.isArray(data.MenusForDays) && data.MenusForDays.length) {
       const queue = new Queue({
         concurrency: 1,
         autoStart: true,
@@ -212,23 +205,21 @@ const handleJson = (json, restaurantId, language) =>
 
       const operations = [];
 
-      json.MenusForDays.forEach((menuJson) => {
-        if ('Date' in menuJson && (typeof menuJson.Date === 'string') && menuJson.Date.length) {
-          const date = parse(menuJson.Date);
+      data.MenusForDays.forEach((menuData) => {
+        if ('Date' in menuData && (typeof menuData.Date === 'string') && menuData.Date.length) {
+          const date = parse(menuData.Date);
 
           operations.push(() => delay(500)
             .then(() => menuService.deleteMenusForRestaurantForDate(restaurantId, date, language))
-            .then(() => handleMenu(menuJson, restaurantId, date, language))
-            .catch((err) => {
-              logger.log('error', err);
-            }));
+            .then(() => handleMenu(menuData, restaurantId, date, language))
+            .catch(err => logger.log('error', err)));
         }
       });
 
       queue.addAll(operations)
-        .then(resolve(json));
+        .then(resolve(data));
     } else {
-      resolve(json);
+      resolve(data);
     }
   });
 
@@ -260,9 +251,7 @@ const amicaImporter = (identifier, restaurantId, language) =>
         .then(() => fetch(getUrl(identifier, language, format(date, 'YYYY-MM-DD'))))
         .then(res => res.json())
         .then(json => handleJson(json, restaurantId, language))
-        .catch((err) => {
-          logger.log('error', err);
-        }));
+        .catch(err => logger.log('error', err)));
     });
 
     operations.push(() => importer.end(startDate, name, identifier, language));

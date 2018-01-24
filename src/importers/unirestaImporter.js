@@ -143,9 +143,7 @@ const handleMenuItems = (menu, items) =>
                 weight: key,
               }))
             .then(menuItem => handleMenuItemComponents(menuItem, meals[key].components))
-            .catch((err) => {
-              logger.log('error', err);
-            }));
+            .catch(err => logger.log('error', err)));
         }
       });
 
@@ -232,9 +230,7 @@ const handleSection = (sectionData, restaurantId, date, language) =>
             language,
           }))
           .then(menu => handleMenuItems(menu, days[key].items))
-          .catch((err) => {
-            logger.log('error', err);
-          }));
+          .catch(err => logger.log('error', err)));
       }
     });
 
@@ -271,11 +267,8 @@ const handleJson = (data, restaurantId, language) =>
               const date = parse(`${year}-W${sectionData.viikko}-1`);
 
               operations.push(() => delay(500)
-                .then(() =>
-                  handleSection(sectionData, restaurantId, date, language))
-                .catch((err) => {
-                  logger.log('error', err);
-                }));
+                .then(() => handleSection(sectionData, restaurantId, date, language))
+                .catch(err => logger.log('error', err)));
             }
           });
         }
@@ -314,9 +307,7 @@ const unirestaImporter = (identifier, restaurantId, language) =>
       .then(() => fetch(getUrl(identifier, language)))
       .then(res => res.json())
       .then(data => handleJson(data, restaurantId, language))
-      .catch((err) => {
-        logger.log('error', err);
-      }));
+      .catch(err => logger.log('error', err)));
 
     operations.push(() => importer.end(startDate, name, identifier, language));
 

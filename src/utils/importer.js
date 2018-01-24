@@ -1,11 +1,13 @@
 import differenceInSeconds from 'date-fns/difference_in_seconds';
 import logger from '../utils/logger';
-import amicaImporter from '../importers/amicaImporter';
 import unirestaImporter from '../importers/unirestaImporter';
+import amicaImporter from '../importers/amicaImporter';
+import sodexoImporter from '../importers/sodexoImporter';
 
 const importers = {
-  amicaImporter,
   unirestaImporter,
+  amicaImporter,
+  sodexoImporter,
 };
 
 export const importer = (importerName, identifier, restaurantId, language) =>
@@ -34,15 +36,6 @@ export const normalizeString = (string) => {
   // \r\n => \n
   str = str.replace(/ *(?:\\[rn]|[\r\n]+)+ */g, '\n');
 
-  // G ,L ,Veg => G, L, Veg
-  str = str.replace(/ ,/g, ', ');
-
-  // G,L,Veg => G, L, Veg
-  str = str.replace(/,[s]*/g, ', ');
-
-  // VEG([S]) => VEG ([S])
-  str = str.replace(/(?<=\w*)\(/g, ' (');
-
   // 10.00-11.00 => 10:00-11:00, doesn't affect dates
   str = str.replace(/(?<=[0-2][0-9]|[0-2])\.(?=[0-5][0-9][$-]|[0-5][0-9]\s)/g, ':');
 
@@ -62,6 +55,15 @@ export const normalizeString = (string) => {
   // 10€ /20€ => 10€ / 20€
   // kcal /100g => kcal / 100g
   str = str.replace(/\/(?<=\S)/g, '/ ');
+
+  // G ,L ,Veg => G, L, Veg
+  str = str.replace(/ ,/g, ', ');
+
+  // G,L,Veg => G, L, Veg
+  str = str.replace(/,[s]*/g, ', ');
+
+  // VEG([S]) => VEG ([S])
+  str = str.replace(/(?<=\w*)\(/g, ' (');
 
   // Replace all double+ spaces with one space
   str = str.replace(/ ( )+/g, ' ');
@@ -101,9 +103,7 @@ export const getMenuItemTypeFromString = (string, defaultType = 'normal_meal', s
   } else if (skipTypes.indexOf('special_meal') < 0 && [
     'grill',
     'erikois',
-    'pitsa',
     'pizza',
-    'bizza',
     'herkku',
     'portion',
     'special',
@@ -113,6 +113,7 @@ export const getMenuItemTypeFromString = (string, defaultType = 'normal_meal', s
     'jälki',
     'jälkkäri',
     'dessert',
+    'sweet',
   ].findIndex(v => str.toLowerCase().includes(v)) > -1) {
     return 'dessert';
   } else if (skipTypes.indexOf('breakfast') < 0 && [

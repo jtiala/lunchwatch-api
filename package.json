@@ -27,6 +27,7 @@
     "seed": "knex seed:run --knexfile src/knexfile.js",
     "migrate": "knex-migrate up --knexfile src/knexfile.js --migrations src/migrations",
     "migrate:down": "knex-migrate down --knexfile src/knexfile.js --migrations src/migrations",
+    "migrate:drop": "knex-migrate down --to 0 --knexfile src/knexfile.js --migrations src/migrations",
     "migrate:rollback": "knex-migrate rollback --knexfile src/knexfile.js --migrations src/migrations",
     "make:seeder": "knex seed:make --knexfile src/knexfile.js",
     "make:migration": "knex migrate:make --knexfile src/knexfile.js",
