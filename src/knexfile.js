@@ -14,7 +14,7 @@ require('dotenv').config({
  */
 module.exports = {
   client: process.env.DB_CLIENT,
-  connection: process.env.DB_URL.length
+  connection: (typeof process.env.DB_URL === 'string' && process.env.DB_URL.length)
     ? process.env.DB_URL
     : process.env.DB_CLIENT === 'sqlite'
       ? {
