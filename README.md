@@ -1,7 +1,23 @@
 LunchWatch Menu Aggregator API
 ==============================
 
-## Setup
+## Production
+
+Copy .env-file for production and edit in your configs
+
+    cp .env .env.production
+
+Migrate and seed the database
+
+    NODE_ENV=production yarn migrate
+    NODE_ENV=production yarn seed
+
+Install, build and start
+
+    yarn install
+    yarn start
+
+## Development
 
 Start containers with [docker-compose](https://docs.docker.com/compose/):
 
@@ -13,12 +29,12 @@ Connect to the web container:
 
 Run migrations and seed the database with some initial data:
 
-    yarn run migrate
-    yarn run seed
+    yarn migrate
+    yarn seed
 
 Navigate to http://localhost:8848/api-docs/ to verify application is running from docker.
 
-## Creating new migrations and seeds
+### Creating new migrations and seeds
 
 These are the commands to create a new migration and corresponding seed file. The commands should be
 ran inside the container.
@@ -29,9 +45,9 @@ ran inside the container.
 For example
 
     yarn make:migration create_restaurants_table
-    yarn make:seeder 01_insert_restaurants
+    yarn make:seeder 01_01_insert_oulu_restaurants
 
-## Tests
+### Testing
 
 To run tests, connect to the container and run tests with:
 
