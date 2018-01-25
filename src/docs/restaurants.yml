@@ -23,6 +23,15 @@ definitions:
       url:
         type: string
         description: URL of the restaurants homepage
+      lat:
+        type: number
+        description: Latitude coordinate of the restaurant
+      lng:
+        type: number
+        description: Longitude coordinate of the restaurant
+      enabled:
+        type: bool
+        description: Is the restaurant enabled
 
 /v1/restaurants:
   get:
@@ -32,6 +41,37 @@ definitions:
       - application/json
     tags:
       - /v1/restaurants
+    parameters:
+      - name: lat
+        in: query
+        description: Latitude coordinate
+        required: false
+        type: number
+      - name: lng
+        in: query
+        description: Longitude coordinate
+        required: false
+        type: number
+      - name: chain
+        description: Chain the restaurant is part of
+        in: query
+        required: false
+        type: string
+      - name: enabled
+        description: Is the restaurant enabled
+        in: query
+        required: false
+        type: bool
+      - name: page
+        description: Number of page
+        in: query
+        required: false
+        type: integer
+      - name: pageSize
+        description: Number of menus in one page
+        in: query
+        required: false
+        type: integer
     responses:
       200:
         description: An array of restaurants

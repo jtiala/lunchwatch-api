@@ -33,11 +33,16 @@ definitions:
     tags:
       - /v1/menus
     parameters:
-      - name: restaurantId
-        description: Unique identifier of a restaurant
+      - name: lat
         in: query
+        description: Latitude coordinate
         required: false
-        type: integer
+        type: number
+      - name: lng
+        in: query
+        description: Longitude coordinate
+        required: false
+        type: number
       - name: date
         description: ISO-8601 formatted date when the menu is served
         in: query
@@ -48,6 +53,21 @@ definitions:
         in: query
         required: false
         type: string
+      - name: restaurantId
+        description: Unique identifier of a restaurant
+        in: query
+        required: false
+        type: integer
+      - name: page
+        description: Number of page
+        in: query
+        required: false
+        type: integer
+      - name: pageSize
+        description: Number of menus in one page
+        in: query
+        required: false
+        type: integer
     responses:
       200:
         description: An array of menus
