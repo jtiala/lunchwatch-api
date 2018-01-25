@@ -1,6 +1,6 @@
 {
   "name": "lunchwatch-api",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "LunchWatch Menu Aggregator API",
   "author": "Joonas Tiala <joonas.tiala@gmail.com>",
   "keywords": [
