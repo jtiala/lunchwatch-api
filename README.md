@@ -1,6 +1,14 @@
 LunchWatch Menu Aggregator API
 ==============================
 
+[LunchWatch](https://lunch.watch) is a lunch menu aggregator web app. The app is currently in development. During beta phase, the app aggregates menus from restaurants in Oulu, Finland.
+
+This repository contains back-end functionality and menu importers. The actual web app is located in a [separate repository](https://github.com/jtiala/lunchwatch-client). Issues concerning UI should be discussed in that repository.
+
+## Contributing
+
+Contributions are most welcome! When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
+
 ## Production
 
 Copy .env-file for production and edit in your configs
