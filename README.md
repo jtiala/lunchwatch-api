@@ -40,7 +40,7 @@ Run migrations and seed the database with some initial data:
     yarn migrate
     yarn seed
 
-Navigate to http://localhost:8848/api-docs/ to verify application is running from docker.
+Navigate to http://localhost:8088/api-docs/ to verify application is running from docker.
 
 ### Creating new migrations and seeds
 
