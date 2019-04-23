@@ -19,7 +19,7 @@
   "scripts": {
     "prestart": "NODE_ENV=production yarn run build",
     "start": "NODE_ENV=production node dist",
-    "start:dev": "nodemon --watch .env --watch src --exec babel-node src --source-maps",
+    "start:dev": "NODE_ENV=development nodemon --watch .env --watch src --exec babel-node src --source-maps",
     "build": "rimraf dist && NODE_ENV=production babel src -D --out-dir dist",
     "precommit": "lint-staged",
     "lint": "eslint src test; exit 0",

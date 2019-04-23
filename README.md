@@ -1,5 +1,4 @@
-LunchWatch Menu Aggregator API
-==============================
+# LunchWatch Menu Aggregator API
 
 [LunchWatch](https://lunch.watch) is a lunch menu aggregator web app. The app is currently in development. During beta phase, the app aggregates menus from restaurants in Oulu, Finland.
 
@@ -33,7 +32,7 @@ Start containers with [docker-compose](https://docs.docker.com/compose/):
 
 Connect to the web container:
 
-    docker exec -it lunchwatchapi_web_1 /bin/bash
+    docker exec -it lunchwatch-api_web_1 /bin/bash
 
 Run migrations and seed the database with some initial data:
 
