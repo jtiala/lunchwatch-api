@@ -44,9 +44,10 @@ export function seed(knex, Promise) {
         { updated_at: new Date(), id: 10300, chain: 'Sodexo', name: 'RE5T4UR4NT MYRSKY', url: 'https://www.sodexo.fi/technopolis-myrsky', lat: 65.012851, lng: 25.512647 },
         { updated_at: new Date(), id: 10301, chain: 'Sodexo', name: 'Elektra', url: 'https://www.sodexo.fi/elektra', lat: 65.0599832, lng: 25.4450976 },
         { updated_at: new Date(), id: 10302, chain: 'Sodexo', name: 'Galaksi', url: 'https://www.sodexo.fi/technopolis-oulu-linnanmaa', lat: 65.057016, lng: 25.442629 },
-        { updated_at: new Date(), id: 10303, chain: 'Sodexo', name: 'Technopolis Oulu, Kahvila', url: 'https://www.sodexo.fi/technopolis/kahvila', lat: 65.058659, lng: 25.440705 },
+        { updated_at: new Date(), id: 10303, chain: 'Sodexo', name: 'Louhi', url: 'https://www.sodexo.fi/louhi', lat: 65.058659, lng: 25.440705 },
         { updated_at: new Date(), id: 10304, chain: 'Sodexo', name: 'Luoto', url: 'https://www.sodexo.fi/technopolis-luoto', lat: 65.013527, lng: 25.510581 },
         { updated_at: new Date(), id: 10305, chain: 'Sodexo', name: 'Lentokentäntie', url: 'https://www.sodexo.fi/technopolis-lentokentantie', lat: 64.938935, lng: 25.445707 },
+        { updated_at: new Date(), id: 10306, chain: 'Sodexo', name: 'Valo', url: 'https://www.sodexo.fi/valo', lat: 65.0591364, lng: 25.4385713 },
         // Oulu / Antell
         { enabled: false, updated_at: new Date(), id: 10400, chain: 'Antell', name: 'Cafe Piha', url: 'https://www.antell.fi/ravintolat/ravintolahaku/ravintola/antell-cafe-piha-oulu.html', lat: 65.012633, lng: 25.467985 },
         { enabled: false, updated_at: new Date(), id: 10401, chain: 'Antell', name: 'Kalevankulma', url: 'https://www.antell.fi/ravintolat/ravintolahaku/ravintola/antell-kalevankulma-oulu.html', lat: 65.013253, lng: 25.472399 },
