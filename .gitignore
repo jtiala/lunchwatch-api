@@ -1,7 +1,11 @@
+# Build directory
+dist
+
 # Logs
 logs
 *.log
 npm-debug.log*
+webpack-stats.json
 
 # Dependency directories
 node_modules
@@ -15,24 +19,20 @@ node_modules
 # Yarn integrity file
 .yarn-integrity
 
-# IntelliJ IDE
-.idea
-
-# Build directory
-dist
-
-# Dotenv production configuration
-.env.production
-
-# Visual Studio Code
-.vscode
-
 # Tests
 coverage
 .nyc_output
+junit.xml
 
-# Vim swp files
+# Dotenv configuration
+.env
+
+# macOS system files
+.DS_Store
+._.DS_Store
+
+# Editors
+.vscode/*
+!.vscode/launch.json
+.idea
 *.swp
-
-# Sqlite databases
-*.sqlite3
