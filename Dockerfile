@@ -1,9 +1,12 @@
-FROM node:9.4-alpine
+FROM node:12-alpine
 
-# Install bash and yarn
-RUN apk update && apk add bash yarn sqlite sqlite-libs && rm -rf /var/cache/apk/*
-
-# Copy app and install packages
-WORKDIR /app
+# Copy source
+WORKDIR /api
 COPY . .
-RUN yarn install
+
+# Install dependencies
+RUN yarn
+
+# Expose ports
+EXPOSE 8080
+EXPOSE 9229

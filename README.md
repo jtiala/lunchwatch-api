@@ -1,18 +1,44 @@
 # LunchWatch Menu Aggregator API
 
-[LunchWatch](https://lunch.watch) is a lunch menu aggregator web app. The app is currently in development. During beta phase, the app aggregates menus from restaurants in Oulu, Finland.
+[![Build Status][build-status-badge]][build-status]
+[![Dependencies Status][dependencies-status-badge]][dependencies-status]
+[![Dev Dependencies Status][devdependencies-status-badge]][devdependencies-status]
+[![PRs Welcome][prs-badge]][contributing]
+[![License][license-badge]](license)
 
-This repository contains back-end functionality and menu importers. The actual web app is located in a [separate repository](https://github.com/jtiala/lunchwatch-client). Issues concerning UI should be discussed in that repository.
+[LunchWatch](https://lunch.watch) is a lunch menu aggregator web app. The app is currently aggregating menus from restaurants in Oulu, Finland.
 
-## Contributing
+This repository contains Node.js API, which also includes menu importers. The actual web app is located in a [separate repository](https://github.com/jtiala/lunchwatch-client). Issues concerning the UI should be discussed in that repository.
 
-Contributions are most welcome! When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
+## Pre-requisites
+
+- [Git][git]
+- [Node][node]
+- [Yarn][yarn]
+- [Docker][docker]
+
+## Development
+
+Duplicate `.env.example` as `.env` and edit in your details
+
+    cp .env.example .env
+
+Start containers
+
+    docker-compose up
+
+Run migrations and seed the database with some initial data
+
+    docker exec -d lunchwatch-api_api_1 yarn migrate
+    docker exec -d lunchwatch-api_api_1 yarn seed
+
+Navigate to http://localhost:8080 to verify application is running.
 
 ## Production
 
-Copy .env-file for production and edit in your configs
+Duplicate `.env.example` as `.env` and edit in your details
 
-    cp .env .env.production
+    cp .env.example .env
 
 Migrate and seed the database
 
@@ -21,50 +47,43 @@ Migrate and seed the database
 
 Install, build and start
 
-    yarn install
+    yarn
+    yarn build
     yarn start
 
-## Development
+## Creating new migrations and seeds
 
-Start containers with [docker-compose](https://docs.docker.com/compose/):
+The project uses [Knex][knex] for query building and database migrations. New migrations and and seeds can be created with these commands.
 
-    docker-compose up
-
-Connect to the web container:
-
-    docker exec -it lunchwatch-api_web_1 /bin/bash
-
-Run migrations and seed the database with some initial data:
-
-    yarn migrate
-    yarn seed
-
-Navigate to http://localhost:8088/api-docs/ to verify application is running from docker.
-
-### Creating new migrations and seeds
-
-These are the commands to create a new migration and corresponding seed file. The commands should be
-ran inside the container.
-
-    yarn make:migration <name>
-    yarn make:seeder <name>
+    docker exec -d lunchwatch-api_api_1 yarn migrate:make <name>
+    docker exec -d lunchwatch-api_api_1 yarn seed:make <name>
 
 For example
 
-    yarn make:migration create_restaurants_table
-    yarn make:seeder 01_01_insert_oulu_restaurants
+    docker exec -d lunchwatch-api_api_1 yarn migrate:make create_restaurants_table
+    docker exec -d lunchwatch-api_api_1 yarn seed:make 01_01_insert_oulu_restaurants
 
-### Testing
+## Contributing
 
-To run tests, connect to the container and run tests with:
-
-    docker exec -it lunchwatchapi_web_1 /bin/bash
-    yarn test
-
-Run tests with coverage with:
-
-    yarn test:coverage
+Contributions are most welcome! If you would like to contribute to this project, please discuss the changes you want to make in the [project's issues][issues] first!
 
 ## License
 
-[MIT](LICENSE)
+This project is open source software licensed under the MIT license. For more information see [LICENSE][license].
+
+[build-status]: https://circleci.com/gh/jtiala/lunchwatch-api/tree/master
+[build-status-badge]: https://circleci.com/gh/jtiala/lunchwatch-api/tree/master.svg?style=svg
+[dependencies-status]: https://david-dm.org/jtiala/lunchwatch-api
+[dependencies-status-badge]: https://img.shields.io/david/jtiala/lunchwatch-api.svg
+[devdependencies-status]: https://david-dm.org/jtiala/lunchwatch-api?type=dev
+[devdependencies-status-badge]: https://img.shields.io/david/dev/jtiala/lunchwatch-api.svg
+[contributing]: #contributing
+[prs-badge]: https://img.shields.io/badge/prs-welcome-blue.svg
+[license]: https://github.com/jtiala/lunchwatch-api/blob/master/LICENSE
+[license-badge]: https://img.shields.io/badge/license-MIT-blue.svg
+[git]: https://git-scm.com/
+[node]: https://nodejs.org/
+[yarn]: https://yarnpkg.com/
+[docker]: https://www.docker.com/
+[knex]: http://knexjs.org/
+[issues]: https://github.com/jtiala/lunchwatch-api/issues

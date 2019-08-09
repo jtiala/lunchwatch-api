@@ -1,0 +1,31 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach to Node",
+      "protocol": "inspector",
+      "address": "0.0.0.0",
+      "port": 9229,
+      "restart": true,
+      "sourceMaps": true
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Docker: Attach to Node",
+      "protocol": "inspector",
+      "address": "0.0.0.0",
+      "port": 9229,
+      "restart": true,
+      "sourceMaps": true,
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/api",
+      "sourceMapPathOverrides": {
+        "/api/*": "${workspaceFolder}/*"
+      },
+      "skipFiles": ["<node_internals>/**/*.js"]
+    }
+  ]
+}

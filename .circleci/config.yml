@@ -1,0 +1,109 @@
+version: 2
+
+jobs:
+  setup:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - run:
+          name: Node version
+          command: node -v
+      - run:
+          name: NPM version
+          command: npm -v
+      - run:
+          name: Yarn version
+          command: yarn -v
+      - restore_cache:
+          name: Restore cached dependencies
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install dependencies
+          command: yarn install --frozen-lockfile
+      - save_cache:
+          name: Cache dependencies
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+      - persist_to_workspace:
+          root: .
+          paths:
+            - node_modules
+  build:
+    docker:
+      - image: circleci/node:latest
+    environment:
+      - APP_HOST: ${APP_HOST}
+      - APP_PORT: ${APP_PORT}
+      - CRON_DB_CLEANER: ${CRON_DB_CLEANER}
+      - CRON_IMPORT_MENUS: ${CRON_IMPORT_MENUS}
+      - DB_CLIENT: ${DB_CLIENT}
+      - DB_HOST: ${DB_HOST}
+      - DB_PORT: ${DB_PORT}
+      - DB_NAME: ${DB_NAME}
+      - DB_USER: ${DB_USER}
+      - DB_PASSWORD: ${DB_PASSWORD}
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Run build
+          command: yarn build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
+  test:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Run tests
+          command: yarn test
+  lint:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Run linters
+          command: yarn lint
+
+workflows:
+  version: 2
+  test_lint_build_deploy:
+    jobs:
+      - setup:
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+      - test:
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+          requires:
+            - setup
+      - lint:
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+          requires:
+            - setup
+      - build:
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+          requires:
+            - test
+            - lint

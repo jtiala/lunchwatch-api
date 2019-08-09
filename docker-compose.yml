@@ -1,21 +1,22 @@
 version: '3'
 services:
-  web:
+  api:
     build: .
-    volumes:
-      - .:/app/
-    ports:
-      - "8088:8088"
     command: yarn start:dev
+    volumes:
+      - .:/api
+    ports:
+      - '8080:8080'
+      - '9229:9229'
     depends_on:
       - db
     links:
       - db
   db:
-    image: postgres:10.1-alpine
+    image: postgres:11-alpine
     ports:
-      - "5432:5432"
+      - '5432:5432'
     environment:
-      - POSTGRES_USER=username
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=web
+      - POSTGRES_USER=lunchwatch
+      - POSTGRES_PASSWORD=lunchwatch
+      - POSTGRES_DB=lunchwatch

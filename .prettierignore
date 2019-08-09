@@ -32,6 +32,4 @@ junit.xml
 ._.DS_Store
 
 # Editors
-.vscode
-.idea
 *.swp
