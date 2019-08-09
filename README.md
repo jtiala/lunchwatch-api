@@ -1,4 +1,4 @@
-# LunchWatch Menu Aggregator API
+# 🍱 LunchWatch Menu Aggregator API
 
 [![Build Status][build-status-badge]][build-status]
 [![Dependencies Status][dependencies-status-badge]][dependencies-status]
