@@ -37,7 +37,7 @@ export default class App {
       concurrency: 1,
       autoStart: true,
       intervalCap: 1,
-      interval: 5000,
+      interval: 1000,
     });
 
     this.configureApp();
