@@ -13,10 +13,10 @@ export interface ImportDetails {
 }
 
 export enum ImporterType {
-  UNIRESTA_IMPORTER = 'UnirestaImporter',
   AMICA_IMPORTER = 'AmicaImporter',
+  FAZER_FOOD_CO_IMPORTER = 'FazerFoodCoImporter',
   SODEXO_IMPORTER = 'SodexoImporter',
-  ANTELL_IMPORTER = 'AntellImporter',
+  UNIRESTA_IMPORTER = 'UnirestaImporter',
 }
 
 export const getEnabledImportDetails = async (

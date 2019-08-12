@@ -20,6 +20,7 @@ import { deleteMenusOlderThan } from './models/menu';
 import { createLogger, createLogDir } from './utils/logger';
 import AbstractImporter from './importers/AbstractImporter';
 import AmicaImporter from './importers/AmicaImporter';
+import FazerFoodCoImporter from './importers/FazerFoodCoImporter';
 import SodexoImporter from './importers/SodexoImporter';
 import UnirestaImporter from './importers/UnirestaImporter';
 
@@ -130,6 +131,8 @@ export default class App {
     switch (importDetails.importer_type) {
       case 'AmicaImporter':
         return new AmicaImporter(importDetails, db, queue, logger);
+      case 'FazerFoodCoImporter':
+        return new FazerFoodCoImporter(importDetails, db, queue, logger);
       case 'SodexoImporter':
         return new SodexoImporter(importDetails, db, queue, logger);
       case 'UnirestaImporter':

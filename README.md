@@ -61,7 +61,7 @@ The project uses [Knex][knex] for query building and database migrations. New mi
 For example
 
     docker exec -d lunchwatch-api_api_1 yarn migrate:make create_restaurants_table
-    docker exec -d lunchwatch-api_api_1 yarn seed:make 01_01_insert_oulu_restaurants
+    docker exec -d lunchwatch-api_api_1 yarn seed:make uniresta_seeds
 
 ## Contributing
 
