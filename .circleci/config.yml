@@ -33,17 +33,6 @@ jobs:
   build:
     docker:
       - image: circleci/node:latest
-    environment:
-      - APP_HOST: ${APP_HOST}
-      - APP_PORT: ${APP_PORT}
-      - CRON_DB_CLEANER: ${CRON_DB_CLEANER}
-      - CRON_IMPORT_MENUS: ${CRON_IMPORT_MENUS}
-      - DB_CLIENT: ${DB_CLIENT}
-      - DB_HOST: ${DB_HOST}
-      - DB_PORT: ${DB_PORT}
-      - DB_NAME: ${DB_NAME}
-      - DB_USER: ${DB_USER}
-      - DB_PASSWORD: ${DB_PASSWORD}
     steps:
       - checkout
       - attach_workspace:
@@ -75,35 +64,35 @@ jobs:
       - run:
           name: Run linters
           command: yarn lint
-
+  deploy:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Deploy to DigitalOcean droplet
+          command: ssh -o "StrictHostKeyChecking no" $DROPLET_USER@$DROPLET_IP "cd $DROPLET_PATH; git pull; yarn; yarn build; yarn migrate; yarn seed; NODE_ENV=production pm2 start dist/server.js --name=\"LunchWatch API\""
 workflows:
   version: 2
   test_lint_build_deploy:
     jobs:
-      - setup:
-          filters:
-            branches:
-              ignore:
-                - gh-pages
+      - setup
       - test:
-          filters:
-            branches:
-              ignore:
-                - gh-pages
           requires:
             - setup
       - lint:
-          filters:
-            branches:
-              ignore:
-                - gh-pages
           requires:
             - setup
       - build:
-          filters:
-            branches:
-              ignore:
-                - gh-pages
           requires:
             - test
             - lint
+      - deploy:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - build
