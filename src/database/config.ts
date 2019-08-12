@@ -5,11 +5,11 @@ import Knex from 'knex';
 const config: Knex.Config = {
   client: process.env.DB_CLIENT,
   connection: {
-    host: 'db',
-    port: 5432,
-    user: 'lunchwatch',
-    password: 'lunchwatch',
-    database: 'lunchwatch',
+    host: String(process.env.DB_HOST),
+    port: Number(process.env.DB_PORT),
+    user: String(process.env.DB_USER),
+    password: String(process.env.DB_PASSWORD),
+    database: String(process.env.DB_NAME),
   },
   pool: {
     min: 2,
