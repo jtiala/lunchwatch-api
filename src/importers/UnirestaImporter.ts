@@ -214,6 +214,10 @@ export default class UnirestaImporter extends AbstractImporter {
             {
               type,
               menuItemComponents,
+              weight:
+                type === MenuItemType.LUNCH_TIME
+                  ? -1
+                  : previousParsedDay.menuItems.length + 1,
             },
           ],
         };
@@ -246,6 +250,7 @@ export default class UnirestaImporter extends AbstractImporter {
             newParsedDay.specialMenuItems[index] = {
               type,
               menuItemComponents,
+              weight: index + 100,
             };
           } else {
             const oldMenuItemComponents =
