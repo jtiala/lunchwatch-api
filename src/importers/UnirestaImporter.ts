@@ -292,6 +292,7 @@ export default class UnirestaImporter extends AbstractImporter {
             newParsedDay.specialMenuItems[index] = {
               type,
               menuItemComponents,
+              weight: index + 100,
             };
           } else {
             const oldMenuItemComponents =
