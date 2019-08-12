@@ -7,7 +7,7 @@ export interface PaginationParams {
   pageCount?: number;
 }
 
-const defaultParams: PaginationParams = { page: 1, pageSize: 3 };
+const defaultParams: PaginationParams = { page: 1, pageSize: 10 };
 
 const parseParams = (query: ParsedUrlQuery): PaginationParams => {
   const params: PaginationParams = { ...defaultParams };
