@@ -73,7 +73,7 @@ jobs:
           at: .
       - run:
           name: Deploy to DigitalOcean droplet
-          command: ssh -o "StrictHostKeyChecking no" $DROPLET_USER@$DROPLET_IP "cd $DROPLET_PATH; git pull; yarn; yarn build; yarn migrate; yarn seed; NODE_ENV=production pm2 start dist/server.js --name=\"LunchWatch API\""
+          command: ssh -o "StrictHostKeyChecking no" $DROPLET_USER@$DROPLET_IP "cd $DROPLET_PATH; git pull; yarn; yarn build; yarn migrate; yarn seed; yarn start:pm2"
 workflows:
   version: 2
   test_lint_build_deploy:
