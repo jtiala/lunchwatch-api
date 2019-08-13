@@ -1,6 +1,9 @@
 import Knex from 'knex';
 import subWeeks from 'date-fns/sub_weeks';
+import { gql } from 'apollo-server-express';
 
+import { Context } from '../utils/graphql';
+import { normalizeDatabaseData } from '../utils/normalize';
 import {
   Restaurant,
   RestaurantSearchConditions,
@@ -204,3 +207,73 @@ export const deleteMenusOlderThan = async (
     .where('date', '<', subWeeks(Date(), weeks))
     .delete()
     .catch((): number => 0);
+
+export const menuTypeDefs = gql`
+  type Menu {
+    id: Int!
+    language: String!
+    date: Date!
+    createdAt: Date!
+    updatedAt: Date!
+    restaurant: Restaurant!
+    menuItems: [MenuItem]
+  }
+
+  extend type Query {
+    menu(id: Int!): Menu
+    menus: [Menu]
+  }
+`;
+
+export const menuResolvers = {
+  Query: {
+    menu: async (
+      _: undefined,
+      { id }: { id: number },
+      { db }: Context,
+    ): Promise<object | undefined> => {
+      const data = await getMenu(db, id, false, false);
+
+      if (data) {
+        return normalizeDatabaseData(data);
+      }
+    },
+    menus: async (
+      _: undefined,
+      __: undefined,
+      { db }: Context,
+    ): Promise<object[]> => {
+      const data = await getMenus(db);
+
+      if (data) {
+        return normalizeDatabaseData(data);
+      }
+
+      return [];
+    },
+  },
+  Menu: {
+    restaurant: async (
+      menu: { restaurantId: number },
+      _: undefined,
+      { db }: Context,
+    ): Promise<object | undefined> => {
+      const data = await getRestaurant(db, menu.restaurantId, false);
+
+      if (data) {
+        return normalizeDatabaseData(data);
+      }
+    },
+    menuItems: async (
+      menu: { id: number },
+      _: undefined,
+      { db }: Context,
+    ): Promise<object | undefined> => {
+      const data = await getMenuItemsForMenu(db, menu.id);
+
+      if (data) {
+        return normalizeDatabaseData(data);
+      }
+    },
+  },
+};

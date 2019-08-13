@@ -1,4 +1,7 @@
 import Knex from 'knex';
+import { gql } from 'apollo-server-express';
+
+import { generateEnumSchema, generateEnumResolver } from '../utils/graphql';
 
 export enum MenuItemComponentType {
   FOOD_ITEM = 'food_item',
@@ -41,3 +44,22 @@ export const createMenuItemComponent = async (
   await db<MenuItemComponent>('menu_item_components')
     .insert(menuItemComponent)
     .catch((): [] => []);
+
+export const menuItemComponentTypeDefs = gql`
+  enum MenuItemComponentType
+  ${generateEnumSchema(MenuItemComponentType)}
+
+  type MenuItemComponent {
+    id: Int!
+    type: MenuItemComponentType
+    weight: Int!
+    value: String
+    createdAt: Date!
+    updatedAt: Date!
+    menuItem: MenuItem!
+  }
+`;
+
+export const menuItemComponentResolvers = {
+  MenuItemComponentType: generateEnumResolver(MenuItemComponentType),
+};

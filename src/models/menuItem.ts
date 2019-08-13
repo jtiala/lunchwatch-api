@@ -1,5 +1,12 @@
 import Knex from 'knex';
+import { gql } from 'apollo-server-express';
 
+import {
+  Context,
+  generateEnumSchema,
+  generateEnumResolver,
+} from '../utils/graphql';
+import { normalizeDatabaseData } from '../utils/normalize';
 import {
   MenuItemComponent,
   CreateMenuItemComponentParams,
@@ -85,4 +92,36 @@ export const createMenuItem = async (
       );
     }
   }
+};
+
+export const menuItemTypeDefs = gql`
+  enum MenuItemType
+  ${generateEnumSchema(MenuItemType)}
+
+  type MenuItem {
+    id: Int!
+    type: MenuItemType
+    weight: Int!
+    createdAt: Date!
+    updatedAt: Date!
+    menu: Menu!
+    menuItemComponents: [MenuItemComponent]
+  }
+`;
+
+export const menuItemResolvers = {
+  MenuItem: {
+    menuItemComponents: async (
+      menuItem: { id: number },
+      _: undefined,
+      { db }: Context,
+    ): Promise<object | undefined> => {
+      const data = await getMenuItemComponentsForMenuItem(db, menuItem.id);
+
+      if (data) {
+        return normalizeDatabaseData(data);
+      }
+    },
+  },
+  MenuItemType: generateEnumResolver(MenuItemType),
 };

@@ -1,5 +1,8 @@
 import Knex from 'knex';
+import { gql } from 'apollo-server-express';
 
+import { Context } from '../utils/graphql';
+import { normalizeDatabaseData } from '../utils/normalize';
 import { Menu, getMenusForRestaurant } from './menu';
 
 export interface Restaurant {
@@ -113,3 +116,67 @@ export const searchRestaurants = async (
           : restaurants,
     )
     .catch((): [] => []);
+
+export const restaurantTypeDefs = gql`
+  type Restaurant {
+    id: Int!
+    name: String!
+    chain: String
+    url: String
+    lat: Float!
+    lng: Float!
+    enabled: Boolean!
+    createdAt: Date!
+    updatedAt: Date!
+    menus: [Menu]!
+  }
+
+  extend type Query {
+    restaurant(id: Int!): Restaurant
+    restaurants: [Restaurant]
+  }
+`;
+
+export const restaurantResolvers = {
+  Query: {
+    restaurant: async (
+      _: undefined,
+      { id }: { id: number },
+      { db }: Context,
+    ): Promise<object | undefined> => {
+      const data = await getRestaurant(db, id);
+
+      if (data) {
+        return normalizeDatabaseData(data);
+      }
+    },
+    restaurants: async (
+      _: undefined,
+      __: undefined,
+      { db }: Context,
+    ): Promise<object[]> => {
+      const data = await getRestaurants(db);
+
+      if (data) {
+        return normalizeDatabaseData(data);
+      }
+
+      return [];
+    },
+  },
+  Restaurant: {
+    menus: async (
+      restaurant: { id: number },
+      _: undefined,
+      { db }: Context,
+    ): Promise<object[]> => {
+      const data = await getMenusForRestaurant(db, restaurant.id);
+
+      if (data) {
+        return normalizeDatabaseData(data);
+      }
+
+      return [];
+    },
+  },
+};
