@@ -2,35 +2,39 @@ import Knex from 'knex';
 import subWeeks from 'date-fns/sub_weeks';
 
 import {
+  Restaurant,
   RestaurantSearchConditions,
   getRestaurant,
-  Restaurant,
 } from './restaurant';
-import { MenuItem, CreateMenuItemParams, createMenuItem } from './menuItem';
-import { MenuItemComponent } from './menuItemComponent';
+import {
+  MenuItem,
+  CreateMenuItemParams,
+  getMenuItemsForMenu,
+  createMenuItem,
+} from './menuItem';
 
 export interface Menu {
   id: number;
+  date: Date;
+  language: string;
   created_at: Date;
   updated_at: Date;
   restaurant_id: number;
-  date: Date;
-  language: string;
-  menuItems?: MenuItem[];
+  menu_items?: MenuItem[];
   restaurant?: Restaurant;
 }
 
 export interface CreateMenuParams {
-  restaurant_id: number;
-  language: string;
   date: Date;
-  menuItems?: CreateMenuItemParams[];
+  language: string;
+  restaurant_id: number;
+  menu_items?: CreateMenuItemParams[];
 }
 
 export interface MenuSearchConditions {
-  restaurantId?: number;
   date?: string;
   language?: string;
+  restaurant_id?: number;
 }
 
 export interface MenuSearchParams {
@@ -48,54 +52,51 @@ export const defaultSearchParams: MenuSearchParams = {
   order: 'restaurants.id ASC',
 };
 
-const getMenuItemComponentsForMenuItem = async (
-  db: Knex,
-  id: number,
-): Promise<MenuItemComponent[]> =>
-  await db<MenuItemComponent>('menu_item_components')
-    .where('menu_item_id', id)
-    .orderBy('menu_item_components.weight')
-    .catch((): [] => []);
-
-const getMenuItemsForMenu = async (db: Knex, id: number): Promise<MenuItem[]> =>
-  await db<MenuItem>('menu_items')
-    .where('menu_id', id)
-    .orderBy('menu_items.weight')
-    .then(
-      async (menuItems): Promise<MenuItem[]> =>
-        Promise.all(
-          menuItems.map(
-            async (item): Promise<MenuItem> => ({
-              ...item,
-              menuItemComponents: await getMenuItemComponentsForMenuItem(
-                db,
-                item.id,
-              ),
-            }),
-          ),
-        ),
-    )
-    .catch((): [] => []);
-
 export const getMenu = async (
   db: Knex,
   id: number,
+  includeMenuItems: boolean = false,
+  includeRestaurant: boolean = false,
 ): Promise<Menu | undefined> =>
   await db<Menu>('menus')
-    .where('menus.id', id)
+    .where('id', id)
     .then(
-      async (menus): Promise<Menu> => {
-        const restaurant = await getRestaurant(
-          db,
-          menus[0].restaurant_id,
-          false,
-        );
-        const menuItems = await getMenuItemsForMenu(db, menus[0].id);
-
-        return { ...menus[0], restaurant, menuItems };
-      },
+      async (menus): Promise<Menu> => ({
+        ...menus[0],
+        menu_items: includeMenuItems
+          ? await getMenuItemsForMenu(db, menus[0].id, true)
+          : undefined,
+        restaurant: includeRestaurant
+          ? await getRestaurant(db, menus[0].restaurant_id)
+          : undefined,
+      }),
     )
     .catch((): undefined => undefined);
+
+export const getMenus = async (db: Knex): Promise<Menu[]> =>
+  await db<Menu>('menus').catch((): [] => []);
+
+export const getMenusForRestaurant = async (
+  db: Knex,
+  restaurantId: number,
+  includeMenuItems: boolean = false,
+): Promise<Menu[]> =>
+  await db<Menu>('menus')
+    .where('restaurant_id', restaurantId)
+    .then(
+      async (menus): Promise<Menu[]> =>
+        includeMenuItems
+          ? await Promise.all(
+              menus.map(
+                async (menu): Promise<Menu> => ({
+                  ...menu,
+                  menu_items: await getMenuItemsForMenu(db, menu.id, true),
+                }),
+              ),
+            )
+          : menus,
+    )
+    .catch((): [] => []);
 
 export const countMenus = async (
   db: Knex,
@@ -122,6 +123,8 @@ export const searchMenus = async (
   searchParams: MenuSearchParams,
   limit: number,
   offset: number,
+  includeMenuItems: boolean = false,
+  includeRestaurant: boolean = false,
 ): Promise<Menu[]> =>
   await db<Menu>('menus')
     .join(
@@ -137,17 +140,20 @@ export const searchMenus = async (
     .limit(limit)
     .offset(offset)
     .then(
-      async (menus): Promise<Menu[]> => {
-        return await Promise.all(
+      async (menus): Promise<Menu[]> =>
+        await Promise.all(
           menus.map(
             async (menu): Promise<Menu> => ({
               ...menu,
-              restaurant: await getRestaurant(db, menu.restaurant_id, false),
-              menuItems: await getMenuItemsForMenu(db, menu.id),
+              menu_items: includeMenuItems
+                ? await getMenuItemsForMenu(db, menu.id, true)
+                : undefined,
+              restaurant: includeRestaurant
+                ? await getRestaurant(db, menu.restaurant_id)
+                : undefined,
             }),
           ),
-        );
-      },
+        ),
     )
     .catch((): [] => []);
 
@@ -155,19 +161,19 @@ export const createMenu = async (
   db: Knex,
   menu: CreateMenuParams,
 ): Promise<Menu | void> => {
-  const { menuItems, ...menuParams } = menu;
+  const { menu_items, ...params } = menu;
   const createdMenu = await db<Menu>('menus')
     .returning('id')
-    .insert(menuParams)
+    .insert(params)
     .catch((): [] => []);
 
   const menuId = createdMenu[0];
 
   if (menuId) {
-    if (Array.isArray(menuItems) && menuItems.length) {
-      menuItems.forEach(
-        async (menuItem): Promise<void> =>
-          await createMenuItem(db, { ...menuItem, menu_id: menuId }),
+    if (Array.isArray(menu_items) && menu_items.length) {
+      menu_items.forEach(
+        async (item): Promise<void> =>
+          await createMenuItem(db, { ...item, menu_id: menuId }),
       );
     }
 

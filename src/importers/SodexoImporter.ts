@@ -108,8 +108,8 @@ export default class SodexoImporter extends AbstractImporter {
       );
 
       if (
-        Array.isArray(createMenuParams.menuItems) &&
-        createMenuParams.menuItems.length
+        Array.isArray(createMenuParams.menu_items) &&
+        createMenuParams.menu_items.length
       ) {
         await createMenu(this.db, createMenuParams);
       }
@@ -194,13 +194,11 @@ export default class SodexoImporter extends AbstractImporter {
     data: MenuRow[],
     date: Date,
   ): CreateMenuParams {
-    const menuItems = this.parseMenuItems(data);
-
     return {
       restaurant_id: this.importDetails.restaurant_id,
       language: this.importDetails.language,
       date,
-      menuItems,
+      menu_items: this.parseMenuItems(data),
     };
   }
 
@@ -269,7 +267,7 @@ export default class SodexoImporter extends AbstractImporter {
           menuItems.push({
             type,
             weight: weight + 1,
-            menuItemComponents,
+            menu_item_components: menuItemComponents,
           });
         }
       }

@@ -56,6 +56,34 @@ const restaurantsController = (db: Knex): Router => {
   };
 
   /**
+   * GET /v1/restaurants/:id
+   */
+  router.get(
+    '/:id',
+    async (req: Request, res: Response, next: Function): Promise<void> => {
+      try {
+        const id = parseInt(req.params.id, 10);
+
+        if (!id) {
+          throw Boom.badRequest('Invalid ID');
+        }
+
+        const restaurant = await getRestaurant(db, id, true);
+
+        if (restaurant && restaurant.id) {
+          res.json({
+            data: normalizeDatabaseData(restaurant),
+          });
+        } else {
+          throw Boom.notFound('Restaurant not found');
+        }
+      } catch (err) {
+        next(err);
+      }
+    },
+  );
+
+  /**
    * GET /v1/restaurants
    */
   router.get(
@@ -73,40 +101,12 @@ const restaurantsController = (db: Knex): Router => {
 
           res.json({
             data: normalizeDatabaseData(
-              await searchRestaurants(db, searchParams, limit, offset),
+              await searchRestaurants(db, searchParams, limit, offset, true),
             ),
             pagination,
           });
         } else {
           throw Boom.notFound('No restaurants found');
-        }
-      } catch (err) {
-        next(err);
-      }
-    },
-  );
-
-  /**
-   * GET /v1/restaurants/:id
-   */
-  router.get(
-    '/:id',
-    async (req: Request, res: Response, next: Function): Promise<void> => {
-      try {
-        const id = parseInt(req.params.id, 10);
-
-        if (!id) {
-          throw Boom.badRequest('Invalid ID');
-        }
-
-        const restaurant = await getRestaurant(db, id);
-
-        if (restaurant && restaurant.id) {
-          res.json({
-            data: normalizeDatabaseData(restaurant),
-          });
-        } else {
-          throw Boom.notFound('Restaurant not found');
         }
       } catch (err) {
         next(err);

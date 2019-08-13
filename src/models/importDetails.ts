@@ -2,14 +2,14 @@ import Knex from 'knex';
 
 export interface ImportDetails {
   id: number;
-  created_at: Date;
-  updated_at: Date;
-  last_import_at: Date;
   importer_type: ImporterType;
   identifier: string;
-  restaurant_id: number;
   language: string;
   enabled: boolean;
+  last_import_at: Date;
+  created_at: Date;
+  updated_at: Date;
+  restaurant_id: number;
 }
 
 export enum ImporterType {

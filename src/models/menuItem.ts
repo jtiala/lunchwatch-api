@@ -3,18 +3,9 @@ import Knex from 'knex';
 import {
   MenuItemComponent,
   CreateMenuItemComponentParams,
+  getMenuItemComponentsForMenuItem,
   createMenuItemComponent,
 } from './menuItemComponent';
-
-export interface MenuItem {
-  id: number;
-  created_at: Date;
-  updated_at: Date;
-  menu_id: number;
-  type: MenuItemType;
-  weight: number;
-  menuItemComponents?: MenuItemComponent[];
-}
 
 export enum MenuItemType {
   NORMAL_MEAL = 'normal_meal',
@@ -28,31 +19,67 @@ export enum MenuItemType {
   PRICE_INFORMATION = 'price_information',
 }
 
+export interface MenuItem {
+  id: number;
+  type: MenuItemType;
+  weight: number;
+  created_at: Date;
+  updated_at: Date;
+  menu_id: number;
+  menu_item_components?: MenuItemComponent[];
+}
+
 export interface CreateMenuItemParams {
-  menu_id?: number;
   type?: MenuItemType;
   weight?: number;
-  menuItemComponents?: CreateMenuItemComponentParams[];
+  menu_id?: number;
+  menu_item_components?: CreateMenuItemComponentParams[];
 }
+
+export const getMenuItemsForMenu = async (
+  db: Knex,
+  menuId: number,
+  includeMenuItemComponents: boolean = false,
+): Promise<MenuItem[]> =>
+  await db<MenuItem>('menu_items')
+    .where('menu_id', menuId)
+    .orderBy('weight')
+    .then(
+      async (menuItems): Promise<MenuItem[]> =>
+        includeMenuItemComponents
+          ? await Promise.all(
+              menuItems.map(
+                async (item): Promise<MenuItem> => ({
+                  ...item,
+                  menu_item_components: await getMenuItemComponentsForMenuItem(
+                    db,
+                    item.id,
+                  ),
+                }),
+              ),
+            )
+          : menuItems,
+    )
+    .catch((): [] => []);
 
 export const createMenuItem = async (
   db: Knex,
   menuItem: CreateMenuItemParams,
 ): Promise<void> => {
-  const { menuItemComponents, ...menuItemParams } = menuItem;
+  const { menu_item_components, ...params } = menuItem;
   const createdMenuItem = await db<MenuItem>('menu_items')
     .returning('id')
-    .insert(menuItemParams)
+    .insert(params)
     .catch((): [] => []);
 
   const menuItemId = createdMenuItem[0];
 
   if (menuItemId) {
-    if (Array.isArray(menuItemComponents) && menuItemComponents.length) {
-      menuItemComponents.forEach(
-        async (menuItemComponent): Promise<number[]> =>
+    if (Array.isArray(menu_item_components) && menu_item_components.length) {
+      menu_item_components.forEach(
+        async (component): Promise<number[]> =>
           await createMenuItemComponent(db, {
-            ...menuItemComponent,
+            ...component,
             menu_item_id: menuItemId,
           }),
       );

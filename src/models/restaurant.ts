@@ -1,24 +1,24 @@
 import Knex from 'knex';
 
-import { Menu } from './menu';
+import { Menu, getMenusForRestaurant } from './menu';
 
 export interface Restaurant {
   id: number;
-  created_at: Date;
-  updated_at: Date;
   name: string;
-  chain: string;
-  url: string;
+  chain?: string;
+  url?: string;
   lat: number;
   lng: number;
   enabled: boolean;
+  created_at: Date;
+  updated_at: Date;
   menus?: Menu[];
   distance?: number;
 }
 
 export interface RestaurantSearchConditions {
-  enabled?: boolean;
   chain?: string;
+  enabled?: boolean;
 }
 
 export interface RestaurantSearchParams {
@@ -34,28 +34,43 @@ export const defaultSearchParams: RestaurantSearchParams = {
   order: 'restaurants.id ASC',
 };
 
-const getMenusForRestaurant = async (db: Knex, id: number): Promise<Menu[]> =>
-  await db<Menu>('menus')
-    .where('restaurant_id', id)
-    .catch((): [] => []);
-
 export const getRestaurant = async (
   db: Knex,
   id: number,
-  getMenus: boolean = true,
+  includeMenus: boolean = false,
 ): Promise<Restaurant | undefined> =>
   await db<Restaurant>('restaurants')
-    .where('restaurants.id', id)
+    .where('id', id)
     .then(
       async (restaurants: Restaurant[]): Promise<Restaurant> => {
-        const menus = getMenus
-          ? await getMenusForRestaurant(db, restaurants[0].id)
+        const menus = includeMenus
+          ? await getMenusForRestaurant(db, restaurants[0].id, true)
           : undefined;
 
         return { ...restaurants[0], menus };
       },
     )
     .catch((): undefined => undefined);
+
+export const getRestaurants = async (
+  db: Knex,
+  includeMenus: boolean = false,
+): Promise<Restaurant[]> =>
+  await db<Restaurant>('restaurants')
+    .then(
+      async (restaurants): Promise<Restaurant[]> =>
+        includeMenus
+          ? await Promise.all(
+              restaurants.map(
+                async (restaurant): Promise<Restaurant> => ({
+                  ...restaurant,
+                  menus: await getMenusForRestaurant(db, restaurant.id, true),
+                }),
+              ),
+            )
+          : restaurants,
+    )
+    .catch((): [] => []);
 
 export const countRestaurants = async (
   db: Knex,
@@ -75,6 +90,7 @@ export const searchRestaurants = async (
   searchParams: RestaurantSearchParams,
   limit: number,
   offset: number,
+  includeMenus: boolean = false,
 ): Promise<object[]> =>
   await db<Restaurant>('restaurants')
     .select(searchParams.columns)
@@ -82,4 +98,18 @@ export const searchRestaurants = async (
     .orderByRaw(searchParams.order)
     .limit(limit)
     .offset(offset)
+    .then(
+      async (restaurants): Promise<object[]> =>
+        includeMenus
+          ? await Promise.all(
+              restaurants.map(
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                async (restaurant: any): Promise<object> => ({
+                  ...restaurant,
+                  menus: await getMenusForRestaurant(db, restaurant.id, true),
+                }),
+              ),
+            )
+          : restaurants,
+    )
     .catch((): [] => []);

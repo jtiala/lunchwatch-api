@@ -78,8 +78,8 @@ export default class AmicaImporter extends AbstractImporter {
       );
 
       if (
-        Array.isArray(createMenuParams.menuItems) &&
-        createMenuParams.menuItems.length
+        Array.isArray(createMenuParams.menu_items) &&
+        createMenuParams.menu_items.length
       ) {
         await createMenu(this.db, createMenuParams);
       }
@@ -122,7 +122,7 @@ export default class AmicaImporter extends AbstractImporter {
       restaurant_id: this.importDetails.restaurant_id,
       language: this.importDetails.language,
       date,
-      menuItems: [...(lunchTimeItem ? [lunchTimeItem] : []), ...menuItems],
+      menu_items: [...(lunchTimeItem ? [lunchTimeItem] : []), ...menuItems],
     };
   }
 
@@ -144,7 +144,7 @@ export default class AmicaImporter extends AbstractImporter {
 
         return {
           type: MenuItemType.LUNCH_TIME,
-          menuItemComponents,
+          menu_item_components: menuItemComponents,
           weight: -1,
         };
       }
@@ -220,7 +220,7 @@ export default class AmicaImporter extends AbstractImporter {
 
         menuItems.push({
           type,
-          menuItemComponents,
+          menu_item_components: menuItemComponents,
           weight,
         });
       }

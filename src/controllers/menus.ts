@@ -25,7 +25,7 @@ const menusController = (db: Knex): Router => {
     if (typeof query.restaurantId === 'string' && query.restaurantId.length) {
       params.conditions = {
         ...params.conditions,
-        restaurantId: parseInt(query.restaurantId, 10),
+        restaurant_id: parseInt(query.restaurantId, 10),
       };
     }
 
@@ -76,6 +76,34 @@ const menusController = (db: Knex): Router => {
   };
 
   /**
+   * GET /v1/menus/:id
+   */
+  router.get(
+    '/:id',
+    async (req: Request, res: Response, next: Function): Promise<void> => {
+      try {
+        const id = parseInt(req.params.id, 10);
+
+        if (!id) {
+          throw Boom.badRequest('Invalid ID');
+        }
+
+        const menu = await getMenu(db, id, true, true);
+
+        if (menu && menu.id) {
+          res.json({
+            data: normalizeDatabaseData(menu),
+          });
+        } else {
+          throw Boom.notFound('Menu not found');
+        }
+      } catch (err) {
+        next(err);
+      }
+    },
+  );
+
+  /**
    * GET /v1/menus
    */
   router.get(
@@ -93,40 +121,12 @@ const menusController = (db: Knex): Router => {
 
           res.json({
             data: normalizeDatabaseData(
-              await searchMenus(db, searchParams, limit, offset),
+              await searchMenus(db, searchParams, limit, offset, true, true),
             ),
             pagination,
           });
         } else {
           throw Boom.notFound('No menus found');
-        }
-      } catch (err) {
-        next(err);
-      }
-    },
-  );
-
-  /**
-   * GET /v1/menus/:id
-   */
-  router.get(
-    '/:id',
-    async (req: Request, res: Response, next: Function): Promise<void> => {
-      try {
-        const id = parseInt(req.params.id, 10);
-
-        if (!id) {
-          throw Boom.badRequest('Invalid ID');
-        }
-
-        const menu = await getMenu(db, id);
-
-        if (menu && menu.id) {
-          res.json({
-            data: normalizeDatabaseData(menu),
-          });
-        } else {
-          throw Boom.notFound('Menu not found');
         }
       } catch (err) {
         next(err);
