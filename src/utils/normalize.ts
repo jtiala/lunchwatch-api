@@ -86,6 +86,12 @@ export const normalizeImportedString = (string: string): string =>
     // VEG([S]) => VEG ([S])
     .replace(/(?<=\w*)\(/g, ' (')
 
+    // Chef`s => Chef's
+    .replace(/[`´]/g, "'")
+
+    // Remove empty pairs of brackets
+    .replace(/\(\s*\)|\[\s*\]|\<\s*\>/, '')
+
     // Remove trailing dots, commas, colons and whitespace
     .replace(/[\.\,\:\s]+$/, '')
 
