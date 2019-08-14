@@ -58,14 +58,14 @@ export const importDetailsTypeDefs = gql`
 
   type ImportDetails {
     id: Int!
-    type: ImporterType
+    type: ImporterType!
     identifier: String!
     language: String!
     enabled: Boolean!
-    lastImportAt: Date!
+    lastImportAt: Date
     createdAt: Date!
     updatedAt: Date!
-    restaurant: Restaurant
+    restaurant: Restaurant!
   }
 `;
 

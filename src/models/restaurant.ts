@@ -134,7 +134,7 @@ export const restaurantTypeDefs = gql`
 
   extend type Query {
     restaurant(id: Int!): Restaurant
-    restaurants: [Restaurant]
+    restaurants: [Restaurant]!
   }
 `;
 

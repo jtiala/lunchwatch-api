@@ -216,12 +216,12 @@ export const menuTypeDefs = gql`
     createdAt: Date!
     updatedAt: Date!
     restaurant: Restaurant!
-    menuItems: [MenuItem]
+    menuItems: [MenuItem]!
   }
 
   extend type Query {
     menu(id: Int!): Menu
-    menus: [Menu]
+    menus: [Menu]!
   }
 `;
 

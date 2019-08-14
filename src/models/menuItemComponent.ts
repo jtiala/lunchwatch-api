@@ -51,7 +51,7 @@ export const menuItemComponentTypeDefs = gql`
 
   type MenuItemComponent {
     id: Int!
-    type: MenuItemComponentType
+    type: MenuItemComponentType!
     weight: Int!
     value: String
     createdAt: Date!
