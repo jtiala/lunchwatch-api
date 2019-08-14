@@ -17,7 +17,6 @@ import { description, version } from '../package.json';
 import databaseConfig from './database/config';
 import restaurantsController from './controllers/restaurants';
 import menusController from './controllers/menus';
-import { ImportDetails, getEnabledImportDetails } from './models/importDetails';
 import { restaurantTypeDefs, restaurantResolvers } from './models/restaurant';
 import {
   deleteMenusOlderThan,
@@ -29,6 +28,12 @@ import {
   menuItemComponentTypeDefs,
   menuItemComponentResolvers,
 } from './models/menuItemComponent';
+import {
+  ImportDetails,
+  getEnabledImportDetails,
+  importDetailsTypeDefs,
+  importDetailsResolvers,
+} from './models/importDetails';
 import { createLogger, createLogDir } from './utils/logger';
 import { Context, rootTypeDefs, rootResolvers } from './utils/graphql';
 import AbstractImporter from './importers/AbstractImporter';
@@ -61,6 +66,7 @@ export default class App {
         menuTypeDefs,
         menuItemTypeDefs,
         menuItemComponentTypeDefs,
+        importDetailsTypeDefs,
       ],
       resolvers: merge([
         rootResolvers,
@@ -69,6 +75,7 @@ export default class App {
         menuItemResolvers,
         menuItemResolvers,
         menuItemComponentResolvers,
+        importDetailsResolvers,
       ]),
       context: (): Context => ({ db: this.db }),
     });

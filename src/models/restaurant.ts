@@ -4,6 +4,7 @@ import { gql } from 'apollo-server-express';
 import { Context } from '../utils/graphql';
 import { normalizeDatabaseData } from '../utils/normalize';
 import { Menu, getMenusForRestaurant } from './menu';
+import { getImportDetailsForRestaurant } from './importDetails';
 
 export interface Restaurant {
   id: number;
@@ -45,13 +46,12 @@ export const getRestaurant = async (
   await db<Restaurant>('restaurants')
     .where('id', id)
     .then(
-      async (restaurants: Restaurant[]): Promise<Restaurant> => {
-        const menus = includeMenus
+      async (restaurants: Restaurant[]): Promise<Restaurant> => ({
+        ...restaurants[0],
+        menus: includeMenus
           ? await getMenusForRestaurant(db, restaurants[0].id, true)
-          : undefined;
-
-        return { ...restaurants[0], menus };
-      },
+          : undefined,
+      }),
     )
     .catch((): undefined => undefined);
 
@@ -129,6 +129,7 @@ export const restaurantTypeDefs = gql`
     createdAt: Date!
     updatedAt: Date!
     menus: [Menu]!
+    importDetails: [ImportDetails]!
   }
 
   extend type Query {
@@ -171,6 +172,19 @@ export const restaurantResolvers = {
       { db }: Context,
     ): Promise<object[]> => {
       const data = await getMenusForRestaurant(db, restaurant.id);
+
+      if (data) {
+        return normalizeDatabaseData(data);
+      }
+
+      return [];
+    },
+    importDetails: async (
+      restaurant: { id: number },
+      _: undefined,
+      { db }: Context,
+    ): Promise<object[]> => {
+      const data = await getImportDetailsForRestaurant(db, restaurant.id);
 
       if (data) {
         return normalizeDatabaseData(data);
