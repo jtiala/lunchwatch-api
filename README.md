@@ -6,9 +6,9 @@
 [![PRs Welcome][prs-badge]][contributing]
 [![License][license-badge]](license)
 
-[LunchWatch](https://lunch.watch) is a lunch menu aggregator web app. The app is currently aggregating menus from restaurants in Oulu, Finland.
+[LunchWatch][lunchwatch] is a lunch menu aggregator web app. The app is currently aggregating menus from restaurants in Oulu, Finland.
 
-This repository contains Node.js API, which also includes menu importers. The actual web app is located in a [separate repository](https://github.com/jtiala/lunchwatch-client). Issues concerning the UI should be discussed in that repository.
+This repository contains Node.js [GraphQL][graphql] and REST APIs, and also includes scheduled menu importers. The actual web app is located in a [separate repository][lunchwatch-client-repo]. Issues concerning the UI should be discussed in that repository.
 
 ## Pre-requisites
 
@@ -32,7 +32,7 @@ Run migrations and seed the database with some initial data
     docker exec -d lunchwatch-api_api_1 yarn migrate
     docker exec -d lunchwatch-api_api_1 yarn seed
 
-Navigate to http://localhost:8080 to verify application is running.
+Navigate to http://localhost:8080/graphql to verify application is running.
 
 ## Production
 
@@ -85,5 +85,8 @@ This project is open source software licensed under the MIT license. For more in
 [node]: https://nodejs.org/
 [yarn]: https://yarnpkg.com/
 [docker]: https://www.docker.com/
+[graphql]: https://graphql.org/
 [knex]: http://knexjs.org/
 [issues]: https://github.com/jtiala/lunchwatch-api/issues
+[lunchwatch]: https://lunch.watch/
+[lunchwatch-client-repo]: https://github.com/jtiala/lunchwatch-client
