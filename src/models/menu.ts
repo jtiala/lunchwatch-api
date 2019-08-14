@@ -58,8 +58,8 @@ export const defaultSearchParams: MenuSearchParams = {
 export const getMenu = async (
   db: Knex,
   id: number,
-  includeMenuItems: boolean = false,
-  includeRestaurant: boolean = false,
+  includeMenuItems = false,
+  includeRestaurant = false,
 ): Promise<Menu | undefined> =>
   await db<Menu>('menus')
     .where('id', id)
@@ -82,7 +82,7 @@ export const getMenus = async (db: Knex): Promise<Menu[]> =>
 export const getMenusForRestaurant = async (
   db: Knex,
   restaurantId: number,
-  includeMenuItems: boolean = false,
+  includeMenuItems = false,
 ): Promise<Menu[]> =>
   await db<Menu>('menus')
     .where('restaurant_id', restaurantId)
@@ -126,8 +126,8 @@ export const searchMenus = async (
   searchParams: MenuSearchParams,
   limit: number,
   offset: number,
-  includeMenuItems: boolean = false,
-  includeRestaurant: boolean = false,
+  includeMenuItems = false,
+  includeRestaurant = false,
 ): Promise<Menu[]> =>
   await db<Menu>('menus')
     .join(

@@ -46,7 +46,7 @@ export interface CreateMenuItemParams {
 export const getMenuItemsForMenu = async (
   db: Knex,
   menuId: number,
-  includeMenuItemComponents: boolean = false,
+  includeMenuItemComponents = false,
 ): Promise<MenuItem[]> =>
   await db<MenuItem>('menu_items')
     .where('menu_id', menuId)
