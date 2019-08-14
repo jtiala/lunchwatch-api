@@ -15,27 +15,29 @@ import merge from 'deepmerge';
 
 import { description, version } from '../package.json';
 import databaseConfig from './database/config';
-import restaurantsController from './controllers/restaurants';
-import menusController from './controllers/menus';
-import { restaurantTypeDefs, restaurantResolvers } from './models/restaurant';
-import {
-  deleteMenusOlderThan,
-  menuTypeDefs,
-  menuResolvers,
-} from './models/menu';
-import { menuItemTypeDefs, menuItemResolvers } from './models/menuItem';
-import {
-  menuItemComponentTypeDefs,
-  menuItemComponentResolvers,
-} from './models/menuItemComponent';
-import {
-  ImportDetails,
-  getEnabledImportDetails,
-  importDetailsTypeDefs,
-  importDetailsResolvers,
-} from './models/importDetails';
 import { createLogger, createLogDir } from './utils/logger';
 import { Context, rootTypeDefs, rootResolvers } from './utils/graphql';
+
+import restaurantsController from './restaurant/controller';
+import menusController from './menu/controller';
+
+import restaurantTypeDefs from './restaurant/typeDefs';
+import menuTypeDefs from './menu/typeDefs';
+import menuItemTypeDefs from './menuItem/typeDefs';
+import menuItemComponentTypeDefs from './menuItemComponent/typeDefs';
+import importDetailsTypeDefs from './importDetails/typeDefs';
+
+import restaurantResolvers from './restaurant/resolvers';
+import menuResolvers from './menu/resolvers';
+import menuItemResolvers from './menuItem/resolvers';
+import menuItemComponentResolvers from './menuItemComponent/resolvers';
+import importDetailsResolvers from './importDetails/resolvers';
+
+import { ImportDetails } from './importDetails/interfaces';
+
+import { getEnabledImportDetails } from './importDetails/services';
+import { deleteMenusOlderThan } from './menu/services';
+
 import AbstractImporter from './importers/AbstractImporter';
 import AmicaImporter from './importers/AmicaImporter';
 import FazerFoodCoImporter from './importers/FazerFoodCoImporter';

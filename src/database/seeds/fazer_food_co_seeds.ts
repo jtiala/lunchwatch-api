@@ -1,6 +1,6 @@
 import Knex from 'knex';
 
-import { ImporterType } from '../../models/importDetails';
+import { ImporterType } from '../../importDetails/interfaces';
 
 /*
 New additions (based on chain + name) to this list will be added to the DB.

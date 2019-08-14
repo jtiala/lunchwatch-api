@@ -1,6 +1,6 @@
 import Knex from 'knex';
-import { gql, IEnumResolver } from 'apollo-server-express';
 import { GraphQLScalarType } from 'graphql';
+import { gql, IEnumResolver } from 'apollo-server-express';
 
 export interface Context {
   db: Knex;

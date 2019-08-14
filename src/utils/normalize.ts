@@ -10,7 +10,6 @@ const stringToCamel = (originalString: string): string => {
   );
 };
 
-// FIXME: anything but any
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const keysToCamel = (obj: any): any => {
   if (obj instanceof Date) {

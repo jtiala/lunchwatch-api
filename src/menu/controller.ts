@@ -1,36 +1,58 @@
-import { Router, Request, Response } from 'express';
-import { ParsedUrlQuery } from 'querystring';
 import Knex from 'knex';
 import Boom from '@hapi/boom';
+import { Router, Request, Response } from 'express';
+import { ParsedUrlQuery } from 'querystring';
 
-import {
-  getRestaurant,
-  searchRestaurants,
-  RestaurantSearchParams,
-  defaultSearchParams,
-  countRestaurants,
-} from '../models/restaurant';
+import { MenuSearchParams } from './interfaces';
+import { getMenu, countMenus, searchMenus } from './services';
 import { generatePagination } from '../utils/pagination';
 import { normalizeDatabaseData } from '../utils/normalize';
 
-const restaurantsController = (db: Knex): Router => {
+export default (db: Knex): Router => {
   const router = Router();
+
+  const defaultSearchParams: MenuSearchParams = {
+    columns: ['menus.*'],
+    conditions: {},
+    restaurantConditions: { enabled: true },
+    order: 'restaurants.id ASC',
+  };
 
   const parseSearchParamsFromQuery = (
     query: ParsedUrlQuery,
-  ): RestaurantSearchParams => {
-    const params: RestaurantSearchParams = { ...defaultSearchParams };
+  ): MenuSearchParams => {
+    const params: MenuSearchParams = { ...defaultSearchParams };
 
-    if (typeof query.enabled === 'string' && query.enabled.length) {
+    // Menu conditions
+    if (typeof query.restaurantId === 'string' && query.restaurantId.length) {
       params.conditions = {
         ...params.conditions,
+        restaurant_id: parseInt(query.restaurantId, 10),
+      };
+    }
+
+    if (typeof query.date === 'string' && query.date.length) {
+      params.conditions = { ...params.conditions, date: String(query.date) };
+    }
+
+    if (typeof query.language === 'string' && query.language.length) {
+      params.conditions = {
+        ...params.conditions,
+        language: String(query.language),
+      };
+    }
+
+    // Restaurant conditions
+    if (typeof query.enabled === 'string' && query.enabled.length) {
+      params.restaurantConditions = {
+        ...params.restaurantConditions,
         enabled: query.enabled === 'true',
       };
     }
 
     if (typeof query.chain === 'string' && query.chain.length) {
-      params.conditions = {
-        ...params.conditions,
+      params.restaurantConditions = {
+        ...params.restaurantConditions,
         chain: String(query.chain),
       };
     }
@@ -56,7 +78,7 @@ const restaurantsController = (db: Knex): Router => {
   };
 
   /**
-   * GET /v1/restaurants/:id
+   * GET /v1/menus/:id
    */
   router.get(
     '/:id',
@@ -68,14 +90,14 @@ const restaurantsController = (db: Knex): Router => {
           throw Boom.badRequest('Invalid ID');
         }
 
-        const restaurant = await getRestaurant(db, id, true);
+        const menu = await getMenu(db, id, true, true);
 
-        if (restaurant && restaurant.id) {
+        if (menu && menu.id) {
           res.json({
-            data: normalizeDatabaseData(restaurant),
+            data: normalizeDatabaseData(menu),
           });
         } else {
-          throw Boom.notFound('Restaurant not found');
+          throw Boom.notFound('Menu not found');
         }
       } catch (err) {
         next(err);
@@ -84,14 +106,14 @@ const restaurantsController = (db: Knex): Router => {
   );
 
   /**
-   * GET /v1/restaurants
+   * GET /v1/menus
    */
   router.get(
     '/',
     async (req: Request, res: Response, next: Function): Promise<void> => {
       try {
         const searchParams = parseSearchParamsFromQuery(req.query);
-        const count = await countRestaurants(db, searchParams);
+        const count = await countMenus(db, searchParams);
 
         if (count) {
           const [pagination, limit, offset] = generatePagination(
@@ -101,12 +123,12 @@ const restaurantsController = (db: Knex): Router => {
 
           res.json({
             data: normalizeDatabaseData(
-              await searchRestaurants(db, searchParams, limit, offset, true),
+              await searchMenus(db, searchParams, limit, offset, true, true),
             ),
             pagination,
           });
         } else {
-          throw Boom.notFound('No restaurants found');
+          throw Boom.notFound('No menus found');
         }
       } catch (err) {
         next(err);
@@ -116,5 +138,3 @@ const restaurantsController = (db: Knex): Router => {
 
   return router;
 };
-
-export default restaurantsController;

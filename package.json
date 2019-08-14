@@ -12,9 +12,9 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "yarn clean && NODE_ENV=production tsc",
-    "start": "NODE_ENV=production node dist/src/server.js",
-    "start:dev": "nodemon --inspect=0.0.0.0:9229 --nolazy src/server.ts",
-    "start:pm2": "pm2 stop dist/src/server.js; NODE_ENV=production pm2 start dist/src/server.js --name=\"LunchWatch API\"",
+    "start": "NODE_ENV=production node dist/src/index.js",
+    "start:dev": "nodemon --inspect=0.0.0.0:9229 --nolazy src/index.ts",
+    "start:pm2": "pm2 stop dist/src/index.js; NODE_ENV=production pm2 start dist/src/index.js --name=\"LunchWatch API\"",
     "format": "prettier --write '**/*.{ts,js,json,css,scss,html,md,yml,yaml}'",
     "lint:ts": "eslint src/**/*.ts",
     "lint:ts:fix": "eslint src/**/*.ts --fix",

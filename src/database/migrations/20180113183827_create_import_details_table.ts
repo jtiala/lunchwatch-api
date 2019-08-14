@@ -1,6 +1,6 @@
 import Knex from 'knex';
 
-import { ImporterType } from '../../models/importDetails';
+import { ImporterType } from '../../importDetails/interfaces';
 
 /**
  * Create imports table.

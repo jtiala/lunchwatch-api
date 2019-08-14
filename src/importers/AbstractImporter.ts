@@ -3,8 +3,9 @@ import PQueue from 'p-queue';
 import { Logger } from 'winston';
 import differenceInMilliseconds from 'date-fns/difference_in_milliseconds';
 
-import { MenuItemType } from '../models/menuItem';
-import { ImportDetails, updateLastImportAt } from '../models/importDetails';
+import { MenuItemType } from '../menuItem/interfaces';
+import { ImportDetails } from '../importDetails/interfaces';
+import { updateLastImportAt } from '../importDetails/services';
 
 export default abstract class AbstractImporter {
   protected importDetails: ImportDetails;

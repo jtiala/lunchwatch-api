@@ -1,5 +1,6 @@
 import Knex from 'knex';
-import { MenuItemType } from '../../models/menuItem';
+
+import { MenuItemType } from '../../menuItem/interfaces';
 
 /**
  * Create menu_items table.
