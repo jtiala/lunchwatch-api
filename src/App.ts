@@ -1,6 +1,6 @@
 import 'dotenv/config';
 
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer, IResolvers } from 'apollo-server-express';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -11,7 +11,7 @@ import morgan from 'morgan';
 import { Logger } from 'winston';
 import schedule from 'node-schedule';
 import Boom from '@hapi/boom';
-import { merge } from 'lodash';
+import merge from 'deepmerge';
 
 import { description, version } from '../package.json';
 import databaseConfig from './database/config';
@@ -68,7 +68,7 @@ export default class App {
         menuItemComponentTypeDefs,
         importDetailsTypeDefs,
       ],
-      resolvers: merge([
+      resolvers: merge.all<IResolvers>([
         rootResolvers,
         restaurantResolvers,
         menuResolvers,
