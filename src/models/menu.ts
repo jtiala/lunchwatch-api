@@ -1,8 +1,11 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
+import { knexPaginator as paginate } from 'apollo-cursor-pagination';
+import { gql, UserInputError } from 'apollo-server-express';
 import Knex from 'knex';
 import subWeeks from 'date-fns/sub_weeks';
-import { gql } from 'apollo-server-express';
 
-import { Context } from '../utils/graphql';
+import { Context, Pagination } from '../utils/graphql';
 import { normalizeDatabaseData } from '../utils/normalize';
 import {
   Restaurant,
@@ -219,9 +222,27 @@ export const menuTypeDefs = gql`
     menuItems: [MenuItem]!
   }
 
+  type MenuConnection {
+    pageInfo: PageInfo!
+    edges: [MenuEdge]!
+    totalCount: Int!
+  }
+
+  type MenuEdge {
+    cursor: String!
+    node: Menu!
+  }
+
   extend type Query {
     menu(id: Int!): Menu
-    menus: [Menu]!
+    menus(
+      first: Int
+      last: Int
+      before: String
+      after: String
+      orderBy: String
+      orderDirection: OrderDirection
+    ): MenuConnection!
   }
 `;
 
@@ -232,18 +253,42 @@ export const menuResolvers = {
       { id }: { id: number },
       { db }: Context,
     ): Promise<object | undefined> => {
-      const data = await getMenu(db, id, false, false);
+      const data = await db<Menu>('menus').where('id', id);
 
       if (data) {
-        return normalizeDatabaseData(data);
+        return normalizeDatabaseData(data[0]);
       }
     },
     menus: async (
       _: undefined,
-      __: undefined,
+      {
+        first,
+        last,
+        before,
+        after,
+        orderBy = 'id',
+        orderDirection = 'asc',
+      }: Pagination,
       { db }: Context,
     ): Promise<object[]> => {
-      const data = await getMenus(db);
+      if (first < 0) {
+        throw new UserInputError('First must be positive number');
+      }
+
+      if (last < 0) {
+        throw new UserInputError('Last must be positive number');
+      }
+
+      const baseQuery = db<Menu>('menus');
+
+      const data = await paginate(baseQuery, {
+        first: !first && !last ? 10 : first,
+        last,
+        before,
+        after,
+        orderBy,
+        orderDirection,
+      });
 
       if (data) {
         return normalizeDatabaseData(data);
@@ -254,22 +299,27 @@ export const menuResolvers = {
   },
   Menu: {
     restaurant: async (
-      menu: { restaurantId: number },
+      { restaurantId }: { restaurantId: number },
       _: undefined,
       { db }: Context,
     ): Promise<object | undefined> => {
-      const data = await getRestaurant(db, menu.restaurantId, false);
+      const data = await db<Restaurant>('restaurants').where(
+        'id',
+        restaurantId,
+      );
 
       if (data) {
-        return normalizeDatabaseData(data);
+        return normalizeDatabaseData(data[0]);
       }
     },
     menuItems: async (
-      menu: { id: number },
+      { id }: { id: number },
       _: undefined,
       { db }: Context,
     ): Promise<object | undefined> => {
-      const data = await getMenuItemsForMenu(db, menu.id);
+      const data = await db<MenuItem>('menu_items')
+        .where('menu_id', id)
+        .orderBy('weight');
 
       if (data) {
         return normalizeDatabaseData(data);

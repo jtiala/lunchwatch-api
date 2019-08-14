@@ -427,6 +427,13 @@ apollo-cache-control@0.8.1:
     apollo-server-env "2.4.1"
     graphql-extensions "0.8.1"
 
+apollo-cursor-pagination@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/apollo-cursor-pagination/-/apollo-cursor-pagination-0.5.1.tgz#ddd6329791a4d4d540f018514767da0555de3d43"
+  integrity sha512-mlFOkSE4iIgntM/woCSJYD3WMQv/OnZMDfR+XN/ss59bLZ0RzniLDRFogXnCOjW7izlfTXPaX1yTKrPkdViCuA==
+  dependencies:
+    base-64 "^0.1.0"
+
 apollo-datasource@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/apollo-datasource/-/apollo-datasource-0.6.1.tgz#697870f564da90bee53fa30d07875cb46c4d6b06"
@@ -691,6 +698,11 @@ balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
   integrity sha1-ibTRmasr7kneFk6gK4nORi1xt2c=
+
+base-64@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/base-64/-/base-64-0.1.0.tgz#780a99c84e7d600260361511c4877613bf24f6bb"
+  integrity sha1-eAqZyE59YAJgNhURxId2E78k9rs=
 
 base@^0.11.1:
   version "0.11.2"

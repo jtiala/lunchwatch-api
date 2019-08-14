@@ -1,10 +1,13 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
+import { knexPaginator as paginate } from 'apollo-cursor-pagination';
+import { gql, UserInputError } from 'apollo-server-express';
 import Knex from 'knex';
-import { gql } from 'apollo-server-express';
 
-import { Context } from '../utils/graphql';
+import { Context, Pagination } from '../utils/graphql';
 import { normalizeDatabaseData } from '../utils/normalize';
 import { Menu, getMenusForRestaurant } from './menu';
-import { getImportDetailsForRestaurant } from './importDetails';
+import { ImportDetails } from './importDetails';
 
 export interface Restaurant {
   id: number;
@@ -132,9 +135,27 @@ export const restaurantTypeDefs = gql`
     importDetails: [ImportDetails]!
   }
 
+  type RestaurantConnection {
+    pageInfo: PageInfo!
+    edges: [RestaurantEdge]!
+    totalCount: Int!
+  }
+
+  type RestaurantEdge {
+    cursor: String!
+    node: Restaurant!
+  }
+
   extend type Query {
     restaurant(id: Int!): Restaurant
-    restaurants: [Restaurant]!
+    restaurants(
+      first: Int
+      last: Int
+      before: String
+      after: String
+      orderBy: String
+      orderDirection: OrderDirection
+    ): RestaurantConnection!
   }
 `;
 
@@ -145,18 +166,42 @@ export const restaurantResolvers = {
       { id }: { id: number },
       { db }: Context,
     ): Promise<object | undefined> => {
-      const data = await getRestaurant(db, id);
+      const data = await db<Restaurant>('restaurants').where('id', id);
 
       if (data) {
-        return normalizeDatabaseData(data);
+        return normalizeDatabaseData(data[0]);
       }
     },
     restaurants: async (
       _: undefined,
-      __: undefined,
+      {
+        first,
+        last,
+        before,
+        after,
+        orderBy = 'id',
+        orderDirection = 'asc',
+      }: Pagination,
       { db }: Context,
     ): Promise<object[]> => {
-      const data = await getRestaurants(db);
+      if (first < 0) {
+        throw new UserInputError('First must be positive number');
+      }
+
+      if (last < 0) {
+        throw new UserInputError('Last must be positive number');
+      }
+
+      const baseQuery = db<Restaurant>('restaurants');
+
+      const data = await paginate(baseQuery, {
+        first: !first && !last ? 10 : first,
+        last,
+        before,
+        after,
+        orderBy,
+        orderDirection,
+      });
 
       if (data) {
         return normalizeDatabaseData(data);
@@ -167,11 +212,13 @@ export const restaurantResolvers = {
   },
   Restaurant: {
     menus: async (
-      restaurant: { id: number },
+      { id }: { id: number },
       _: undefined,
       { db }: Context,
     ): Promise<object[]> => {
-      const data = await getMenusForRestaurant(db, restaurant.id);
+      const data = await db<Menu>('menus')
+        .where('restaurant_id', id)
+        .orderBy('date');
 
       if (data) {
         return normalizeDatabaseData(data);
@@ -180,11 +227,13 @@ export const restaurantResolvers = {
       return [];
     },
     importDetails: async (
-      restaurant: { id: number },
+      { id }: { id: number },
       _: undefined,
       { db }: Context,
     ): Promise<object[]> => {
-      const data = await getImportDetailsForRestaurant(db, restaurant.id);
+      const data = await db<ImportDetails>('import_details')
+        .where('restaurant_id', id)
+        .orderBy('id');
 
       if (data) {
         return normalizeDatabaseData(data);

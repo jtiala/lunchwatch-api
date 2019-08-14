@@ -7,7 +7,7 @@ import {
   generateEnumResolver,
 } from '../utils/graphql';
 import { normalizeDatabaseData } from '../utils/normalize';
-import { getRestaurant } from './restaurant';
+import { Restaurant } from './restaurant';
 
 export interface ImportDetails {
   id: number;
@@ -72,14 +72,17 @@ export const importDetailsTypeDefs = gql`
 export const importDetailsResolvers = {
   ImportDetails: {
     restaurant: async (
-      importDetails: { restaurantId: number },
+      { restaurantId }: { restaurantId: number },
       _: undefined,
       { db }: Context,
     ): Promise<object | undefined> => {
-      const data = await getRestaurant(db, importDetails.restaurantId);
+      const data = await db<Restaurant>('restaurants').where(
+        'id',
+        restaurantId,
+      );
 
       if (data) {
-        return normalizeDatabaseData(data);
+        return normalizeDatabaseData(data[0]);
       }
     },
   },

@@ -6,6 +6,15 @@ export interface Context {
   db: Knex;
 }
 
+export interface Pagination {
+  first: number;
+  last: number;
+  before: string;
+  after: string;
+  orderBy: string;
+  orderDirection: 'asc' | 'desc';
+}
+
 export const generateEnumSchema = (tsEnum: object): string =>
   `{${Object.keys(tsEnum).join(', ')}}`;
 
@@ -20,6 +29,18 @@ export const generateEnumResolver = (tsEnum: object): IEnumResolver =>
 
 export const rootTypeDefs = gql`
   scalar Date
+
+  type PageInfo {
+    hasNextPage: Boolean
+    hasPreviousPage: Boolean
+    startCursor: String
+    endCursor: String
+  }
+
+  enum OrderDirection {
+    asc
+    desc
+  }
 
   type Query
 

@@ -112,11 +112,13 @@ export const menuItemTypeDefs = gql`
 export const menuItemResolvers = {
   MenuItem: {
     menuItemComponents: async (
-      menuItem: { id: number },
+      { id }: { id: number },
       _: undefined,
       { db }: Context,
     ): Promise<object | undefined> => {
-      const data = await getMenuItemComponentsForMenuItem(db, menuItem.id);
+      const data = await db<MenuItemComponent>('menu_item_components')
+        .where('menu_item_id', id)
+        .orderBy('weight');
 
       if (data) {
         return normalizeDatabaseData(data);
