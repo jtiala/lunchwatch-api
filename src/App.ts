@@ -80,6 +80,8 @@ export default class App {
         importDetailsResolvers,
       ]),
       context: (): Context => ({ db: this.db }),
+      introspection: true,
+      playground: true,
     });
 
     this.configureApp();
