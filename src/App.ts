@@ -1,5 +1,6 @@
 import 'dotenv/config';
 
+import { ApolloServer, IResolvers } from 'apollo-server-express';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -10,14 +11,33 @@ import morgan from 'morgan';
 import { Logger } from 'winston';
 import schedule from 'node-schedule';
 import Boom from '@hapi/boom';
+import merge from 'deepmerge';
 
 import { description, version } from '../package.json';
 import databaseConfig from './database/config';
-import restaurantsController from './controllers/restaurants';
-import menusController from './controllers/menus';
-import { ImportDetails, getEnabledImportDetails } from './models/importDetails';
-import { deleteMenusOlderThan } from './models/menu';
 import { createLogger, createLogDir } from './utils/logger';
+import { Context, rootTypeDefs, rootResolvers } from './utils/graphql';
+
+import restaurantsController from './restaurant/controller';
+import menusController from './menu/controller';
+
+import restaurantTypeDefs from './restaurant/typeDefs';
+import menuTypeDefs from './menu/typeDefs';
+import menuItemTypeDefs from './menuItem/typeDefs';
+import menuItemComponentTypeDefs from './menuItemComponent/typeDefs';
+import importDetailsTypeDefs from './importDetails/typeDefs';
+
+import restaurantResolvers from './restaurant/resolvers';
+import menuResolvers from './menu/resolvers';
+import menuItemResolvers from './menuItem/resolvers';
+import menuItemComponentResolvers from './menuItemComponent/resolvers';
+import importDetailsResolvers from './importDetails/resolvers';
+
+import { ImportDetails } from './importDetails/interfaces';
+
+import { getEnabledImportDetails } from './importDetails/services';
+import { deleteMenusOlderThan } from './menu/services';
+
 import AbstractImporter from './importers/AbstractImporter';
 import AmicaImporter from './importers/AmicaImporter';
 import FazerFoodCoImporter from './importers/FazerFoodCoImporter';
@@ -25,6 +45,7 @@ import SodexoImporter from './importers/SodexoImporter';
 import UnirestaImporter from './importers/UnirestaImporter';
 
 export default class App {
+  public apolloServer: ApolloServer;
   public app: express.Application;
   public db: Knex;
   public logger: Logger;
@@ -40,11 +61,32 @@ export default class App {
       intervalCap: 1,
       interval: 1000,
     });
+    this.apolloServer = new ApolloServer({
+      typeDefs: [
+        rootTypeDefs,
+        restaurantTypeDefs,
+        menuTypeDefs,
+        menuItemTypeDefs,
+        menuItemComponentTypeDefs,
+        importDetailsTypeDefs,
+      ],
+      resolvers: merge.all<IResolvers>([
+        rootResolvers,
+        restaurantResolvers,
+        menuResolvers,
+        menuItemResolvers,
+        menuItemResolvers,
+        menuItemComponentResolvers,
+        importDetailsResolvers,
+      ]),
+      context: (): Context => ({ db: this.db }),
+    });
 
     this.configureApp();
     this.configureMiddleware();
     this.configureRoutes();
     this.configureErrorHandling();
+    this.applyApolloServerMiddleware();
 
     if (process.env.NODE_ENV !== 'test') {
       this.scheduleImporters();
@@ -120,6 +162,10 @@ export default class App {
 
     this.app.use('/v1/restaurants', restaurantsController(this.db));
     this.app.use('/v1/menus', menusController(this.db));
+  }
+
+  private applyApolloServerMiddleware(): void {
+    this.apolloServer.applyMiddleware({ app: this.app });
   }
 
   private getImporter(

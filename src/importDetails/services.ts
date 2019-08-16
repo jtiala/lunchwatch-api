@@ -1,23 +1,14 @@
 import Knex from 'knex';
 
-export interface ImportDetails {
-  id: number;
-  created_at: Date;
-  updated_at: Date;
-  last_import_at: Date;
-  importer_type: ImporterType;
-  identifier: string;
-  restaurant_id: number;
-  language: string;
-  enabled: boolean;
-}
+import { ImportDetails } from './interfaces';
 
-export enum ImporterType {
-  AMICA_IMPORTER = 'AmicaImporter',
-  FAZER_FOOD_CO_IMPORTER = 'FazerFoodCoImporter',
-  SODEXO_IMPORTER = 'SodexoImporter',
-  UNIRESTA_IMPORTER = 'UnirestaImporter',
-}
+export const getImportDetailsForRestaurant = async (
+  db: Knex,
+  restaurantId: number,
+): Promise<ImportDetails[]> =>
+  await db<ImportDetails>('import_details')
+    .where('restaurant_id', restaurantId)
+    .catch((): [] => []);
 
 export const getEnabledImportDetails = async (
   db: Knex,

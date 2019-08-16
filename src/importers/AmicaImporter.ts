@@ -2,16 +2,13 @@ import fetch, { Response } from 'node-fetch';
 import { startOfWeek, addWeeks, format, parse } from 'date-fns';
 
 import AbstractImporter from './AbstractImporter';
-import {
-  deleteMenusForRestaurantForDate,
-  createMenu,
-  CreateMenuParams,
-} from '../models/menu';
-import { CreateMenuItemParams, MenuItemType } from '../models/menuItem';
+import { CreateMenuParams } from '../menu/interfaces';
+import { deleteMenusForRestaurantForDate, createMenu } from '../menu/services';
+import { CreateMenuItemParams, MenuItemType } from '../menuItem/interfaces';
 import {
   CreateMenuItemComponentParams,
   MenuItemComponentType,
-} from '../models/menuItemComponent';
+} from '../menuItemComponent/interfaces';
 import { normalizeImportedString } from '../utils/normalize';
 
 interface SetMenu {
@@ -78,8 +75,8 @@ export default class AmicaImporter extends AbstractImporter {
       );
 
       if (
-        Array.isArray(createMenuParams.menuItems) &&
-        createMenuParams.menuItems.length
+        Array.isArray(createMenuParams.menu_items) &&
+        createMenuParams.menu_items.length
       ) {
         await createMenu(this.db, createMenuParams);
       }
@@ -122,7 +119,7 @@ export default class AmicaImporter extends AbstractImporter {
       restaurant_id: this.importDetails.restaurant_id,
       language: this.importDetails.language,
       date,
-      menuItems: [...(lunchTimeItem ? [lunchTimeItem] : []), ...menuItems],
+      menu_items: [...(lunchTimeItem ? [lunchTimeItem] : []), ...menuItems],
     };
   }
 
@@ -144,7 +141,7 @@ export default class AmicaImporter extends AbstractImporter {
 
         return {
           type: MenuItemType.LUNCH_TIME,
-          menuItemComponents,
+          menu_item_components: menuItemComponents,
           weight: -1,
         };
       }
@@ -220,7 +217,7 @@ export default class AmicaImporter extends AbstractImporter {
 
         menuItems.push({
           type,
-          menuItemComponents,
+          menu_item_components: menuItemComponents,
           weight,
         });
       }

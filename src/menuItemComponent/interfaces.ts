@@ -1,13 +1,11 @@
-import Knex from 'knex';
-
 export interface MenuItemComponent {
   id: number;
-  created_at: Date;
-  updated_at: Date;
-  menu_item_id: number;
   type: MenuItemComponentType;
   value: string;
   weight: number;
+  created_at: Date;
+  updated_at: Date;
+  menu_item_id: number;
 }
 
 export enum MenuItemComponentType {
@@ -19,16 +17,8 @@ export enum MenuItemComponentType {
 }
 
 export interface CreateMenuItemComponentParams {
-  menu_item_id?: number;
   type?: MenuItemComponentType;
   value?: string;
   weight?: number;
+  menu_item_id?: number;
 }
-
-export const createMenuItemComponent = async (
-  db: Knex,
-  menuItemComponent: CreateMenuItemComponentParams,
-): Promise<number[]> =>
-  await db<MenuItemComponent>('menu_item_components')
-    .insert(menuItemComponent)
-    .catch((): [] => []);

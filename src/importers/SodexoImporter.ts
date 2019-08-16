@@ -5,17 +5,14 @@ import fetch, { Response } from 'node-fetch';
 import { startOfWeek, addWeeks, format, addDays } from 'date-fns';
 
 import AbstractImporter from './AbstractImporter';
-import {
-  deleteMenusForRestaurantForDate,
-  createMenu,
-  CreateMenuParams,
-} from '../models/menu';
-import { CreateMenuItemParams, MenuItemType } from '../models/menuItem';
+import { CreateMenuParams } from '../menu/interfaces';
+import { deleteMenusForRestaurantForDate, createMenu } from '../menu/services';
+import { CreateMenuItemParams, MenuItemType } from '../menuItem/interfaces';
 import {
   CreateMenuItemComponentParams,
   MenuItemComponentType,
-} from '../models/menuItemComponent';
-import { ImportDetails } from '../models/importDetails';
+} from '../menuItemComponent/interfaces';
+import { ImportDetails } from '../importDetails/interfaces';
 import { normalizeImportedString } from '../utils/normalize';
 
 type TitleKey = 'title_fi' | 'title_en';
@@ -108,8 +105,8 @@ export default class SodexoImporter extends AbstractImporter {
       );
 
       if (
-        Array.isArray(createMenuParams.menuItems) &&
-        createMenuParams.menuItems.length
+        Array.isArray(createMenuParams.menu_items) &&
+        createMenuParams.menu_items.length
       ) {
         await createMenu(this.db, createMenuParams);
       }
@@ -194,13 +191,11 @@ export default class SodexoImporter extends AbstractImporter {
     data: MenuRow[],
     date: Date,
   ): CreateMenuParams {
-    const menuItems = this.parseMenuItems(data);
-
     return {
       restaurant_id: this.importDetails.restaurant_id,
       language: this.importDetails.language,
       date,
-      menuItems,
+      menu_items: this.parseMenuItems(data),
     };
   }
 
@@ -269,7 +264,7 @@ export default class SodexoImporter extends AbstractImporter {
           menuItems.push({
             type,
             weight: weight + 1,
-            menuItemComponents,
+            menu_item_components: menuItemComponents,
           });
         }
       }

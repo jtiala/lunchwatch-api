@@ -10,7 +10,6 @@ const stringToCamel = (originalString: string): string => {
   );
 };
 
-// FIXME: anything but any
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const keysToCamel = (obj: any): any => {
   if (obj instanceof Date) {
@@ -85,6 +84,12 @@ export const normalizeImportedString = (string: string): string =>
 
     // VEG([S]) => VEG ([S])
     .replace(/(?<=\w*)\(/g, ' (')
+
+    // Chef`s => Chef's
+    .replace(/[`´]/g, "'")
+
+    // Remove empty pairs of brackets
+    .replace(/\(\s*\)|\[\s*\]|\<\s*\>/, '')
 
     // Remove trailing dots, commas, colons and whitespace
     .replace(/[\.\,\:\s]+$/, '')

@@ -9,16 +9,13 @@ import {
 } from 'date-fns';
 
 import AbstractImporter from './AbstractImporter';
-import {
-  deleteMenusForRestaurantForDate,
-  createMenu,
-  CreateMenuParams,
-} from '../models/menu';
-import { CreateMenuItemParams, MenuItemType } from '../models/menuItem';
+import { CreateMenuParams } from '../menu/interfaces';
+import { deleteMenusForRestaurantForDate, createMenu } from '../menu/services';
+import { CreateMenuItemParams, MenuItemType } from '../menuItem/interfaces';
 import {
   CreateMenuItemComponentParams,
   MenuItemComponentType,
-} from '../models/menuItemComponent';
+} from '../menuItemComponent/interfaces';
 import { normalizeImportedString } from '../utils/normalize';
 
 interface Section {
@@ -110,8 +107,8 @@ export default class UnirestaImporter extends AbstractImporter {
       );
 
       if (
-        Array.isArray(createMenuParams.menuItems) &&
-        createMenuParams.menuItems.length
+        Array.isArray(createMenuParams.menu_items) &&
+        createMenuParams.menu_items.length
       ) {
         await createMenu(this.db, createMenuParams);
       }
@@ -173,7 +170,7 @@ export default class UnirestaImporter extends AbstractImporter {
     return parsedDays.map(
       (parsedDay): CreateMenuParams => ({
         ...parsedDay.menu,
-        menuItems: [
+        menu_items: [
           ...(parsedDay.menuItems ? parsedDay.menuItems : []),
           ...(parsedDay.specialMenuItems ? parsedDay.specialMenuItems : []),
         ],
@@ -213,7 +210,7 @@ export default class UnirestaImporter extends AbstractImporter {
             ...previousParsedDay.menuItems,
             {
               type,
-              menuItemComponents,
+              menu_item_components: menuItemComponents,
               weight:
                 type === MenuItemType.LUNCH_TIME
                   ? -1
@@ -249,15 +246,15 @@ export default class UnirestaImporter extends AbstractImporter {
           if (typeof newParsedDay.specialMenuItems[index] !== 'object') {
             newParsedDay.specialMenuItems[index] = {
               type,
-              menuItemComponents,
+              menu_item_components: menuItemComponents,
               weight: index + 100,
             };
           } else {
             const oldMenuItemComponents =
-              newParsedDay.specialMenuItems[index].menuItemComponents;
+              newParsedDay.specialMenuItems[index].menu_item_components;
 
             newParsedDay.specialMenuItems[index].type = type;
-            newParsedDay.specialMenuItems[index].menuItemComponents = [
+            newParsedDay.specialMenuItems[index].menu_item_components = [
               ...(Array.isArray(oldMenuItemComponents)
                 ? oldMenuItemComponents
                 : []),
@@ -291,14 +288,14 @@ export default class UnirestaImporter extends AbstractImporter {
           if (typeof newParsedDay.specialMenuItems[index] !== 'object') {
             newParsedDay.specialMenuItems[index] = {
               type,
-              menuItemComponents,
+              menu_item_components: menuItemComponents,
               weight: index + 100,
             };
           } else {
             const oldMenuItemComponents =
-              newParsedDay.specialMenuItems[index].menuItemComponents;
+              newParsedDay.specialMenuItems[index].menu_item_components;
 
-            newParsedDay.specialMenuItems[index].menuItemComponents = [
+            newParsedDay.specialMenuItems[index].menu_item_components = [
               ...(Array.isArray(oldMenuItemComponents)
                 ? oldMenuItemComponents
                 : []),
