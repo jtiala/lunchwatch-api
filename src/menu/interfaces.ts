@@ -25,7 +25,7 @@ export interface CreateMenuParams {
 }
 
 export interface MenuSearchConditions {
-  date?: string;
+  date?: Date;
   language?: string;
   restaurant_id?: number;
 }

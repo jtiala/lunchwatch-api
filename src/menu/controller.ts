@@ -32,7 +32,7 @@ export default (db: Knex): Router => {
     }
 
     if (typeof query.date === 'string' && query.date.length) {
-      params.conditions = { ...params.conditions, date: String(query.date) };
+      params.conditions = { ...params.conditions, date: new Date(query.date) };
     }
 
     if (typeof query.language === 'string' && query.language.length) {

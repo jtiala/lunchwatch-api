@@ -1,12 +1,19 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import { knexPaginator as paginate } from 'apollo-cursor-pagination';
-import { UserInputError } from 'apollo-server-express';
+import Knex from 'knex';
 
-import { Restaurant } from './interfaces';
+import { Restaurant, RestaurantSearchConditions } from './interfaces';
 import { Menu } from '../menu/interfaces';
 import { ImportDetails } from '../importDetails/interfaces';
-import { Context, Pagination } from '../utils/graphql';
+import {
+  Context,
+  Location,
+  Pagination,
+  parseLocation,
+  parsePaginationParams,
+  parseConditions,
+} from '../utils/graphql';
 import { normalizeDatabaseData } from '../utils/normalize';
 
 const restaurantQueryResolver = async (
@@ -23,34 +30,36 @@ const restaurantQueryResolver = async (
 
 const restaurantsQueryResolver = async (
   _: undefined,
-  {
-    first,
-    last,
-    before,
-    after,
-    orderBy = 'id',
-    orderDirection = 'asc',
-  }: Pagination,
+  args: RestaurantSearchConditions & Location & Pagination,
   { db }: Context,
 ): Promise<object[]> => {
-  if (first < 0) {
-    throw new UserInputError('First must be positive number');
-  }
-
-  if (last < 0) {
-    throw new UserInputError('Last must be positive number');
-  }
-
-  const baseQuery = db<Restaurant>('restaurants');
-
-  const data = await paginate(baseQuery, {
-    first: !first && !last ? 10 : first,
-    last,
-    before,
-    after,
-    orderBy,
-    orderDirection,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const columns: (string | Knex.Raw<any>)[] = ['*'];
+  const location = parseLocation(args);
+  const pagination = parsePaginationParams(args);
+  const conditions: RestaurantSearchConditions = parseConditions({
+    chain: typeof args.chain === 'string' ? args.chain : undefined,
+    enabled: typeof args.enabled === 'boolean' ? args.enabled : undefined,
   });
+
+  if (location) {
+    columns.push(
+      db.raw(
+        `((2 * 3961
+          * asin(sqrt((sin(radians((lat - ${location.lat}) / 2))) ^ 2
+          + cos(radians(${location.lat})) * cos(radians(lat))
+          * (sin(radians((lng - ${location.lng}) / 2))) ^ 2)))
+          * 1.60934) as distance`,
+      ),
+    );
+  }
+
+  const baseQuery = db<Restaurant>('restaurants')
+    .select(columns)
+    .where(conditions)
+    .groupBy('id');
+
+  const data = await paginate(baseQuery, pagination);
 
   if (data) {
     return normalizeDatabaseData(data);

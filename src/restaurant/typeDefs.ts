@@ -13,6 +13,7 @@ export default gql`
     updatedAt: Date!
     menus: [Menu]!
     importDetails: [ImportDetails]!
+    distance: Float
   }
 
   type RestaurantConnection {
@@ -29,6 +30,10 @@ export default gql`
   extend type Query {
     restaurant(id: Int!): Restaurant
     restaurants(
+      chain: String
+      enabled: Boolean
+      lat: Float
+      lng: Float
       first: Int
       last: Int
       before: String

@@ -25,6 +25,11 @@ export default gql`
   extend type Query {
     menu(id: Int!): Menu
     menus(
+      date: Date
+      language: String
+      restaurantId: Int
+      lat: Float
+      lng: Float
       first: Int
       last: Int
       before: String
