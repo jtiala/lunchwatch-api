@@ -51,8 +51,12 @@ export function normalizeDatabaseData(data: any[] | object): any[] | object {
  * @param {string} string - Original string
  * @returns {string} Normalized string
  */
+
 export const normalizeImportedString = (string: string): string =>
   string
+    // Remove HTML (or anything between <> really)
+    .replace(/<[^>]*>/g, ' ')
+
     // \r\n => \n
     .replace(/ *(?:\\[rn]|[\r\n]+)+ */g, '\n')
 
@@ -96,6 +100,9 @@ export const normalizeImportedString = (string: string): string =>
 
     // Replace all double+ spaces with one space
     .replace(/ ( )+/g, ' ')
+
+    // Replace all triple+ \n with double \n
+    .replace(/\n{3,}/g, '\n\n')
 
     // Trim whitespace
     .trim();

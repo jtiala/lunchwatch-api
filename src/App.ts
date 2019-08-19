@@ -42,6 +42,7 @@ import AbstractImporter from './importers/AbstractImporter';
 import AmicaImporter from './importers/AmicaImporter';
 import FazerFoodCoImporter from './importers/FazerFoodCoImporter';
 import SodexoImporter from './importers/SodexoImporter';
+import JuvenesImporter from './importers/JuvenesImporter';
 import UnirestaImporter from './importers/UnirestaImporter';
 
 export default class App {
@@ -94,6 +95,8 @@ export default class App {
       this.scheduleImporters();
       this.scheduleCleaner();
     }
+
+    this.addImportersToQueue();
   }
 
   private configureApp(): void {
@@ -181,6 +184,8 @@ export default class App {
         return new AmicaImporter(importDetails, db, queue, logger);
       case 'FazerFoodCoImporter':
         return new FazerFoodCoImporter(importDetails, db, queue, logger);
+      case 'JuvenesImporter':
+        return new JuvenesImporter(importDetails, db, queue, logger);
       case 'SodexoImporter':
         return new SodexoImporter(importDetails, db, queue, logger);
       case 'UnirestaImporter':
