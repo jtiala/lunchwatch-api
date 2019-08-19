@@ -91,12 +91,11 @@ export default class App {
     this.configureErrorHandling();
     this.applyApolloServerMiddleware();
 
-    if (process.env.NODE_ENV !== 'test') {
+    if (process.env.NODE_ENV === 'production') {
+      this.addImportersToQueue();
       this.scheduleImporters();
       this.scheduleCleaner();
     }
-
-    this.addImportersToQueue();
   }
 
   private configureApp(): void {
