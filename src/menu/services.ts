@@ -1,5 +1,5 @@
 import Knex from 'knex';
-import subWeeks from 'date-fns/sub_weeks';
+import { subWeeks } from 'date-fns';
 
 import { Menu, MenuSearchParams, CreateMenuParams } from './interfaces';
 import { getRestaurant } from '../restaurant/services';
@@ -154,6 +154,6 @@ export const deleteMenusOlderThan = async (
   weeks: number,
 ): Promise<number> =>
   await db<Menu>('menus')
-    .where('date', '<', subWeeks(Date(), weeks))
+    .where('date', '<', subWeeks(new Date(), weeks))
     .delete()
     .catch((): number => 0);
