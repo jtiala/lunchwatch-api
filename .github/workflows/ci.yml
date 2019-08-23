@@ -10,7 +10,7 @@ jobs:
         with:
           version: 12.x
       - name: Install
-        run: npm install
+        run: npm ci
       - name: Lint
         run: npm run lint
       - name: Test
