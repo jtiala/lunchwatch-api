@@ -41,6 +41,8 @@ interface ParsedDay {
 }
 
 export default class SodexoImporter extends AbstractImporter {
+  public name = 'SodexoImporter';
+
   private titleKey: TitleKey;
   private descKey: DescKey;
 

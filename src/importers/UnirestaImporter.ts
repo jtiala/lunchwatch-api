@@ -38,6 +38,8 @@ interface ParsedDay {
 }
 
 export default class UnirestaImporter extends AbstractImporter {
+  public name = 'UnirestaImporter';
+
   protected getUrl(identifier: string, language: string): string {
     const languageUrlPart = language !== 'fi' ? `${language}/` : '';
 

@@ -29,6 +29,8 @@ interface Data {
 }
 
 export default class AmicaImporter extends AbstractImporter {
+  public name = 'AmicaImporter';
+
   protected getUrl(identifier: string, language: string, date: Date): string {
     return `https://www.amica.fi/modules/json/json/Index?costNumber=${identifier}&language=${language}&firstDay=${format(
       date,

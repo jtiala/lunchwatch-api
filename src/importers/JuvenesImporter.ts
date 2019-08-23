@@ -77,6 +77,8 @@ interface RestaurantInfo {
 }
 
 export default class JuvenesImporter extends AbstractImporter {
+  public name = 'JuvenesImporter';
+
   protected getRestaurantUrl(identifier: string, language: string): string {
     return `https://www.juvenes.fi/DesktopModules/Talents.Restaurants/RestaurantsService.svc/GetRestaurant?restaurantId=${identifier}&lang=${language}`;
   }

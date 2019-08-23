@@ -13,6 +13,7 @@ export default abstract class AbstractImporter {
   protected queue: PQueue;
   protected logger: Logger;
 
+  abstract name: string;
   abstract run(): Promise<void>;
 
   public constructor(
@@ -28,7 +29,7 @@ export default abstract class AbstractImporter {
   }
 
   protected getLogService(): string {
-    return `${this.constructor.name}/${this.importDetails.identifier}/${this.importDetails.language}`;
+    return `${this.name}/${this.importDetails.identifier}/${this.importDetails.language}`;
   }
 
   protected async logStart(): Promise<Date> {
