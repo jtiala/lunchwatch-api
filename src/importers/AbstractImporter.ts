@@ -1,7 +1,7 @@
 import Knex from 'knex';
 import PQueue from 'p-queue';
 import { Logger } from 'winston';
-import differenceInMilliseconds from 'date-fns/difference_in_milliseconds';
+import { differenceInMilliseconds } from 'date-fns';
 
 import { MenuItemType } from '../menuItem/interfaces';
 import { ImportDetails } from '../importDetails/interfaces';

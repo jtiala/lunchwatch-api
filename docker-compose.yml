@@ -2,7 +2,7 @@ version: '3'
 services:
   api:
     build: .
-    command: sh -c "yarn && yarn start:dev"
+    command: sh -c "npm install && npm run start:dev"
     volumes:
       - .:/api
     ports:

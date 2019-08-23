@@ -1,5 +1,5 @@
 import fetch, { Response } from 'node-fetch';
-import { startOfWeek, addWeeks, format, parse } from 'date-fns';
+import { startOfWeek, addWeeks, format, parseISO } from 'date-fns';
 
 import AbstractImporter from './AbstractImporter';
 import { CreateMenuParams } from '../menu/interfaces';
@@ -32,12 +32,12 @@ export default class AmicaImporter extends AbstractImporter {
   protected getUrl(identifier: string, language: string, date: Date): string {
     return `https://www.amica.fi/modules/json/json/Index?costNumber=${identifier}&language=${language}&firstDay=${format(
       date,
-      'YYYY-MM-DD',
+      'yyyy-MM-dd',
     )}`;
   }
 
   public async run(): Promise<void> {
-    const thisMonday = startOfWeek(Date(), {
+    const thisMonday = startOfWeek(new Date(), {
       weekStartsOn: 1,
     });
     const nextMonday = addWeeks(thisMonday, 1);
@@ -97,7 +97,7 @@ export default class AmicaImporter extends AbstractImporter {
           typeof menuData.Date === 'string' &&
           menuData.Date.length
         ) {
-          const date = parse(menuData.Date);
+          const date = parseISO(menuData.Date);
           parsedCreateMenuParamas.push(
             this.parseCreateMenuParamsForDay(menuData, date),
           );

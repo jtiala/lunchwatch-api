@@ -1,5 +1,5 @@
 import fetch, { Response } from 'node-fetch';
-import { getISOWeek, getQuarter, getYear, addYears, parse } from 'date-fns';
+import { getISOWeek, getQuarter, getYear, addYears, parseISO } from 'date-fns';
 import { parseString } from 'xml2js';
 
 import AbstractImporter from './AbstractImporter';
@@ -174,7 +174,7 @@ export default class JuvenesImporter extends AbstractImporter {
         this.getMenuUrl(
           availableMenu.KitchenId,
           availableMenu.MenuTypeId,
-          getISOWeek(Date()),
+          getISOWeek(new Date()),
           this.importDetails.language,
         ),
       ).then(
@@ -230,11 +230,11 @@ export default class JuvenesImporter extends AbstractImporter {
         // If current quarter is the last and menu's week is within the first 4 weeks of a year,
         // the menu must be for the next year.
         const year =
-          [1, 2, 3, 4].includes(item.Week) && getQuarter(Date()) === 4
-            ? getYear(addYears(Date(), 1))
-            : getYear(Date());
+          [1, 2, 3, 4].includes(item.Week) && getQuarter(new Date()) === 4
+            ? getYear(addYears(new Date(), 1))
+            : getYear(new Date());
 
-        const date = parse(`${year}-W${item.Week}-${item.Weekday}`);
+        const date = parseISO(`${year}-W${item.Week}-${item.Weekday}`);
         const dateString = date.toISOString();
 
         let name;

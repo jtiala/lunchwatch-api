@@ -4,8 +4,8 @@ import {
   addYears,
   addDays,
   getQuarter,
-  parse,
-  eachDay,
+  parseISO,
+  eachDayOfInterval,
 } from 'date-fns';
 
 import AbstractImporter from './AbstractImporter';
@@ -81,11 +81,11 @@ export default class UnirestaImporter extends AbstractImporter {
             ) {
               const year =
                 ['01', '02', '03', '04'].includes(sectionData.viikko) &&
-                getQuarter(Date()) === 4
-                  ? getYear(addYears(Date(), 1))
-                  : getYear(Date());
+                getQuarter(new Date()) === 4
+                  ? getYear(addYears(new Date(), 1))
+                  : getYear(new Date());
 
-              const firstDate = parse(`${year}-W${sectionData.viikko}-1`);
+              const firstDate = parseISO(`${year}-W${sectionData.viikko}-1`);
 
               await this.handleSection(sectionData, firstDate);
             }
@@ -119,7 +119,10 @@ export default class UnirestaImporter extends AbstractImporter {
     data: Section,
     firstDate: Date,
   ): CreateMenuParams[] {
-    const parsedDays = eachDay(firstDate, addDays(firstDate, 6)).map(
+    const parsedDays = eachDayOfInterval({
+      start: firstDate,
+      end: addDays(firstDate, 6),
+    }).map(
       (date: Date): ParsedDay => ({
         menu: {
           restaurant_id: this.importDetails.restaurant_id,

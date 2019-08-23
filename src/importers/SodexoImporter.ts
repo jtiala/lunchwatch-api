@@ -59,12 +59,12 @@ export default class SodexoImporter extends AbstractImporter {
   protected getUrl(identifier: string, language: string, date: Date): string {
     return `https://www.sodexo.fi/ruokalistat/output/weekly_json/${identifier}/${format(
       date,
-      'YYYY/MM/DD',
+      'yyyy/MM/dd',
     )}/${language}`;
   }
 
   public async run(): Promise<void> {
-    const thisMonday = startOfWeek(Date(), {
+    const thisMonday = startOfWeek(new Date(), {
       weekStartsOn: 1,
     });
     const nextMonday = addWeeks(thisMonday, 1);
