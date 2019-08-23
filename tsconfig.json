@@ -8,7 +8,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "outDir": "./dist/",
+    "outDir": "./build/",
     "sourceMap": true,
     "strict": true,
     "target": "es6"
