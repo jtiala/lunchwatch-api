@@ -5,7 +5,7 @@ WORKDIR /api
 COPY . .
 
 # Install dependencies
-RUN yarn
+RUN npm install
 
 # Expose ports
 EXPOSE 8080
