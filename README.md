@@ -1,6 +1,6 @@
 # 🍱 LunchWatch Menu Aggregator API
 
-[![Build Status][build-status-badge]][build-status]
+[![Actions Status][actions-status-badge]][actions-status]
 [![Dependencies Status][dependencies-status-badge]][dependencies-status]
 [![Dev Dependencies Status][devdependencies-status-badge]][devdependencies-status]
 [![PRs Welcome][prs-badge]][contributing]
@@ -8,7 +8,7 @@
 
 [LunchWatch][lunchwatch] is a lunch menu aggregator web app. The app is currently aggregating menus from restaurants in Oulu, Finland.
 
-This repository contains Node.js [GraphQL][graphql] and REST APIs, and also includes scheduled menu importers. The actual web app is located in a [separate repository][lunchwatch-client-repo]. Issues concerning the UI should be discussed in that repository.
+This repository contains Node.js [GraphQL][graphql] and REST APIs, and also includes scheduled menu importers. The actual web app is located in a [separate repository][lunchwatch-pwa-repo]. Issues concerning the UI should be discussed in that repository.
 
 ## Pre-requisites
 
@@ -70,8 +70,8 @@ Contributions are most welcome! If you would like to contribute to this project,
 
 This project is open source software licensed under the MIT license. For more information see [LICENSE][license].
 
-[build-status]: https://circleci.com/gh/jtiala/lunchwatch-api/tree/master
-[build-status-badge]: https://circleci.com/gh/jtiala/lunchwatch-api/tree/master.svg?style=svg
+[actions-status]: https://github.com/jtiala/lunchwatch-pwa/actions
+[actions-status-badge]: https://github.com/jtiala/lunchwatch-pwa/workflows/CI/CD/badge.svg
 [dependencies-status]: https://david-dm.org/jtiala/lunchwatch-api
 [dependencies-status-badge]: https://img.shields.io/david/jtiala/lunchwatch-api.svg
 [devdependencies-status]: https://david-dm.org/jtiala/lunchwatch-api?type=dev
@@ -87,4 +87,4 @@ This project is open source software licensed under the MIT license. For more in
 [knex]: http://knexjs.org/
 [issues]: https://github.com/jtiala/lunchwatch-api/issues
 [lunchwatch]: https://lunch.watch/
-[lunchwatch-client-repo]: https://github.com/jtiala/lunchwatch-client
+[lunchwatch-pwa-repo]: https://github.com/jtiala/lunchwatch-pwa
