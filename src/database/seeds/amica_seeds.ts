@@ -1,6 +1,6 @@
 import Knex from 'knex';
 
-import { ImporterType } from '../../importDetails/interfaces';
+const importer_type = 'AmicaImporter';
 
 /*
 New additions (based on chain + name) to this list will be added to the DB.
@@ -16,12 +16,12 @@ const restaurants = [
     lng: 25.4601201,
     importDetails: [
       {
-        importer_type: ImporterType.AMICA_IMPORTER,
+        importer_type,
         identifier: '1693',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.AMICA_IMPORTER,
+        importer_type,
         identifier: '1693',
         language: 'en',
       },
@@ -36,12 +36,12 @@ const restaurants = [
     lng: 25.4901111,
     importDetails: [
       {
-        importer_type: ImporterType.AMICA_IMPORTER,
+        importer_type,
         identifier: '0217',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.AMICA_IMPORTER,
+        importer_type,
         identifier: '0217',
         language: 'en',
       },
@@ -56,12 +56,12 @@ const restaurants = [
     lng: 25.5112750000001,
     importDetails: [
       {
-        importer_type: ImporterType.AMICA_IMPORTER,
+        importer_type,
         identifier: '0226',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.AMICA_IMPORTER,
+        importer_type,
         identifier: '0226',
         language: 'en',
       },
@@ -76,12 +76,12 @@ const restaurants = [
     lng: 25.5129067,
     importDetails: [
       {
-        importer_type: ImporterType.AMICA_IMPORTER,
+        importer_type,
         identifier: '2532',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.AMICA_IMPORTER,
+        importer_type,
         identifier: '2532',
         language: 'en',
       },
@@ -96,12 +96,12 @@ const restaurants = [
     lng: 25.5106401,
     importDetails: [
       {
-        importer_type: ImporterType.AMICA_IMPORTER,
+        importer_type,
         identifier: '0235',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.AMICA_IMPORTER,
+        importer_type,
         identifier: '0235',
         language: 'en',
       },
@@ -116,12 +116,12 @@ const restaurants = [
     lng: 25.5106401,
     importDetails: [
       {
-        importer_type: ImporterType.AMICA_IMPORTER,
+        importer_type,
         identifier: '0218',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.AMICA_IMPORTER,
+        importer_type,
         identifier: '0218',
         language: 'en',
       },

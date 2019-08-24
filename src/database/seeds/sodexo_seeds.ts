@@ -1,6 +1,6 @@
 import Knex from 'knex';
 
-import { ImporterType } from '../../importDetails/interfaces';
+const importer_type = 'SodexoImporter';
 
 /*
 New additions (based on chain + name) to this list will be added to the DB.
@@ -15,12 +15,12 @@ const restaurants = [
     lng: 25.512647,
     importDetails: [
       {
-        importer_type: ImporterType.SODEXO_IMPORTER,
+        importer_type,
         identifier: '12820',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.SODEXO_IMPORTER,
+        importer_type,
         identifier: '12820',
         language: 'en',
       },
@@ -34,12 +34,12 @@ const restaurants = [
     lng: 25.4450976,
     importDetails: [
       {
-        importer_type: ImporterType.SODEXO_IMPORTER,
+        importer_type,
         identifier: '16',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.SODEXO_IMPORTER,
+        importer_type,
         identifier: '16',
         language: 'en',
       },
@@ -53,12 +53,12 @@ const restaurants = [
     lng: 25.442629,
     importDetails: [
       {
-        importer_type: ImporterType.SODEXO_IMPORTER,
+        importer_type,
         identifier: '49',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.SODEXO_IMPORTER,
+        importer_type,
         identifier: '49',
         language: 'en',
       },
@@ -72,12 +72,12 @@ const restaurants = [
     lng: 25.4385713,
     importDetails: [
       {
-        importer_type: ImporterType.SODEXO_IMPORTER,
+        importer_type,
         identifier: '39528',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.SODEXO_IMPORTER,
+        importer_type,
         identifier: '39528',
         language: 'en',
       },
@@ -91,12 +91,12 @@ const restaurants = [
     lng: 25.440705,
     importDetails: [
       {
-        importer_type: ImporterType.SODEXO_IMPORTER,
+        importer_type,
         identifier: '122',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.SODEXO_IMPORTER,
+        importer_type,
         identifier: '122',
         language: 'en',
       },
@@ -110,12 +110,12 @@ const restaurants = [
     lng: 25.510581,
     importDetails: [
       {
-        importer_type: ImporterType.SODEXO_IMPORTER,
+        importer_type,
         identifier: '8336',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.SODEXO_IMPORTER,
+        importer_type,
         identifier: '8336',
         language: 'en',
       },
@@ -129,12 +129,12 @@ const restaurants = [
     lng: 25.445707,
     importDetails: [
       {
-        importer_type: ImporterType.SODEXO_IMPORTER,
+        importer_type,
         identifier: '94',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.SODEXO_IMPORTER,
+        importer_type,
         identifier: '94',
         language: 'en',
       },

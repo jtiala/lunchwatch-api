@@ -1,6 +1,6 @@
 import Knex from 'knex';
 
-import { ImporterType } from '../../importDetails/interfaces';
+const importer_type = 'JuvenesImporter';
 
 /*
 New additions (based on chain + name) to this list will be added to the DB.
@@ -15,12 +15,12 @@ const restaurants = [
     lng: 25.4663717,
     importDetails: [
       {
-        importer_type: ImporterType.JUVENES_IMPORTER,
+        importer_type,
         identifier: '7097',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.JUVENES_IMPORTER,
+        importer_type,
         identifier: '7097',
         language: 'en',
       },
@@ -34,12 +34,12 @@ const restaurants = [
     lng: 25.4652391,
     importDetails: [
       {
-        importer_type: ImporterType.JUVENES_IMPORTER,
+        importer_type,
         identifier: '7098',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.JUVENES_IMPORTER,
+        importer_type,
         identifier: '7098',
         language: 'en',
       },
@@ -53,12 +53,12 @@ const restaurants = [
     lng: 25.4661188,
     importDetails: [
       {
-        importer_type: ImporterType.JUVENES_IMPORTER,
+        importer_type,
         identifier: '7099',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.JUVENES_IMPORTER,
+        importer_type,
         identifier: '7099',
         language: 'en',
       },
@@ -72,12 +72,12 @@ const restaurants = [
     lng: 25.4661826,
     importDetails: [
       {
-        importer_type: ImporterType.JUVENES_IMPORTER,
+        importer_type,
         identifier: '7100',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.JUVENES_IMPORTER,
+        importer_type,
         identifier: '7100',
         language: 'en',
       },
@@ -91,12 +91,12 @@ const restaurants = [
     lng: 25.4677306,
     importDetails: [
       {
-        importer_type: ImporterType.JUVENES_IMPORTER,
+        importer_type,
         identifier: '7102',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.JUVENES_IMPORTER,
+        importer_type,
         identifier: '7102',
         language: 'en',
       },
@@ -110,12 +110,12 @@ const restaurants = [
     lng: 25.4652156,
     importDetails: [
       {
-        importer_type: ImporterType.JUVENES_IMPORTER,
+        importer_type,
         identifier: '7552',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.JUVENES_IMPORTER,
+        importer_type,
         identifier: '7552',
         language: 'en',
       },
@@ -129,12 +129,12 @@ const restaurants = [
     lng: 25.4652391,
     importDetails: [
       {
-        importer_type: ImporterType.JUVENES_IMPORTER,
+        importer_type,
         identifier: '8175',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.JUVENES_IMPORTER,
+        importer_type,
         identifier: '8175',
         language: 'en',
       },

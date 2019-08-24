@@ -1,6 +1,6 @@
 import Knex from 'knex';
 
-import { ImporterType } from '../../importDetails/interfaces';
+const importer_type = 'FazerFoodCoImporter';
 
 /*
 New additions (based on chain + name) to this list will be added to the DB.
@@ -16,12 +16,12 @@ const restaurants = [
     lng: 25.4395850999999,
     importDetails: [
       {
-        importer_type: ImporterType.FAZER_FOOD_CO_IMPORTER,
+        importer_type,
         identifier: '3498',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.FAZER_FOOD_CO_IMPORTER,
+        importer_type,
         identifier: '3498',
         language: 'en',
       },
@@ -36,12 +36,12 @@ const restaurants = [
     lng: 25.4579624,
     importDetails: [
       {
-        importer_type: ImporterType.FAZER_FOOD_CO_IMPORTER,
+        importer_type,
         identifier: '3497',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.FAZER_FOOD_CO_IMPORTER,
+        importer_type,
         identifier: '3497',
         language: 'en',
       },
@@ -56,12 +56,12 @@ const restaurants = [
     lng: 25.4701764,
     importDetails: [
       {
-        importer_type: ImporterType.FAZER_FOOD_CO_IMPORTER,
+        importer_type,
         identifier: '1694',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.FAZER_FOOD_CO_IMPORTER,
+        importer_type,
         identifier: '1694',
         language: 'en',
       },
@@ -76,12 +76,12 @@ const restaurants = [
     lng: 25.4693725,
     importDetails: [
       {
-        importer_type: ImporterType.FAZER_FOOD_CO_IMPORTER,
+        importer_type,
         identifier: '3511',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.FAZER_FOOD_CO_IMPORTER,
+        importer_type,
         identifier: '3511',
         language: 'en',
       },
@@ -96,12 +96,12 @@ const restaurants = [
     lng: 25.5150452,
     importDetails: [
       {
-        importer_type: ImporterType.FAZER_FOOD_CO_IMPORTER,
+        importer_type,
         identifier: '3508',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.FAZER_FOOD_CO_IMPORTER,
+        importer_type,
         identifier: '3508',
         language: 'en',
       },
@@ -116,12 +116,12 @@ const restaurants = [
     lng: 25.5100324,
     importDetails: [
       {
-        importer_type: ImporterType.FAZER_FOOD_CO_IMPORTER,
+        importer_type,
         identifier: '3509',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.FAZER_FOOD_CO_IMPORTER,
+        importer_type,
         identifier: '3509',
         language: 'en',
       },

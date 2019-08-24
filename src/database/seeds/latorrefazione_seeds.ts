@@ -1,6 +1,6 @@
 import Knex from 'knex';
 
-import { ImporterType } from '../../importDetails/interfaces';
+const importer_type = 'LaTorrefazioneImporter';
 
 /*
 New additions (based on chain + name) to this list will be added to the DB.
@@ -14,12 +14,12 @@ const restaurants = [
     lng: 25.472034,
     importDetails: [
       {
-        importer_type: ImporterType.LA_TORREFAZIONE_IMPORTER,
+        importer_type,
         identifier: 'valkea',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.LA_TORREFAZIONE_IMPORTER,
+        importer_type,
         identifier: 'valkea',
         language: 'en',
       },

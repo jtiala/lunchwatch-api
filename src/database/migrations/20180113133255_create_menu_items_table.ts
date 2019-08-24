@@ -1,6 +1,16 @@
 import Knex from 'knex';
 
-import { MenuItemType } from '../../menuItem/interfaces';
+const menuItemTypes = [
+  'normal_meal',
+  'vegetarian_meal',
+  'light_meal',
+  'special_meal',
+  'dessert',
+  'breakfast',
+  'lunch_time',
+  'information',
+  'price_information',
+];
 
 /**
  * Create menu_items table.
@@ -25,7 +35,7 @@ export const up = async (knex: Knex): Promise<void> =>
       .inTable('menus')
       .onDelete('CASCADE')
       .notNullable();
-    table.enu('type', Object.values(MenuItemType)).notNullable();
+    table.enu('type', menuItemTypes).notNullable();
     table
       .integer('weight')
       .notNullable()

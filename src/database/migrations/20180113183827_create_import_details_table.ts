@@ -1,6 +1,11 @@
 import Knex from 'knex';
 
-import { ImporterType } from '../../importDetails/interfaces';
+const importerTypes = [
+  'AmicaImporter',
+  'FazerFoodCoImporter',
+  'SodexoImporter',
+  'UnirestaImporter',
+];
 
 /**
  * Create imports table.
@@ -20,7 +25,7 @@ export const up = async (knex: Knex): Promise<void> =>
       .notNullable()
       .defaultTo(knex.fn.now());
     table.timestamp('last_import_at');
-    table.enu('importer_type', Object.values(ImporterType)).notNullable();
+    table.enu('importer_type', importerTypes).notNullable();
     table.string('identifier').notNullable();
     table
       .integer('restaurant_id')

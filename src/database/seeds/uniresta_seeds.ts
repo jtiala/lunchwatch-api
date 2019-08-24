@@ -1,6 +1,6 @@
 import Knex from 'knex';
 
-import { ImporterType } from '../../importDetails/interfaces';
+const importer_type = 'UnirestaImporter';
 
 /*
 New additions (based on chain + name) to this list will be added to the DB.
@@ -16,12 +16,12 @@ const restaurants = [
     lng: 25.467585,
     importDetails: [
       {
-        importer_type: ImporterType.UNIRESTA_IMPORTER,
+        importer_type,
         identifier: 'kastari',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.UNIRESTA_IMPORTER,
+        importer_type,
         identifier: 'kastari',
         language: 'en',
       },
@@ -36,12 +36,12 @@ const restaurants = [
     lng: 25.465423,
     importDetails: [
       {
-        importer_type: ImporterType.UNIRESTA_IMPORTER,
+        importer_type,
         identifier: 'vanilla',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.UNIRESTA_IMPORTER,
+        importer_type,
         identifier: 'vanilla',
         language: 'en',
       },
@@ -56,12 +56,12 @@ const restaurants = [
     lng: 25.524053,
     importDetails: [
       {
-        importer_type: ImporterType.UNIRESTA_IMPORTER,
+        importer_type,
         identifier: 'medisiina',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.UNIRESTA_IMPORTER,
+        importer_type,
         identifier: 'medisiina',
         language: 'en',
       },
@@ -76,12 +76,12 @@ const restaurants = [
     lng: 25.479655,
     importDetails: [
       {
-        importer_type: ImporterType.UNIRESTA_IMPORTER,
+        importer_type,
         identifier: 'preludi',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.UNIRESTA_IMPORTER,
+        importer_type,
         identifier: 'preludi',
         language: 'en',
       },
@@ -96,12 +96,12 @@ const restaurants = [
     lng: 25.511383,
     importDetails: [
       {
-        importer_type: ImporterType.UNIRESTA_IMPORTER,
+        importer_type,
         identifier: 'castanea',
         language: 'fi',
       },
       {
-        importer_type: ImporterType.UNIRESTA_IMPORTER,
+        importer_type,
         identifier: 'castanea',
         language: 'en',
       },
