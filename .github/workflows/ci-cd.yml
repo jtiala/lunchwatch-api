@@ -44,4 +44,11 @@ jobs:
       - name: Deploy build
         run: rsync -avz --delete -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" build/ node_modules tsconfig.json src/database ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }}:${{ secrets.SSH_PATH }}/
       - name: Run migrations
-        run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }} "cd ${{ secrets.SSH_PATH }}; knex migrate:latest --knexfile database/knexfile.ts; knex seed --knexfile database/knexfile.ts"
+        env:
+          DB_CLIENT: ${{ secrets.DB_CLIENT }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -o SendEnv=DB_* ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }} "cd ${{ secrets.SSH_PATH }}; knex migrate:latest --knexfile database/knexfile.ts; knex seed --knexfile database/knexfile.ts"
