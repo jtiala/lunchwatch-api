@@ -43,3 +43,5 @@ jobs:
           ssh-add ~/.ssh/id_rsa
       - name: Deploy build
         run: rsync -avz --delete -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" build/ node_modules ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }}:${{ secrets.SSH_PATH }}/
+      - name: Run migrations
+        run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }} "cd $SSH_PATH; yarn migrate; yarn seed;"
