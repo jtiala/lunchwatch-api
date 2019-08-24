@@ -10,8 +10,13 @@ services:
       - '9229:9229'
     depends_on:
       - db
+      - chrome
     links:
       - db
+      - chrome
+  chrome:
+    image: browserless/chrome:latest
+    shm_size: '2gb'
   db:
     image: postgres:11-alpine
     ports:

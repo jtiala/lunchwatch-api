@@ -14,6 +14,7 @@ export enum ImporterType {
   AMICA_IMPORTER = 'AmicaImporter',
   FAZER_FOOD_CO_IMPORTER = 'FazerFoodCoImporter',
   JUVENES_IMPORTER = 'JuvenesImporter',
+  LA_TORREFAZIONE_IMPORTER = 'LaTorrefazioneImporter',
   SODEXO_IMPORTER = 'SodexoImporter',
   UNIRESTA_IMPORTER = 'UnirestaImporter',
 }
