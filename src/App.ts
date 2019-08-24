@@ -43,6 +43,7 @@ import AmicaImporter from './importers/AmicaImporter';
 import FazerFoodCoImporter from './importers/FazerFoodCoImporter';
 import SodexoImporter from './importers/SodexoImporter';
 import JuvenesImporter from './importers/JuvenesImporter';
+import LaTorrefazioneImporter from './importers/LaTorrefazioneImporter';
 import UnirestaImporter from './importers/UnirestaImporter';
 
 export default class App {
@@ -185,6 +186,8 @@ export default class App {
         return new FazerFoodCoImporter(importDetails, db, queue, logger);
       case 'JuvenesImporter':
         return new JuvenesImporter(importDetails, db, queue, logger);
+      case 'LaTorrefazioneImporter':
+        return new LaTorrefazioneImporter(importDetails, db, queue, logger);
       case 'SodexoImporter':
         return new SodexoImporter(importDetails, db, queue, logger);
       case 'UnirestaImporter':
