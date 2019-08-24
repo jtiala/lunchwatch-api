@@ -51,4 +51,4 @@ jobs:
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -o SendEnv=DB_* ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }} "cd ${{ secrets.SSH_PATH }}; knex migrate:latest --knexfile database/knexfile.ts; knex seed --knexfile database/knexfile.ts"
+        run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -o SendEnv=DB_* ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }} "cd ${{ secrets.SSH_PATH }}; knex --knexfile database/knexfile.ts migrate:latest ; knex --knexfile database/knexfile.ts seed"
