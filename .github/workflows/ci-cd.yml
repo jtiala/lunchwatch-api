@@ -44,4 +44,4 @@ jobs:
       - name: Deploy build
         run: rsync -avz --delete -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" build/ node_modules src/database ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }}:${{ secrets.SSH_PATH }}/
       - name: Run migrations
-        run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }} "knex migrate:latest --knexfile $SSH_PATH/knexfile.ts; knex seed --knexfile $SSH_PATH/knexfile.ts"
+        run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }} "knex migrate:latest --knexfile $SSH_PATH/database/knexfile.ts; knex seed --knexfile $SSH_PATH/database/knexfile.ts"
