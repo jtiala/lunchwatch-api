@@ -236,10 +236,20 @@ export default class App {
     );
   }
 
+  public getBuild(): string {
+    if (typeof process.env.APP_BUILD === 'string') {
+      return process.env.APP_BUILD;
+    }
+
+    return String(process.env.NODE_ENV);
+  }
+
   public listen(): void {
     this.app.listen(this.app.get('port'), this.app.get('host'), (): void => {
       this.logger.info(
-        `Started at http://${this.app.get('host')}:${this.app.get('port')}`,
+        `Started build ${this.getBuild()} at http://${this.app.get(
+          'host',
+        )}:${this.app.get('port')}`,
       );
     });
   }

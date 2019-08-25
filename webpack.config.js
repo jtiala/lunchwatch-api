@@ -23,7 +23,12 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'build'),
   },
-  plugins: [new Dotenv({ systemvars: true })],
+  plugins: [
+    new Dotenv({ systemvars: true }),
+    new webpack.DefinePlugin({
+      APP_BUILD: JSON.stringify(Date.now()),
+    }),
+  ],
   target: 'node',
   externals: [nodeExternals()],
 };
