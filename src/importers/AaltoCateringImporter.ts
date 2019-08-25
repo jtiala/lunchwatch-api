@@ -226,20 +226,20 @@ export default class AaltoCateringImporter extends AbstractPuppeteerImporter {
       weekStartsOn: 1,
     });
 
-    switch (string) {
-      case 'Maanantai':
+    switch (string.trim().toLowerCase()) {
+      case 'maanantai':
         return thisMonday;
-      case 'Tiistai':
+      case 'tiistai':
         return addDays(thisMonday, 1);
-      case 'Keskiviikko':
+      case 'keskiviikko':
         return addDays(thisMonday, 2);
-      case 'Torstai':
+      case 'torstai':
         return addDays(thisMonday, 3);
-      case 'Perjantai':
+      case 'perjantai':
         return addDays(thisMonday, 4);
-      case 'Lauantai':
+      case 'lauantai':
         return addDays(thisMonday, 5);
-      case 'Sunnuntai':
+      case 'sunnuntai':
         return addDays(thisMonday, 6);
     }
   }

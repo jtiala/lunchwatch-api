@@ -46,6 +46,7 @@ import UnirestaImporter from './importers/UnirestaImporter';
 import JuvenesImporter from './importers/JuvenesImporter';
 import LaTorrefazioneImporter from './importers/LaTorrefazioneImporter';
 import AaltoCateringImporter from './importers/AaltoCateringImporter';
+import PitopalveluTimonenImporter from './importers/PitopalveluTimonenImporter';
 
 export default class App {
   public apolloServer: ApolloServer;
@@ -199,6 +200,8 @@ export default class App {
         return new LaTorrefazioneImporter(importDetails, db, queue, logger);
       case 'AaltoCateringImporter':
         return new AaltoCateringImporter(importDetails, db, queue, logger);
+      case 'PitopalveluTimonenImporter':
+        return new PitopalveluTimonenImporter(importDetails, db, queue, logger);
       default:
         this.logger.error(
           `Invalid importer type: ${importDetails.importer_type}`,

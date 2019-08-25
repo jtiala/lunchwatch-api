@@ -95,8 +95,10 @@ export const normalizeImportedString = (string: string): string =>
     // Remove empty pairs of brackets
     .replace(/\(\s*\)|\[\s*\]|\<\s*\>/, '')
 
-    // Remove trailing dots, commas, colons and whitespace
-    .replace(/[\.\,\:\s]+$/, '')
+    // Remove starting and trailing dots, commas, colons,
+    // dashes, underscores and whitespace
+    .replace(/^[\.\,\:\-\_\s]+/, '')
+    .replace(/[\.\,\:\-\_\s]+$/, '')
 
     // Replace all double+ spaces with one space
     .replace(/ ( )+/g, ' ')

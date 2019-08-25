@@ -36,7 +36,7 @@ export const up = async (knex: Knex): Promise<void> =>
  */
 export const down = async (knex: Knex): Promise<void> => {
   await knex('restaurants')
-    .where('name', 'La Torrefazione')
+    .where('chain', 'Aalto Catering')
     .delete();
 
   await knex.schema.raw(`
