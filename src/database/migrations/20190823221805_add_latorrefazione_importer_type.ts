@@ -35,6 +35,7 @@ export const up = async (knex: Knex): Promise<void> =>
  */
 export const down = async (knex: Knex): Promise<void> => {
   await knex('restaurants')
+    .where('url', 'like', '%latorre.fi%')
     .where('name', 'La Torrefazione')
     .delete();
 
