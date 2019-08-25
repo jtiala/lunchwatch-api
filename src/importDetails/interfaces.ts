@@ -8,6 +8,7 @@ export interface ImportDetails {
   created_at: Date;
   updated_at: Date;
   restaurant_id: number;
+  schedule?: string;
 }
 
 export enum ImporterType {

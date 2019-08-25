@@ -1,4 +1,4 @@
-import { getISODay, startOfWeek, addDays } from 'date-fns';
+import { startOfWeek, addDays } from 'date-fns';
 
 import AbstractPuppeteerImporter from './AbstractPuppeteerImporter';
 import { CreateMenuParams } from '../menu/interfaces';
@@ -19,27 +19,22 @@ export default class PitopalveluTimonenImporter extends AbstractPuppeteerImporte
   }
 
   public async run(): Promise<void> {
-    const today = getISODay(new Date());
+    const parsedData = await this.getData();
+    const parsedCreateMenuParamas = this.parseCreateMenuParams(parsedData);
 
-    // Don't run on weekends
-    if (today !== 6 && today !== 7) {
-      const parsedData = await this.getData();
-      const parsedCreateMenuParamas = this.parseCreateMenuParams(parsedData);
+    for (const createMenuParams of parsedCreateMenuParamas) {
+      await deleteMenusForRestaurantForDate(
+        this.db,
+        this.importDetails.restaurant_id,
+        this.importDetails.language,
+        createMenuParams.date,
+      );
 
-      for (const createMenuParams of parsedCreateMenuParamas) {
-        await deleteMenusForRestaurantForDate(
-          this.db,
-          this.importDetails.restaurant_id,
-          this.importDetails.language,
-          createMenuParams.date,
-        );
-
-        if (
-          Array.isArray(createMenuParams.menu_items) &&
-          createMenuParams.menu_items.length
-        ) {
-          await createMenu(this.db, createMenuParams);
-        }
+      if (
+        Array.isArray(createMenuParams.menu_items) &&
+        createMenuParams.menu_items.length
+      ) {
+        await createMenu(this.db, createMenuParams);
       }
     }
   }

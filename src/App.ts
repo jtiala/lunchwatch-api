@@ -9,7 +9,7 @@ import Knex from 'knex';
 import PQueue from 'p-queue';
 import morgan from 'morgan';
 import { Logger } from 'winston';
-import schedule from 'node-schedule';
+import nodeSchedule from 'node-schedule';
 import Boom from '@hapi/boom';
 import merge from 'deepmerge';
 
@@ -35,7 +35,10 @@ import importDetailsResolvers from './importDetails/resolvers';
 
 import { ImportDetails } from './importDetails/interfaces';
 
-import { getEnabledImportDetails } from './importDetails/services';
+import {
+  getEnabledImportDetails,
+  getSchedules,
+} from './importDetails/services';
 import { deleteMenusOlderThan } from './menu/services';
 
 import AbstractImporter from './importers/AbstractImporter';
@@ -112,10 +115,6 @@ export default class App {
     this.app.set('host', process.env.APP_HOST || '0.0.0.0');
     this.app.set('port', process.env.APP_PORT || '3000');
 
-    this.app.set(
-      'cronImportMenus',
-      process.env.CRON_IMPORT_MENUS || '0 4 * * *',
-    );
     this.app.set('cronDBCleaner', process.env.CRON_DB_CLEANER || '0 3 * * 1');
 
     createLogDir();
@@ -209,8 +208,11 @@ export default class App {
     }
   }
 
-  private async addImportersToQueue(): Promise<void> {
-    const enabledImportDetails = await getEnabledImportDetails(this.db);
+  private async addImportersToQueue(schedule?: string): Promise<void> {
+    const enabledImportDetails = await getEnabledImportDetails(
+      this.db,
+      schedule,
+    );
 
     for (const importDetails of enabledImportDetails) {
       const importer = this.getImporter(
@@ -227,14 +229,22 @@ export default class App {
   }
 
   private async scheduleImporters(): Promise<void> {
-    await schedule.scheduleJob(
-      this.app.get('cronImportMenus'),
-      async (): Promise<void> => await this.addImportersToQueue(),
-    );
+    const schedules = await getSchedules(this.db);
+
+    for (const { schedule } of schedules) {
+      const crons = schedule.split(';');
+
+      for (const cron of crons) {
+        await nodeSchedule.scheduleJob(
+          cron,
+          async (): Promise<void> => await this.addImportersToQueue(schedule),
+        );
+      }
+    }
   }
 
   private async scheduleCleaner(): Promise<void> {
-    await schedule.scheduleJob(
+    await nodeSchedule.scheduleJob(
       this.app.get('cronDBCleaner'),
       async (): Promise<void> => {
         const deletedMenusCount = await deleteMenusOlderThan(this.db, 4);

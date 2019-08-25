@@ -26,7 +26,6 @@ jobs:
           APP_PORT: ${{ secrets.APP_PORT }}
           APP_LOG_DIR: ${{ secrets.APP_LOG_DIR }}
           CRON_DB_CLEANER: ${{ secrets.CRON_DB_CLEANER }}
-          CRON_IMPORT_MENUS: ${{ secrets.CRON_IMPORT_MENUS }}
           CHROME_WS_ENDPOINT: ${{ secrets.CHROME_WS_ENDPOINT }}
           DB_CLIENT: ${{ secrets.DB_CLIENT }}
           DB_HOST: ${{ secrets.DB_HOST }}
