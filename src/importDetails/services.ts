@@ -12,8 +12,24 @@ export const getImportDetailsForRestaurant = async (
 
 export const getEnabledImportDetails = async (
   db: Knex,
-): Promise<ImportDetails[]> =>
-  await db<ImportDetails>('import_details')
+  schedule?: string,
+): Promise<ImportDetails[]> => {
+  const conditions: { enabled: boolean; schedule?: string } = {
+    enabled: true,
+  };
+
+  if (schedule) {
+    conditions['schedule'] = schedule;
+  }
+
+  return await db<ImportDetails>('import_details')
+    .where(conditions)
+    .catch((): [] => []);
+};
+
+export const getSchedules = async (db: Knex): Promise<{ schedule: string }[]> =>
+  await db<{ schedule: string }>('import_details')
+    .distinct('schedule')
     .where('enabled', true)
     .catch((): [] => []);
 

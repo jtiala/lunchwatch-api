@@ -1,6 +1,10 @@
 import Knex from 'knex';
 
 const importer_type = 'PitopalveluTimonenImporter';
+const schedule = [
+  '0 6-8 * * 1', // On mon, run at 6:00, 7:00 and 8:00 GMT
+  '0 6 * * 2-5', // On tue-fri, run at 6:00 AM GMT
+].join(';');
 
 /*
 New additions (based on chain + name) to this list will be added to the DB.
@@ -15,6 +19,7 @@ const restaurants = [
     importDetails: [
       {
         importer_type,
+        schedule,
         identifier: 'aeroport-lounasravintola-oulunsalo',
         language: 'fi',
       },
