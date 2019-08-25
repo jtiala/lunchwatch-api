@@ -42,9 +42,10 @@ import AbstractImporter from './importers/AbstractImporter';
 import AmicaImporter from './importers/AmicaImporter';
 import FazerFoodCoImporter from './importers/FazerFoodCoImporter';
 import SodexoImporter from './importers/SodexoImporter';
+import UnirestaImporter from './importers/UnirestaImporter';
 import JuvenesImporter from './importers/JuvenesImporter';
 import LaTorrefazioneImporter from './importers/LaTorrefazioneImporter';
-import UnirestaImporter from './importers/UnirestaImporter';
+import AaltoCateringImporter from './importers/AaltoCateringImporter';
 
 export default class App {
   public apolloServer: ApolloServer;
@@ -91,6 +92,10 @@ export default class App {
     this.configureRoutes();
     this.configureErrorHandling();
     this.applyApolloServerMiddleware();
+
+    if (process.env.NODE_ENV === 'development') {
+      this.addImportersToQueue();
+    }
 
     if (process.env.NODE_ENV === 'production') {
       this.addImportersToQueue();
@@ -184,14 +189,16 @@ export default class App {
         return new AmicaImporter(importDetails, db, queue, logger);
       case 'FazerFoodCoImporter':
         return new FazerFoodCoImporter(importDetails, db, queue, logger);
-      case 'JuvenesImporter':
-        return new JuvenesImporter(importDetails, db, queue, logger);
-      case 'LaTorrefazioneImporter':
-        return new LaTorrefazioneImporter(importDetails, db, queue, logger);
       case 'SodexoImporter':
         return new SodexoImporter(importDetails, db, queue, logger);
       case 'UnirestaImporter':
         return new UnirestaImporter(importDetails, db, queue, logger);
+      case 'JuvenesImporter':
+        return new JuvenesImporter(importDetails, db, queue, logger);
+      case 'LaTorrefazioneImporter':
+        return new LaTorrefazioneImporter(importDetails, db, queue, logger);
+      case 'AaltoCateringImporter':
+        return new AaltoCateringImporter(importDetails, db, queue, logger);
       default:
         this.logger.error(
           `Invalid importer type: ${importDetails.importer_type}`,
