@@ -35,19 +35,24 @@ Navigate to http://localhost:8080/graphql to verify application is running.
 
 ## Production
 
+Make sure you have [browserless/chrome][chrome] Docker container or similar instance of headless Chromium running and accepting websocket connection at URI defined in `CHROME_WS_ENDPOINT` environment variable.
+
 Duplicate `.env.example` as `.env` and edit in your details
 
     cp .env.example .env
 
-Migrate and seed the database
-
-    NODE_ENV=production npm run migrate
-    NODE_ENV=production npm run seed
-
-Install, build and start
+Install and build
 
     npm install
     npm run build
+
+Migrate and seed the database
+
+    npm run migrate
+    npm run seed
+
+Start the app
+
     npm run start
 
 ## Creating new migrations and seeds
@@ -85,6 +90,7 @@ This project is open source software licensed under the MIT license. For more in
 [docker]: https://www.docker.com/
 [graphql]: https://graphql.org/
 [knex]: http://knexjs.org/
+[chrome]: https://hub.docker.com/r/browserless/chrome
 [issues]: https://github.com/jtiala/lunchwatch-api/issues
 [lunchwatch]: https://lunch.watch/
 [lunchwatch-pwa-repo]: https://github.com/jtiala/lunchwatch-pwa
