@@ -42,7 +42,7 @@ jobs:
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_rsa
       - name: Deploy build
-        run: rsync -avz --delete -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" build/ node_modules tsconfig.json src/database ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }}:${{ secrets.SSH_PATH }}/
+        run: rsync -avz --delete -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" build/ node_modules tsconfig.json ecosystem.config.js src/database ${{ secrets.SSH_USER }}@${{ secrets.SSH_IP }}:${{ secrets.SSH_PATH }}/
       - name: Run migrations
         env:
           DB_CLIENT: ${{ secrets.DB_CLIENT }}
