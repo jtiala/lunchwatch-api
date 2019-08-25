@@ -25,7 +25,7 @@ module.exports = {
   },
   plugins: [
     new Dotenv({ systemvars: true }),
-    new webpack.DefinePlugin({
+    new webpack.EnvironmentPlugin({
       APP_BUILD: JSON.stringify(Date.now()),
     }),
   ],
