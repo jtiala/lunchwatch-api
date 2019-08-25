@@ -1,5 +1,13 @@
 import fetch, { Response } from 'node-fetch';
-import { getISOWeek, getQuarter, getYear, addYears, parseISO } from 'date-fns';
+import {
+  isToday,
+  isFuture,
+  getISOWeek,
+  getQuarter,
+  getYear,
+  addYears,
+  parseISO,
+} from 'date-fns';
 import { parseString } from 'xml2js';
 
 import AbstractImporter from './AbstractImporter';
@@ -144,21 +152,25 @@ export default class JuvenesImporter extends AbstractImporter {
       }
     }
 
-    for (const [date, createMenuParams] of Object.entries(
+    for (const [d, createMenuParams] of Object.entries(
       createMenuParamsPerDate,
     )) {
-      await deleteMenusForRestaurantForDate(
-        this.db,
-        this.importDetails.restaurant_id,
-        this.importDetails.language,
-        new Date(date),
-      );
+      const date = new Date(d);
 
-      if (
-        Array.isArray(createMenuParams.menu_items) &&
-        createMenuParams.menu_items.length
-      ) {
-        await createMenu(this.db, createMenuParams);
+      if (isToday(date) || isFuture(date)) {
+        await deleteMenusForRestaurantForDate(
+          this.db,
+          this.importDetails.restaurant_id,
+          this.importDetails.language,
+          date,
+        );
+
+        if (
+          Array.isArray(createMenuParams.menu_items) &&
+          createMenuParams.menu_items.length
+        ) {
+          await createMenu(this.db, createMenuParams);
+        }
       }
     }
   }

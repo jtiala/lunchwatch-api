@@ -1,5 +1,7 @@
 import fetch, { Response } from 'node-fetch';
 import {
+  isToday,
+  isFuture,
   getYear,
   addYears,
   addDays,
@@ -101,18 +103,20 @@ export default class UnirestaImporter extends AbstractImporter {
     const parsedCreateMenuParamas = this.parseCreateMenuParams(data, firstDate);
 
     for (const createMenuParams of parsedCreateMenuParamas) {
-      await deleteMenusForRestaurantForDate(
-        this.db,
-        this.importDetails.restaurant_id,
-        this.importDetails.language,
-        createMenuParams.date,
-      );
+      if (isToday(createMenuParams.date) || isFuture(createMenuParams.date)) {
+        await deleteMenusForRestaurantForDate(
+          this.db,
+          this.importDetails.restaurant_id,
+          this.importDetails.language,
+          createMenuParams.date,
+        );
 
-      if (
-        Array.isArray(createMenuParams.menu_items) &&
-        createMenuParams.menu_items.length
-      ) {
-        await createMenu(this.db, createMenuParams);
+        if (
+          Array.isArray(createMenuParams.menu_items) &&
+          createMenuParams.menu_items.length
+        ) {
+          await createMenu(this.db, createMenuParams);
+        }
       }
     }
   }

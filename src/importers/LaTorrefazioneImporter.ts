@@ -1,4 +1,10 @@
-import { startOfWeek, addDays, eachDayOfInterval } from 'date-fns';
+import {
+  isToday,
+  isFuture,
+  startOfWeek,
+  addDays,
+  eachDayOfInterval,
+} from 'date-fns';
 
 import AbstractPuppeteerImporter from './AbstractPuppeteerImporter';
 import { CreateMenuParams } from '../menu/interfaces';
@@ -33,18 +39,20 @@ export default class LaTorrefazioneImporter extends AbstractPuppeteerImporter {
     const parsedCreateMenuParamas = this.parseCreateMenuParams(parsedData);
 
     for (const createMenuParams of parsedCreateMenuParamas) {
-      await deleteMenusForRestaurantForDate(
-        this.db,
-        this.importDetails.restaurant_id,
-        this.importDetails.language,
-        createMenuParams.date,
-      );
+      if (isToday(createMenuParams.date) || isFuture(createMenuParams.date)) {
+        await deleteMenusForRestaurantForDate(
+          this.db,
+          this.importDetails.restaurant_id,
+          this.importDetails.language,
+          createMenuParams.date,
+        );
 
-      if (
-        Array.isArray(createMenuParams.menu_items) &&
-        createMenuParams.menu_items.length
-      ) {
-        await createMenu(this.db, createMenuParams);
+        if (
+          Array.isArray(createMenuParams.menu_items) &&
+          createMenuParams.menu_items.length
+        ) {
+          await createMenu(this.db, createMenuParams);
+        }
       }
     }
   }

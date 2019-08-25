@@ -1,5 +1,12 @@
 import fetch, { Response } from 'node-fetch';
-import { startOfWeek, addWeeks, format, parseISO } from 'date-fns';
+import {
+  isToday,
+  isFuture,
+  startOfWeek,
+  addWeeks,
+  format,
+  parseISO,
+} from 'date-fns';
 
 import AbstractImporter from './AbstractImporter';
 import { CreateMenuParams } from '../menu/interfaces';
@@ -69,18 +76,20 @@ export default class AmicaImporter extends AbstractImporter {
     const parsedCreateMenuParamas = this.parseCreateMenuParams(data);
 
     for (const createMenuParams of parsedCreateMenuParamas) {
-      await deleteMenusForRestaurantForDate(
-        this.db,
-        this.importDetails.restaurant_id,
-        this.importDetails.language,
-        createMenuParams.date,
-      );
+      if (isToday(createMenuParams.date) || isFuture(createMenuParams.date)) {
+        await deleteMenusForRestaurantForDate(
+          this.db,
+          this.importDetails.restaurant_id,
+          this.importDetails.language,
+          createMenuParams.date,
+        );
 
-      if (
-        Array.isArray(createMenuParams.menu_items) &&
-        createMenuParams.menu_items.length
-      ) {
-        await createMenu(this.db, createMenuParams);
+        if (
+          Array.isArray(createMenuParams.menu_items) &&
+          createMenuParams.menu_items.length
+        ) {
+          await createMenu(this.db, createMenuParams);
+        }
       }
     }
   }
