@@ -100,9 +100,15 @@ export default abstract class AbstractImporter {
 
     if (
       skipTypes.indexOf(MenuItemType.SPECIAL_MEAL) < 0 &&
-      ['grill', 'erikois', 'pizza', 'herkku', 'portion', 'special'].findIndex(
-        (v: string): boolean => string.toLowerCase().includes(v),
-      ) > -1
+      [
+        'grill',
+        'erikois',
+        'pizza',
+        'pitsa',
+        'herkku',
+        'portion',
+        'special',
+      ].findIndex((v: string): boolean => string.toLowerCase().includes(v)) > -1
     ) {
       return MenuItemType.SPECIAL_MEAL;
     }
