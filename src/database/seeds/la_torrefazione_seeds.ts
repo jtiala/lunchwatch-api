@@ -45,7 +45,6 @@ export const seed = async (knex: Knex): Promise<void> =>
       for (const restaurantData of restaurants) {
         const foundRestaurants = await knex('restaurants').where({
           url: restaurantData.url,
-          name: restaurantData.name,
         });
 
         if (!foundRestaurants.length) {

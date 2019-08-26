@@ -53,66 +53,72 @@ export default class AaltoCateringImporter extends AbstractPuppeteerImporter {
       // There are two .panel-grid-cell elements inside .menulistat.
       // Everyrthing we need is inside the first one.
       // There's only one .so-panel inside the cell.
-      const panelElem = document.querySelector(
+      const panelElem = document.querySelector<HTMLElement>(
         'div.menulistat > .panel-grid-cell > .so-panel',
       );
 
       if (panelElem) {
         // Lunch time doesn't have any class that would help us to recognize it
         // Hopefully the first h4 in .lunch-block__description won't ever contain anything else
-        const lunchTimeElem = panelElem.querySelector(':scope > .widget-title');
+        const lunchTimeElem = panelElem.querySelector<HTMLElement>(
+          ':scope > .widget-title',
+        );
 
-        if (lunchTimeElem && lunchTimeElem.textContent) {
-          data['lunchTime'] = [lunchTimeElem.textContent.trim()];
+        if (lunchTimeElem && lunchTimeElem.innerText) {
+          data['lunchTime'] = [lunchTimeElem.innerText.trim()];
         }
 
         // At the moment, all the food stuff is inside one .textwidget
         // Lets use querySelectorAll if some day there's more than one
-        panelElem.querySelectorAll('div.textwidget').forEach((menuItemElem) => {
-          // Since all the data is inside one dive, let's assume a new item
-          // starts with h4, possibly followed by one or more <p> (without class)
-          // containing menu items
-          // If there's a p before the first h4, it's price info
-          const menuItemChildren = menuItemElem.querySelectorAll(':scope > *');
-          let previousDay: string;
-          let skipRest = false;
+        panelElem
+          .querySelectorAll<HTMLElement>('div.textwidget')
+          .forEach((menuItemElem) => {
+            // Since all the data is inside one dive, let's assume a new item
+            // starts with h4, possibly followed by one or more <p> (without class)
+            // containing menu items
+            // If there's a p before the first h4, it's price info
+            const menuItemChildren = menuItemElem.querySelectorAll<HTMLElement>(
+              ':scope > *',
+            );
+            let previousDay: string;
+            let skipRest = false;
 
-          menuItemChildren.forEach((menuItemChild) => {
-            const isDay = menuItemChild.tagName === 'H4';
+            menuItemChildren.forEach((menuItemChild) => {
+              const isDay = menuItemChild.tagName === 'H4';
 
-            const content =
-              menuItemChild.textContent && menuItemChild.textContent.trim();
+              const content =
+                menuItemChild.innerText && menuItemChild.innerText.trim();
 
-            // On some menus, english menu is on the same page after ***
-            // For now, lets skip everything after ***
-            if (content === '***') {
-              skipRest = true;
-            }
-
-            if (content && !skipRest) {
-              if (isDay) {
-                // If current piece of data is day, the following data will be associated to this day
-                previousDay = content;
+              // On some menus, english menu is on the same page after ***
+              // For now, lets skip everything after ***
+              if (content === '***') {
+                skipRest = true;
               }
-              // if no day is found yet, the data is considered as price information
-              else if (!previousDay) {
-                data['priceInformation'] = [
-                  ...(Array.isArray(data['priceInformation'])
-                    ? data['priceInformation']
-                    : []),
-                  content,
-                ];
-              } else {
-                data[previousDay] = [
-                  ...(Array.isArray(data[previousDay])
-                    ? data[previousDay]
-                    : []),
-                  ...content.split('\n'),
-                ];
+
+              if (content && !skipRest) {
+                if (isDay) {
+                  // If current piece of data is day, the following data will be associated to this day
+                  previousDay = content;
+                }
+                // if no day is found yet, the data is considered as price information
+                else if (!previousDay) {
+                  data['priceInformation'] = [
+                    ...(Array.isArray(data['priceInformation'])
+                      ? data['priceInformation']
+                      : []),
+                    content,
+                  ];
+                } else {
+                  data[previousDay] = [
+                    ...(Array.isArray(data[previousDay])
+                      ? data[previousDay]
+                      : []),
+                    ...content.split('\n'),
+                  ];
+                }
               }
-            }
+            });
           });
-        });
       }
 
       return data;

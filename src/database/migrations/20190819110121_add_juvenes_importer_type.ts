@@ -10,7 +10,7 @@ const oldImporterTypes = [
 const newImporterTypes = [...oldImporterTypes, 'JuvenesImporter'];
 
 /**
- * Alter import details. Add JuvenesImporter to importer_type enum.
+ * Alter import details: update importer type to include all types in ImporterType enum.
  *
  * @param {Knex} knex
  * @return {Promise}
@@ -26,15 +26,15 @@ export const up = async (knex: Knex): Promise<void> =>
   `);
 
 /**
- * Delete all Juvenes restaurants.
- * Alter import details: remove JuvenesImporter from importer_type enum.
+ * Delete all related restaurants.
+ * Alter import details: remove new type from importer_type enum.
  *
  * @param {Knex} knex
  * @return {Promise}
  */
 export const down = async (knex: Knex): Promise<void> => {
   await knex('restaurants')
-    .where('chain', 'Juvenes')
+    .where('url', 'like', '%juvenes.fi%')
     .delete();
 
   await knex.schema.raw(`

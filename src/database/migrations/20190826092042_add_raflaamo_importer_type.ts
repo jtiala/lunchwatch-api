@@ -6,9 +6,12 @@ const oldImporterTypes = [
   'SodexoImporter',
   'UnirestaImporter',
   'JuvenesImporter',
+  'LaTorrefazioneImporter',
+  'AaltoCateringImporter',
+  'PitopalveluTimonenImporter',
 ];
 
-const newImporterTypes = [...oldImporterTypes, 'LaTorrefazioneImporter'];
+const newImporterTypes = [...oldImporterTypes, 'RaflaamoImporter'];
 
 /**
  * Alter import details: update importer type to include all types in ImporterType enum.
@@ -35,7 +38,7 @@ export const up = async (knex: Knex): Promise<void> =>
  */
 export const down = async (knex: Knex): Promise<void> => {
   await knex('restaurants')
-    .where('url', 'like', '%latorre.fi%')
+    .where('url', 'like', '%raflaamo.fi%')
     .delete();
 
   await knex.schema.raw(`
