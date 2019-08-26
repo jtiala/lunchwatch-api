@@ -1,10 +1,6 @@
 import Knex from 'knex';
 
-const importer_type = 'LaTorrefazioneImporter';
-const schedule = [
-  '0 6-8 * * 1', // On mon, run at 6:00, 7:00 and 8:00 GMT
-  '0 6 * * 2-5', // On tue-fri, run at 6:00 AM GMT
-].join(';');
+const importer_type = 'HealthToOrganicImporter';
 
 /*
 New additions (based on restaurants url) to this list will be added to the DB.
@@ -12,22 +8,58 @@ Removing or editing existing ones will not modify them.
 */
 const restaurants = [
   {
-    name: 'La Torrefazione',
-    url: 'http://www.latorre.fi/toimipiste/valkea',
-    lat: 65.011429,
-    lng: 25.472034,
+    chain: 'Health to Organic',
+    name: 'H2O Cafe & Deli Keskusta',
+    url: 'https://www.health2organic.fi/lounaslistat/keskusta.html',
+    lat: 65.01139,
+    lng: 25.474738,
     importDetails: [
       {
         importer_type,
-        schedule,
-        identifier: 'valkea',
+        identifier: 'keskusta',
         language: 'fi',
       },
+    ],
+  },
+  {
+    chain: 'Health to Organic',
+    name: 'H2O Cafe & Deli Kaleva',
+    url: 'https://www.health2organic.fi/lounaslistat/kaleva.html',
+    lat: 65.006093,
+    lng: 25.47939,
+    importDetails: [
       {
         importer_type,
-        schedule,
-        identifier: 'valkea',
-        language: 'en',
+        identifier: 'kaleva',
+        language: 'fi',
+      },
+    ],
+  },
+  {
+    chain: 'Health to Organic',
+    name: 'H2O Cafe & Deli Ideapark',
+    url: 'https://www.health2organic.fi/lounaslistat/ideapark.html',
+    lat: 65.07739,
+    lng: 25.447251,
+    importDetails: [
+      {
+        importer_type,
+        identifier: 'ideapark',
+        language: 'fi',
+      },
+    ],
+  },
+  {
+    chain: 'Health to Organic',
+    name: 'H2O Cafe & Deli Campus',
+    url: 'https://www.health2organic.fi/lounaslistat/campus.html',
+    lat: 65.057658,
+    lng: 25.46747,
+    importDetails: [
+      {
+        importer_type,
+        identifier: 'campus',
+        language: 'fi',
       },
     ],
   },

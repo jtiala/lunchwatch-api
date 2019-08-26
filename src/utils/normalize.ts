@@ -100,8 +100,11 @@ export const normalizeImportedString = (string: string): string =>
     .replace(/^[\.\,\:\-\_\s]+/, '')
     .replace(/[\.\,\:\-\_\s]+$/, '')
 
+    // Replace non-breaking spaces and tabs with a space
+    .replace(/[\xA0\t]/g, ' ')
+
     // Replace all double+ spaces with one space
-    .replace(/ ( )+/g, ' ')
+    .replace(/ {2,}/g, ' ')
 
     // Replace all triple+ \n with double \n
     .replace(/\n{3,}/g, '\n\n')

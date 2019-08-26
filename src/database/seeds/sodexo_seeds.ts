@@ -3,7 +3,7 @@ import Knex from 'knex';
 const importer_type = 'SodexoImporter';
 
 /*
-New additions (based on chain + name) to this list will be added to the DB.
+New additions (based on restaurants url) to this list will be added to the DB.
 Removing or editing existing ones will not modify them.
 */
 const restaurants = [
