@@ -15,6 +15,7 @@ import AaltoCateringImporter from '../importers/AaltoCateringImporter';
 import PitopalveluTimonenImporter from '../importers/PitopalveluTimonenImporter';
 import RaflaamoImporter from '../importers/RaflaamoImporter';
 import OskarinKellariImporter from '../importers/OskarinKellariImporter';
+import HealthToOrganicImporter from '../importers/HealthToOrganicImporter';
 
 export const getImporter = (
   importDetails: ImportDetails,
@@ -43,6 +44,8 @@ export const getImporter = (
       return new RaflaamoImporter(importDetails, db, queue, logger);
     case 'OskarinKellariImporter':
       return new OskarinKellariImporter(importDetails, db, queue, logger);
+    case 'HealthToOrganicImporter':
+      return new HealthToOrganicImporter(importDetails, db, queue, logger);
     default:
       logger.error(`Invalid importer type: ${importDetails.importer_type}`);
   }
