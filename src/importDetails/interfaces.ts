@@ -21,4 +21,5 @@ export enum ImporterType {
   AALTO_CATERING_IMPORTER = 'AaltoCateringImporter',
   PITOPALVELU_TIMONEN_IMPORTER = 'PitopalveluTimonenImporter',
   RAFLAAMO_IMPORTER = 'RaflaamoImporter',
+  OSKARIN_KELLARI_IMPORTER = 'OskarinKellariImporter',
 }
