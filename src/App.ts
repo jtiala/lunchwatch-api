@@ -17,6 +17,7 @@ import { description, version } from '../package.json';
 import databaseConfig from './database/config';
 import { createLogger, createLogDir } from './utils/logger';
 import { Context, rootTypeDefs, rootResolvers } from './utils/graphql';
+import { delay } from './utils/delay';
 
 import restaurantsController from './restaurant/controller';
 import menusController from './menu/controller';
@@ -98,11 +99,11 @@ export default class App {
     this.applyApolloServerMiddleware();
 
     if (process.env.NODE_ENV === 'development') {
-      this.addImportersToQueue();
+      this.addImportersToQueue(1);
     }
 
     if (process.env.NODE_ENV === 'production') {
-      this.addImportersToQueue();
+      this.addImportersToQueue(60);
       this.scheduleImporters();
       this.scheduleCleaner();
     }
@@ -208,7 +209,43 @@ export default class App {
     }
   }
 
-  private async addImportersToQueue(schedule?: string): Promise<void> {
+  private async scheduleImporters(): Promise<void> {
+    const schedules = await getSchedules(this.db);
+
+    for (const { schedule } of schedules) {
+      const crons = schedule.split(';');
+
+      for (const cron of crons) {
+        await nodeSchedule.scheduleJob(
+          cron,
+          async (): Promise<void> =>
+            await this.addImportersToQueue(60, schedule),
+        );
+      }
+    }
+  }
+
+  private async scheduleCleaner(): Promise<void> {
+    await nodeSchedule.scheduleJob(
+      this.app.get('cronDBCleaner'),
+      async (): Promise<void> => {
+        const deletedMenusCount = await deleteMenusOlderThan(this.db, 4);
+
+        await this.logger.info(`Deleted ${deletedMenusCount} menus`, {
+          service: 'Cleaner',
+        });
+      },
+    );
+  }
+
+  private async addImportersToQueue(
+    timeout?: number,
+    schedule?: string,
+  ): Promise<void> {
+    if (timeout) {
+      await delay(timeout);
+    }
+
     const enabledImportDetails = await getEnabledImportDetails(
       this.db,
       schedule,
@@ -226,34 +263,6 @@ export default class App {
         importer.addToQueue();
       }
     }
-  }
-
-  private async scheduleImporters(): Promise<void> {
-    const schedules = await getSchedules(this.db);
-
-    for (const { schedule } of schedules) {
-      const crons = schedule.split(';');
-
-      for (const cron of crons) {
-        await nodeSchedule.scheduleJob(
-          cron,
-          async (): Promise<void> => await this.addImportersToQueue(schedule),
-        );
-      }
-    }
-  }
-
-  private async scheduleCleaner(): Promise<void> {
-    await nodeSchedule.scheduleJob(
-      this.app.get('cronDBCleaner'),
-      async (): Promise<void> => {
-        const deletedMenusCount = await deleteMenusOlderThan(this.db, 4);
-
-        await this.logger.info(`Deleted ${deletedMenusCount} menus`, {
-          service: 'Cleaner',
-        });
-      },
-    );
   }
 
   public getBuild(): string {
