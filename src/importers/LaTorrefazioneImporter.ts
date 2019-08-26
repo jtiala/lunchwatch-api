@@ -69,61 +69,67 @@ export default class LaTorrefazioneImporter extends AbstractPuppeteerImporter {
       const data: ParsedData[] = [];
 
       // There is two elements with id lounas, we use the one that's inside div.content
-      const lunchElem = document.querySelector('div.content div#lounas');
+      const lunchElem = document.querySelector<HTMLElement>(
+        'div.content div#lounas',
+      );
 
       if (lunchElem) {
         // Lunch time doesn't have any class that would help us to recognize it
         // Hopefully the first h4 in .lunch-block__description won't ever contain anything else
-        const lunchTimeElem = lunchElem.querySelector(
+        const lunchTimeElem = lunchElem.querySelector<HTMLElement>(
           '.lunch-block__description > h4',
         );
 
-        if (lunchTimeElem && lunchTimeElem.textContent) {
+        if (lunchTimeElem && lunchTimeElem.innerText) {
           data.push({
             type: 'lunchTime',
-            value: lunchTimeElem.textContent.trim(),
+            value: lunchTimeElem.innerText.trim(),
           });
         }
 
         // At the moment, all the food stuff is inside one .menu-item
         // Lets use querySelectorAll if some day there's more than one
-        lunchElem.querySelectorAll('div.menu-item').forEach((menuItemElem) => {
-          // Since all the menu-items are inside one dive, let's assume a new item
-          // starts with .menu-item__title, possibly followed by a <p> (without class)
-          // containing the value, possibly followed by .menu-item__price
-          const menuItemChildren = menuItemElem.querySelectorAll(':scope > *');
-          let wipData: ParsedData = {};
+        lunchElem
+          .querySelectorAll<HTMLElement>('div.menu-item')
+          .forEach((menuItemElem) => {
+            // Since all the menu-items are inside one dive, let's assume a new item
+            // starts with .menu-item__title, possibly followed by a <p> (without class)
+            // containing the value, possibly followed by .menu-item__price
+            const menuItemChildren = menuItemElem.querySelectorAll<HTMLElement>(
+              ':scope > *',
+            );
+            let wipData: ParsedData = {};
 
-          menuItemChildren.forEach((menuItemChild) => {
-            const type = menuItemChild.classList.contains('menu-item__title')
-              ? 'title'
-              : menuItemChild.classList.contains('menu-item__price')
-              ? 'price'
-              : menuItemChild.tagName === 'P'
-              ? 'value'
-              : undefined;
-            const content =
-              menuItemChild.textContent && menuItemChild.textContent.trim();
+            menuItemChildren.forEach((menuItemChild) => {
+              const type = menuItemChild.classList.contains('menu-item__title')
+                ? 'title'
+                : menuItemChild.classList.contains('menu-item__price')
+                ? 'price'
+                : menuItemChild.tagName === 'P'
+                ? 'value'
+                : undefined;
+              const content =
+                menuItemChild.innerText && menuItemChild.innerText.trim();
 
-            // If current piece of data is title, last wipData is ready to be pushed
-            if (type === 'title') {
-              if (Object.keys(wipData).length) {
-                data.push(wipData);
+              // If current piece of data is title, last wipData is ready to be pushed
+              if (type === 'title') {
+                if (Object.keys(wipData).length) {
+                  data.push(wipData);
+                }
+
+                wipData = {};
               }
 
-              wipData = {};
-            }
+              if (content && type && !(type in wipData)) {
+                wipData[type] = content;
+              }
+            });
 
-            if (content && type && !(type in wipData)) {
-              wipData[type] = content;
+            // After the loop, push last wipData if it contains anything
+            if (Object.keys(wipData).length) {
+              data.push(wipData);
             }
           });
-
-          // After the loop, push last wipData if it contains anything
-          if (Object.keys(wipData).length) {
-            data.push(wipData);
-          }
-        });
       }
 
       return data;
