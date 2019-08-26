@@ -1,6 +1,6 @@
 import Knex from 'knex';
 
-const importer_type = 'UnirestaImporter';
+const importer_type = 'RaflaamoImporter';
 
 /*
 New additions (based on chain + name) to this list will be added to the DB.
@@ -8,102 +8,106 @@ Removing or editing existing ones will not modify them.
 */
 const restaurants = [
   {
-    chain: 'Uniresta',
-    name: 'Kastari',
-    url:
-      'https://www.uniresta.fi/lounasravintolat/kaikki-ravintolat/kastari.html',
-    lat: 65.05724,
-    lng: 25.467585,
+    name: 'Amarillo',
+    url: 'https://www.raflaamo.fi/fi/oulu/amarillo-oulu',
+    lat: 65.012404,
+    lng: 25.471878,
     importDetails: [
       {
         importer_type,
-        identifier: 'kastari',
+        identifier: 'oulu/amarillo-oulu/menu',
         language: 'fi',
-      },
-      {
-        importer_type,
-        identifier: 'kastari',
-        language: 'en',
       },
     ],
   },
   {
-    chain: 'Uniresta',
-    name: 'Vanilla',
-    url:
-      'https://www.uniresta.fi/lounasravintolat/kaikki-ravintolat/vanilla.html',
-    lat: 65.010636,
-    lng: 25.465423,
+    name: 'Rosso',
+    url: 'https://www.raflaamo.fi/fi/oulu/rosso-oulu',
+    lat: 65.01159,
+    lng: 25.471527,
     importDetails: [
       {
         importer_type,
-        identifier: 'vanilla',
+        identifier: 'oulu/rosso-oulu/menu',
         language: 'fi',
-      },
-      {
-        importer_type,
-        identifier: 'vanilla',
-        language: 'en',
       },
     ],
   },
   {
-    chain: 'Uniresta',
-    name: 'Medisiina',
-    url:
-      'https://www.uniresta.fi/lounasravintolat/kaikki-ravintolat/medisiina.html',
-    lat: 65.007327,
-    lng: 25.524053,
+    name: 'Frans & Camille',
+    url: 'https://www.raflaamo.fi/fi/oulu/frans-camille-oulu',
+    lat: 65.012121,
+    lng: 25.473005,
     importDetails: [
       {
         importer_type,
-        identifier: 'medisiina',
+        identifier: 'oulu/frans-camille-oulu/menu',
         language: 'fi',
-      },
-      {
-        importer_type,
-        identifier: 'medisiina',
-        language: 'en',
       },
     ],
   },
   {
-    chain: 'Uniresta',
-    name: 'Preludi',
-    url:
-      'https://www.uniresta.fi/lounasravintolat/kaikki-ravintolat/preludi.html',
-    lat: 65.003095,
-    lng: 25.479655,
+    name: 'Puistokahvila Makia',
+    url: 'https://www.raflaamo.fi/fi/oulu/puistokahvila-makia',
+    lat: 65.012225,
+    lng: 25.474158,
     importDetails: [
       {
         importer_type,
-        identifier: 'preludi',
+        identifier: 'oulu/puistokahvila-makia/menu',
         language: 'fi',
-      },
-      {
-        importer_type,
-        identifier: 'preludi',
-        language: 'en',
       },
     ],
   },
   {
-    chain: 'Uniresta',
-    name: 'Castanea',
-    url:
-      'https://www.uniresta.fi/lounasravintolat/kaikki-ravintolat/castanea.html',
-    lat: 65.011072,
-    lng: 25.511383,
+    name: 'Grill it!',
+    url: 'https://www.raflaamo.fi/fi/oulu/grill-it-oulu',
+    lat: 65.010771,
+    lng: 25.47363,
     importDetails: [
       {
         importer_type,
-        identifier: 'castanea',
+        identifier: 'oulu/grill-it-oulu/menu',
         language: 'fi',
       },
+    ],
+  },
+  {
+    name: 'Pizza & Buffa Limingantulli',
+    url: 'https://www.raflaamo.fi/fi/oulu/pizza-buffa-limingantulli-oulu',
+    lat: 64.993765,
+    lng: 25.462514,
+    importDetails: [
       {
         importer_type,
-        identifier: 'castanea',
-        language: 'en',
+        identifier: 'oulu/pizza-buffa-limingantulli-oulu/menu',
+        language: 'fi',
+      },
+    ],
+  },
+  {
+    name: 'Pizza & Buffa Linnanmaa',
+    url: 'https://www.raflaamo.fi/fi/oulu/pizza-buffa-linnanmaa-oulu',
+    lat: 65.05457,
+    lng: 25.456149,
+    importDetails: [
+      {
+        importer_type,
+        identifier: 'oulu/pizza-buffa-linnanmaa-oulu/menu',
+        language: 'fi',
+      },
+    ],
+  },
+  {
+    name: 'Ravintola Ara',
+    url: 'https://www.raflaamo.fi/fi/oulu/ravintola-ara',
+    lat: 65.027597,
+    lng: 25.414441,
+    importDetails: [
+      {
+        importer_type,
+        identifier: 'oulu/ravintola-ara/menu',
+        language: 'fi',
       },
     ],
   },

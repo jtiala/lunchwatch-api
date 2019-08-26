@@ -34,23 +34,13 @@ import menuItemResolvers from './menuItem/resolvers';
 import menuItemComponentResolvers from './menuItemComponent/resolvers';
 import importDetailsResolvers from './importDetails/resolvers';
 
-import { ImportDetails } from './importDetails/interfaces';
+import { getImporter } from './importDetails/utils';
 
 import {
   getEnabledImportDetails,
   getSchedules,
 } from './importDetails/services';
 import { deleteMenusOlderThan } from './menu/services';
-
-import AbstractImporter from './importers/AbstractImporter';
-import AmicaImporter from './importers/AmicaImporter';
-import FazerFoodCoImporter from './importers/FazerFoodCoImporter';
-import SodexoImporter from './importers/SodexoImporter';
-import UnirestaImporter from './importers/UnirestaImporter';
-import JuvenesImporter from './importers/JuvenesImporter';
-import LaTorrefazioneImporter from './importers/LaTorrefazioneImporter';
-import AaltoCateringImporter from './importers/AaltoCateringImporter';
-import PitopalveluTimonenImporter from './importers/PitopalveluTimonenImporter';
 
 export default class App {
   public apolloServer: ApolloServer;
@@ -179,36 +169,6 @@ export default class App {
     this.apolloServer.applyMiddleware({ app: this.app });
   }
 
-  private getImporter(
-    importDetails: ImportDetails,
-    db: Knex,
-    queue: PQueue,
-    logger: Logger,
-  ): AbstractImporter | undefined {
-    switch (importDetails.importer_type) {
-      case 'AmicaImporter':
-        return new AmicaImporter(importDetails, db, queue, logger);
-      case 'FazerFoodCoImporter':
-        return new FazerFoodCoImporter(importDetails, db, queue, logger);
-      case 'SodexoImporter':
-        return new SodexoImporter(importDetails, db, queue, logger);
-      case 'UnirestaImporter':
-        return new UnirestaImporter(importDetails, db, queue, logger);
-      case 'JuvenesImporter':
-        return new JuvenesImporter(importDetails, db, queue, logger);
-      case 'LaTorrefazioneImporter':
-        return new LaTorrefazioneImporter(importDetails, db, queue, logger);
-      case 'AaltoCateringImporter':
-        return new AaltoCateringImporter(importDetails, db, queue, logger);
-      case 'PitopalveluTimonenImporter':
-        return new PitopalveluTimonenImporter(importDetails, db, queue, logger);
-      default:
-        this.logger.error(
-          `Invalid importer type: ${importDetails.importer_type}`,
-        );
-    }
-  }
-
   private async scheduleImporters(): Promise<void> {
     const schedules = await getSchedules(this.db);
 
@@ -252,7 +212,7 @@ export default class App {
     );
 
     for (const importDetails of enabledImportDetails) {
-      const importer = this.getImporter(
+      const importer = getImporter(
         importDetails,
         this.db,
         this.queue,

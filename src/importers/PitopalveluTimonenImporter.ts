@@ -50,16 +50,20 @@ export default class PitopalveluTimonenImporter extends AbstractPuppeteerImporte
     const parsedData = await page.evaluate(() => {
       const data: ParsedData = {};
 
-      const popupElem = document.querySelector('.lounaslistapopup-content');
+      const popupElem = document.querySelector<HTMLElement>(
+        '.lounaslistapopup-content',
+      );
 
       if (popupElem) {
         popupElem
           .querySelectorAll<HTMLElement>('.item-wrapper')
           .forEach((itemWrapperElem) => {
-            const headingElem = itemWrapperElem.querySelector('.item-heading');
+            const headingElem = itemWrapperElem.querySelector<HTMLElement>(
+              '.item-heading',
+            );
 
             if (headingElem) {
-              const heading = String(headingElem.textContent);
+              const heading = String(headingElem.innerText);
 
               if (heading.length) {
                 const items = [];
