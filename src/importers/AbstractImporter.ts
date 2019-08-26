@@ -82,7 +82,7 @@ export default abstract class AbstractImporter {
   ): string {
     if (
       skipTypes.indexOf(MenuItemType.VEGETARIAN_MEAL) < 0 &&
-      ['kasvi', 'vege', 'vegaani', 'vegan'].findIndex((v: string): boolean =>
+      ['kasvis', 'vege', 'vegaani', 'vegan'].findIndex((v: string): boolean =>
         string.toLowerCase().includes(v),
       ) > -1
     ) {
