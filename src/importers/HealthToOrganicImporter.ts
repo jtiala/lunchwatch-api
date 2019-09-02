@@ -1,15 +1,5 @@
 import fetch, { Response } from 'node-fetch';
-import {
-  isToday,
-  isFuture,
-  getYear,
-  addYears,
-  addDays,
-  getQuarter,
-  parseISO,
-  eachDayOfInterval,
-  startOfWeek,
-} from 'date-fns';
+import { isToday, isFuture, addDays, startOfWeek } from 'date-fns';
 import he from 'he';
 import striptags from 'striptags';
 
@@ -17,12 +7,8 @@ import AbstractImporter from './AbstractImporter';
 import { CreateMenuParams } from '../menu/interfaces';
 import { deleteMenusForRestaurantForDate, createMenu } from '../menu/services';
 import { CreateMenuItemParams, MenuItemType } from '../menuItem/interfaces';
-import {
-  CreateMenuItemComponentParams,
-  MenuItemComponentType,
-} from '../menuItemComponent/interfaces';
+import { MenuItemComponentType } from '../menuItemComponent/interfaces';
 import { normalizeImportedString } from '../utils/normalize';
-import { empty } from 'apollo-link';
 
 interface Section {
   [key: string]: string | undefined;
@@ -176,18 +162,27 @@ export default class HealthToOrganicImporter extends AbstractImporter {
         weight: 0,
       };
 
-      // Start a new item after there has been 2 itemChange conditions
-      // Conditions: empty row, row containing €
-      let itemChangeConditions = 0;
-
       for (const component of components) {
         const value = normalizeImportedString(component);
 
         if (value.length) {
-          if (value.toLowerCase().includes('€')) {
-            itemChangeConditions = 1;
-          } else {
-            itemChangeConditions = 0;
+          // Start new item when a row with "klo" or "kello" is encountered
+          if (
+            value.toLowerCase().includes('klo ') ||
+            value.toLowerCase().includes('kello ')
+          ) {
+            if (
+              Array.isArray(wipItem.menu_item_components) &&
+              wipItem.menu_item_components.length
+            ) {
+              createMenuItemParams.push(wipItem);
+
+              wipItem = {
+                type: MenuItemType.NORMAL_MEAL,
+                menu_item_components: [],
+                weight: Number(wipItem.weight) + 1,
+              };
+            }
           }
 
           const currentComponents = Array.isArray(wipItem.menu_item_components)
@@ -202,28 +197,10 @@ export default class HealthToOrganicImporter extends AbstractImporter {
               weight: currentComponents.length,
             },
           ];
-        } else {
-          if (itemChangeConditions > 2) {
-            if (
-              Array.isArray(wipItem.menu_item_components) &&
-              wipItem.menu_item_components.length
-            ) {
-              createMenuItemParams.push(wipItem);
-            }
-
-            wipItem = {
-              type: MenuItemType.NORMAL_MEAL,
-              menu_item_components: [],
-              weight: Number(wipItem.weight) + 1,
-            };
-
-            itemChangeConditions = 0;
-          } else {
-            itemChangeConditions++;
-          }
         }
       }
 
+      // Push last wipItem after the loop
       if (
         Array.isArray(wipItem.menu_item_components) &&
         wipItem.menu_item_components.length
