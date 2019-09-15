@@ -25,8 +25,13 @@ jobs:
           APP_HOST: ${{ secrets.APP_HOST }}
           APP_PORT: ${{ secrets.APP_PORT }}
           APP_LOG_DIR: ${{ secrets.APP_LOG_DIR }}
+          APP_FRONTEND_URL: ${{ secrets.APP_FRONTEND_URL }}
           CRON_DB_CLEANER: ${{ secrets.CRON_DB_CLEANER }}
           CHROME_WS_ENDPOINT: ${{ secrets.CHROME_WS_ENDPOINT }}
+          SLACK_CLIENT_ID: ${{ secrets.SLACK_CLIENT_ID }}
+          SLACK_CLIENT_SECRET: ${{ secrets.SLACK_CLIENT_SECRET }}
+          SLACK_SIGNING_SECRET: ${{ secrets.SLACK_SIGNING_SECRET }}
+          SLACK_REDIRECT_URI: ${{ secrets.SLACK_REDIRECT_URI }}
           DB_CLIENT: ${{ secrets.DB_CLIENT }}
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_PORT: ${{ secrets.DB_PORT }}
