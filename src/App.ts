@@ -166,7 +166,7 @@ export default class App {
 
     this.app.use('/v1/restaurants', restaurantController(this.db));
     this.app.use('/v1/menus', menuController(this.db));
-    this.app.use('/v1/slack', slackController(this.db));
+    this.app.use('/v1/slack', slackController(this.db, this.logger));
   }
 
   private applyApolloServerMiddleware(): void {

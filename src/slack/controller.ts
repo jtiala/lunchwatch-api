@@ -6,6 +6,7 @@ import merge from 'deepmerge';
 import { addDays, getUnixTime } from 'date-fns';
 import querystring from 'querystring';
 import crypto from 'crypto';
+import { Logger } from 'winston';
 
 import {
   getTokenByTeamId,
@@ -21,7 +22,7 @@ import { searchMenus } from '../menu/services';
 import { MenuSearchParams, Menu } from '../menu/interfaces';
 import { MenuItemComponentType } from '../menuItemComponent/interfaces';
 
-export default (db: Knex): Router => {
+export default (db: Knex, logger: Logger): Router => {
   const router = Router();
 
   const usageResponse = (): object => ({
@@ -489,20 +490,28 @@ export default (db: Knex): Router => {
     res.json(notConfiguredResponse());
   };
 
-  const validateRequest = (req: Request): boolean => {
+  const validateRequest = async (req: Request): Promise<boolean> => {
     const signatureHeader = req.header('X-Slack-Signature');
     const timestampHeader = parseInt(
       req.header('X-Slack-Request-Timestamp') || '',
       10,
     );
+    const currentTimestamp = getUnixTime(new Date());
 
     // If the request timestamp is more than five minutes from local time
     // or signatureHeader or timestampHeader doesn't exist we return an error
     if (
       !signatureHeader ||
       !timestampHeader ||
-      Math.abs(getUnixTime(new Date()) - timestampHeader) > 60 * 5
+      Math.abs(currentTimestamp - timestampHeader) > 60 * 5
     ) {
+      await logger.error(
+        `Invalid headers. Signature header: ${signatureHeader} Timestamp header: ${timestampHeader} Current timestamp: ${currentTimestamp}`,
+        {
+          service: 'Slack',
+        },
+      );
+
       return false;
     }
 
@@ -524,6 +533,13 @@ export default (db: Knex): Router => {
     ) {
       return true;
     }
+
+    await logger.error(
+      `Invalid signature. Got: ${signatureHeader} Calculated: ${signature}`,
+      {
+        service: 'Slack',
+      },
+    );
 
     return false;
   };
