@@ -544,13 +544,13 @@ export default (db: Knex): Router => {
         } = req.body;
 
         // Respond to Slack's SSL verification
-        if (sslCheck === 1 && token.length) {
+        if (String(sslCheck) === '1' && token.length) {
           res.status(200).send();
           return;
         }
 
         if (!validateRequest(req)) {
-          res.json(somethingWentWrongResponse);
+          res.json(somethingWentWrongResponse());
           return;
         }
 
