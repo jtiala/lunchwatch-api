@@ -177,13 +177,13 @@ export default (db: Knex, logger: Logger): Router => {
                     menuItemTexts.push(`*${menuItemComponent.value}*`);
                     break;
                   case MenuItemComponentType.LUNCH_TIME:
-                    menuItemTexts.push(`🕚 _${menuItemComponent.value}_`);
+                    menuItemTexts.push(`🕚 ${menuItemComponent.value}`);
                     break;
                   case MenuItemComponentType.PRICE_INFORMATION:
-                    menuItemTexts.push(`🏷 _${menuItemComponent.value}_`);
+                    menuItemTexts.push(`🏷 ${menuItemComponent.value}`);
                     break;
                   case MenuItemComponentType.INFORMATION:
-                    menuItemTexts.push(`ℹ️ _${menuItemComponent.value}_`);
+                    menuItemTexts.push(`ℹ️ ${menuItemComponent.value}`);
                     break;
                   default:
                     menuItemTexts.push(menuItemComponent.value);
