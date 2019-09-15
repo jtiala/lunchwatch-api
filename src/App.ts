@@ -2,6 +2,7 @@ import 'dotenv/config';
 
 import { ApolloServer, IResolvers } from 'apollo-server-express';
 import express, { Request, Response } from 'express';
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
@@ -19,8 +20,9 @@ import { createLogger, createLogDir } from './utils/logger';
 import { Context, rootTypeDefs, rootResolvers } from './utils/graphql';
 import { delay } from './utils/delay';
 
-import restaurantsController from './restaurant/controller';
-import menusController from './menu/controller';
+import restaurantController from './restaurant/controller';
+import menuController from './menu/controller';
+import slackController from './slack/controller';
 
 import restaurantTypeDefs from './restaurant/typeDefs';
 import menuTypeDefs from './menu/typeDefs';
@@ -112,6 +114,7 @@ export default class App {
   }
 
   private configureMiddleware(): void {
+    this.app.use(bodyParser.urlencoded({ extended: true }));
     this.app.use(cors());
     this.app.use(helmet());
     this.app.use(compression());
@@ -161,8 +164,9 @@ export default class App {
       res.redirect('/');
     });
 
-    this.app.use('/v1/restaurants', restaurantsController(this.db));
-    this.app.use('/v1/menus', menusController(this.db));
+    this.app.use('/v1/restaurants', restaurantController(this.db));
+    this.app.use('/v1/menus', menuController(this.db));
+    this.app.use('/v1/slack', slackController(this.db));
   }
 
   private applyApolloServerMiddleware(): void {

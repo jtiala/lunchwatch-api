@@ -35,5 +35,6 @@ export interface MenuSearchParams {
   columns: (string | Knex.Raw<any>)[];
   conditions: MenuSearchConditions;
   restaurantConditions: RestaurantSearchConditions;
+  restaurant_ids?: number[];
   order: string;
 }

@@ -65,6 +65,12 @@ export const countMenus = async (
     )
     .count('menus.id')
     .where(searchParams.conditions)
+    .andWhereRaw(
+      Array.isArray(searchParams.restaurant_ids) &&
+        searchParams.restaurant_ids.length
+        ? `menus.restaurant_id IN (${searchParams.restaurant_ids.join(',')})`
+        : 'true',
+    )
     .then((countResult: { [index: string]: number | string }[]): number => {
       const count = countResult[0].count;
       return typeof count === 'number' ? count : parseInt(count, 10);
@@ -89,6 +95,12 @@ export const searchMenus = async (
     )
     .select(searchParams.columns)
     .where(searchParams.conditions)
+    .andWhereRaw(
+      Array.isArray(searchParams.restaurant_ids) &&
+        searchParams.restaurant_ids.length
+        ? `menus.restaurant_id IN (${searchParams.restaurant_ids.join(',')})`
+        : 'true',
+    )
     .orderByRaw(searchParams.order)
     .limit(limit)
     .offset(offset)
