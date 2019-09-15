@@ -645,5 +645,21 @@ export default (db: Knex): Router => {
     },
   );
 
+  /**
+   * GET /v1/slack/install
+   */
+  router.get(
+    '/install',
+    async (req: Request, res: Response, next: Function): Promise<void> => {
+      try {
+        res.redirect(
+          `https://slack.com/oauth/authorize?client_id=${process.env.SLACK_CLIENT_ID}&scope=commands`,
+        );
+      } catch (err) {
+        next(err);
+      }
+    },
+  );
+
   return router;
 };
