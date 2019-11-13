@@ -21,7 +21,6 @@ export default class OskarinKellariImporter extends AbstractPuppeteerImporter {
   public async run(): Promise<void> {
     const parsedData = await this.getData();
     const parsedCreateMenuParamas = this.parseCreateMenuParams(parsedData);
-    console.log(JSON.stringify(parsedCreateMenuParamas, null, 2));
 
     for (const createMenuParams of parsedCreateMenuParamas) {
       if (isToday(createMenuParams.date) || isFuture(createMenuParams.date)) {
