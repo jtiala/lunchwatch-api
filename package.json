@@ -51,7 +51,7 @@
     "p-queue": "^6.1.1",
     "pg": "7.12.1",
     "puppeteer-core": "^1.20.0",
-    "striptags": "^3.1.1",
+    "striptags": "^3.2.0",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^4.1.0",
     "xml2js": "^0.4.22"
