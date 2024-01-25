@@ -1,12 +1,6 @@
 # 🍱 LunchWatch Menu Aggregator API
 
-[![Actions Status][actions-status-badge]][actions-status]
-[![Dependencies Status][dependencies-status-badge]][dependencies-status]
-[![Dev Dependencies Status][devdependencies-status-badge]][devdependencies-status]
-[![PRs Welcome][prs-badge]][contributing]
-[![License][license-badge]](license)
-
-[LunchWatch][lunchwatch] is a lunch menu aggregator web app. The app is currently aggregating menus from restaurants in Oulu, Finland.
+LunchWatch is a lunch menu aggregator web app. The app is currently aggregating menus from restaurants in Oulu, Finland.
 
 This repository contains Node.js [GraphQL][graphql] and REST APIs, and also includes scheduled menu importers. The actual web app is located in a [separate repository][lunchwatch-pwa-repo]. Issues concerning the UI should be discussed in that repository.
 
@@ -75,16 +69,6 @@ Contributions are most welcome! If you would like to contribute to this project,
 
 This project is open source software licensed under the MIT license. For more information see [LICENSE][license].
 
-[actions-status]: https://github.com/jtiala/lunchwatch-pwa/actions
-[actions-status-badge]: https://github.com/jtiala/lunchwatch-pwa/workflows/CI/CD/badge.svg
-[dependencies-status]: https://david-dm.org/jtiala/lunchwatch-api
-[dependencies-status-badge]: https://img.shields.io/david/jtiala/lunchwatch-api.svg
-[devdependencies-status]: https://david-dm.org/jtiala/lunchwatch-api?type=dev
-[devdependencies-status-badge]: https://img.shields.io/david/dev/jtiala/lunchwatch-api.svg
-[contributing]: #contributing
-[prs-badge]: https://img.shields.io/badge/prs-welcome-blue.svg
-[license]: https://github.com/jtiala/lunchwatch-api/blob/master/LICENSE
-[license-badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [git]: https://git-scm.com/
 [node]: https://nodejs.org/
 [docker]: https://www.docker.com/
@@ -92,5 +76,5 @@ This project is open source software licensed under the MIT license. For more in
 [knex]: http://knexjs.org/
 [chrome]: https://hub.docker.com/r/browserless/chrome
 [issues]: https://github.com/jtiala/lunchwatch-api/issues
-[lunchwatch]: https://lunch.watch/
 [lunchwatch-pwa-repo]: https://github.com/jtiala/lunchwatch-pwa
+[license]: https://github.com/jtiala/lunchwatch-api/blob/master/LICENSE
